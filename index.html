@@ -156,6 +156,21 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .cphoto-add{width:72px;height:72px;border-radius:12px;border:1.5px dashed var(--line);background:var(--surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink-soft)}
 .cphoto-add svg{width:20px;height:20px;stroke:var(--leaf);fill:none;stroke-width:1.8}
 .cphoto-add span{font-size:10.5px;font-weight:600}
+/* ---- rendelés azonosítása (QR/fotó) ---- */
+.claim-order{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:10px 12px}
+.co-id{flex:1;min-width:0}
+.co-id b{font-size:15px;font-weight:700;display:block;font-variant-numeric:tabular-nums}
+.co-id span{font-size:12px;color:var(--ink-soft)}
+.co-scan{display:flex;align-items:center;gap:7px;border:1.5px solid var(--leaf);background:var(--sprout);color:var(--leaf-ink);border-radius:11px;padding:9px 12px;font-size:12.5px;font-weight:700;flex:0 0 auto}
+.co-scan svg{width:16px;height:16px;stroke:var(--leaf-ink);fill:none;stroke-width:1.8}
+.scan-view{display:flex;justify-content:center;margin:16px 0 4px}
+.scan-frame{position:relative;width:184px;height:184px;border-radius:16px;background:#0b0f0b;overflow:hidden;display:grid;place-items:center}
+.scan-frame canvas{width:118px;height:118px;image-rendering:pixelated;opacity:.9}
+.scan-frame::before,.scan-frame::after{content:"";position:absolute;width:26px;height:26px;border:3px solid #45D197}
+.scan-frame::before{top:12px;left:12px;border-right:0;border-bottom:0;border-radius:7px 0 0 0}
+.scan-frame::after{bottom:12px;right:12px;border-left:0;border-top:0;border-radius:0 0 7px 0}
+.scan-line{position:absolute;left:14px;right:14px;height:2px;background:#45D197;box-shadow:0 0 10px #45D197;animation:scanmove 2.1s ease-in-out infinite}
+@keyframes scanmove{0%{top:18px}50%{top:160px}100%{top:18px}}
 .icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
   background:var(--surface-2);display:grid;place-items:center;position:relative}
 .icon-btn svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:1.8}
@@ -1061,6 +1076,22 @@ button{font-family:inherit;cursor:pointer;color:inherit}
       </div>
     </div>
 
+    <!-- ===== RENDELÉS-AZONOSÍTÓ (QR/fotó szkenner) ===== -->
+    <div id="scan" class="info-modal" hidden>
+      <div class="info-card" style="max-width:356px">
+        <div class="info-top">
+          <span class="info-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM15 15h2v2h-2zM19 15h1v5h-5v-1"/></svg></span>
+          <b data-t="scan_title">Rendelés azonosítása</b>
+          <button class="info-x" aria-label="Bezárás" onclick="closeScan()"><svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;stroke:currentColor;stroke-width:2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="scan-view"><div class="scan-frame"><canvas id="scanqr" width="25" height="25"></canvas><span class="scan-line"></span></div></div>
+        <p class="info-body" data-t="scan_hint">Tartsd a kamerát a futár szállítólevelének QR‑kódjára – vagy azonosítsd fotóval.</p>
+        <button class="info-ok" data-t="scan_ok" onclick="onScanned()">Beolvasva ✓ (demó)</button>
+        <button class="ghostbtn" data-t="scan_photo" onclick="scanByPhoto()">Inkább fotóval azonosítom</button>
+        <input type="file" id="scanFile" accept="image/*" capture="environment" hidden onchange="onScannedPhoto(this)">
+      </div>
+    </div>
+
     <div id="claim" class="sheet" hidden></div>
     <div id="detail" class="detail" hidden></div>
     <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
@@ -1205,6 +1236,9 @@ const TR = {
   claim_note_ph:{hu:'Pl. a felét penészesen kaptuk, a láda alja nyomott.',en:'E.g. half of it arrived mouldy, the bottom of the crate was crushed.'},
   claim_note2:{hu:'A fotó és a szállítólevél a jóváírás bizonyítéka. A PilPel kapcsolattartó még ma visszajelez.',en:'The photo and the delivery note are the evidence for the credit. Your PilPel contact replies the same day.'},
   claim_send:{hu:'Reklamáció beküldése',en:'Submit claim'},
+  claim_order:{hu:'Melyik rendelés?',en:'Which order?'}, claim_scan:{hu:'QR / fotó',en:'QR / photo'},
+  scan_title:{hu:'Rendelés azonosítása',en:'Identify order'}, scan_hint:{hu:'Tartsd a kamerát a futár szállítólevelének QR‑kódjára – vagy azonosítsd fotóval.',en:'Point the camera at the QR code on the courier’s delivery note – or identify it with a photo.'},
+  scan_ok:{hu:'Beolvasva ✓ (demó)',en:'Scanned ✓ (demo)'}, scan_photo:{hu:'Inkább fotóval azonosítom',en:'Identify with a photo instead'},
   tab_ma:{hu:'Ma',en:'Today'}, tab_piac:{hu:'Piac',en:'Market'}, tab_kosar:{hu:'Kosár',en:'Cart'}, tab_rend:{hu:'Rendelések',en:'Orders'},
   greet:{hu:'Jó reggelt, Dániel séf',en:'Good morning, chef Dániel'},
   flow_title:{hu:'Teljes folyamat',en:'Full process'},
@@ -1453,6 +1487,10 @@ function buildClaim(){
   $('#claim').innerHTML=`
     <div class="s-top"><button class="back" aria-label="Vissza" onclick="closeSheet('claim')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button><div class="tt">${t('claim_title')}<small>${claim.orderNo}</small></div></div>
     <div class="s-body">
+      <label class="claim-lab">${t('claim_order')}</label>
+      <div class="claim-order"><div class="co-id"><b>${claim.orderNo}</b><span>${order.lines.length} ${t('items')}</span></div>
+        <button class="co-scan" onclick="openScan()"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM15 15h2v2h-2zM19 15h1v5h-5v-1"/></svg> ${t('claim_scan')}</button>
+      </div>
       <label class="claim-lab">${t('claim_which')}</label>
       <div class="claim-items">${items}</div>
       <label class="claim-lab">${t('claim_what')}</label>
@@ -1474,6 +1512,12 @@ function renderClaimPhotos(){ const el=$('#claimPhotos'); if(!el)return;
   el.innerHTML=claim.photos.map((src,i)=>`<div class="cphoto"><img src="${src}" alt=""><button aria-label="Törlés" onclick="claim.photos.splice(${i},1);renderClaimPhotos()">×</button></div>`).join('')
    + (claim.photos.length<6?`<button class="cphoto-add" onclick="$('#claimFile').click()"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8h3l1.5-2h5L16 8h3v11H5z"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>${t('claim_addphoto')}</span></button>`:''); }
 function submitClaim(){ closeSheet('claim'); toast(lang=='en'?('Claim submitted · '+claim.orderNo+' · credit started'):('Reklamáció beküldve · '+claim.orderNo+' · jóváírást indítjuk')); }
+/* Rendelés azonosítása QR-rel vagy fotóval */
+function openScan(){ const el=$('#scan'); el.hidden=false; const cv=$('#scanqr'); if(cv) drawQR(cv, (claim.orderNo||order&&order.no||'PP-DEMO')); void el.offsetHeight; el.classList.add('open'); applyStatic(); }
+function closeScan(){ const el=$('#scan'); el.classList.remove('open'); setTimeout(()=>el.hidden=true,180); }
+function onScanned(){ closeScan(); claim.orderNo = order ? order.no : claim.orderNo; if(!$('#claim').hidden) buildClaim(); toast(lang=='en'?('Order identified · '+claim.orderNo):('Rendelés azonosítva · '+claim.orderNo)); }
+function scanByPhoto(){ document.getElementById('scanFile').click(); }
+function onScannedPhoto(input){ const f=input.files[0]; if(f){ const r=new FileReader(); r.onload=e=>{ if(claim.photos.length<6) claim.photos.unshift(e.target.result); onScanned(); }; r.readAsDataURL(f); } input.value=''; }
 
 /* ============ SEGÉDEK ============ */
 const $ = s=>document.querySelector(s);
@@ -1770,7 +1814,7 @@ $('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerC
 /* ============ FOLYAMAT: fedőrétegek ============ */
 function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);void el.offsetHeight;el.classList.add('open');}
 function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
-function closeAllSheets(){ ['theme','info','onboard','hub','fiok','pay','claim','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
+function closeAllSheets(){ ['scan','theme','info','onboard','hub','fiok','pay','claim','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
 
 /* ---- onboarding / regisztráció ---- */
 function openOnboard(){showOb(0);openSheet('onboard');}
