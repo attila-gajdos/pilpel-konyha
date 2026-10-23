@@ -1,0 +1,1806 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PilPel Konyha</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* ============================================================
+   PilPel Konyha — séf-rendelő app, kattintható prototípus
+   Arculat: PilPel sötét-prémium + smaragdzöld márkaszín, meleg
+   paradicsom CTA, borostyán kiemelés; a termékek adják a színt.
+   Elrendezés: telefon-app oszlop (max 440px), fix felső sáv +
+   görgő tartalom + alsó fülsáv; asztalon keretezve, mobilon teljes.
+   ============================================================ */
+
+/* ---- színek: világos alap ---- */
+:root{
+  --paper:#F6F7F2; --surface:#FFFFFF; --surface-2:#FBFCF8;
+  --ink:#16201A; --ink-soft:#5C675E; --ink-faint:#8B948C;
+  --line:#E7EAE0; --line-soft:#EFF1EA;
+  --leaf:#0E6B45; --leaf-ink:#0A5235; --leaf-bright:#17A866; --sprout:#E4F0E7;
+  --tomato:#DF4F2C; --tomato-ink:#B63C1E; --tomato-soft:#FBE7DF;
+  --amber:#C98A13; --amber-soft:#F6EACB;
+  --plum:#7A4A86; --plum-soft:#F0E6F2;
+  --backdrop:#0B0F0B; --backdrop-2:#11170F;
+  --shadow:28px 60px 120px rgba(10,24,16,.26);
+  --r:18px; --r-sm:12px;
+  --sans:"Hanken Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Bricolage Grotesque","Hanken Grotesk",ui-sans-serif,system-ui,sans-serif;
+}
+/* ---- sötét téma (a pilpelhungary.com hangulata) ---- */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0C0F0C; --surface:#141A14; --surface-2:#10150F;
+    --ink:#ECEFE6; --ink-soft:#9BA79C; --ink-faint:#6D7A6F;
+    --line:#242C22; --line-soft:#1B211A;
+    --leaf:#36C089; --leaf-ink:#8FE5BE; --leaf-bright:#45D197; --sprout:#16271D;
+    --tomato:#FF6D47; --tomato-ink:#FF8E70; --tomato-soft:#2C1811;
+    --amber:#E7B048; --amber-soft:#2A2213;
+    --plum:#C79BD1; --plum-soft:#241A28;
+    --backdrop:#060806; --backdrop-2:#0B0F0A;
+    --shadow:28px 60px 120px rgba(0,0,0,.6);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0C0F0C; --surface:#141A14; --surface-2:#10150F;
+  --ink:#ECEFE6; --ink-soft:#9BA79C; --ink-faint:#6D7A6F;
+  --line:#242C22; --line-soft:#1B211A;
+  --leaf:#36C089; --leaf-ink:#8FE5BE; --leaf-bright:#45D197; --sprout:#16271D;
+  --tomato:#FF6D47; --tomato-ink:#FF8E70; --tomato-soft:#2C1811;
+  --amber:#E7B048; --amber-soft:#2A2213;
+  --plum:#C79BD1; --plum-soft:#241A28;
+  --backdrop:#060806; --backdrop-2:#0B0F0A;
+  --shadow:28px 60px 120px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--backdrop);color:var(--ink);
+  font-family:var(--sans);-webkit-font-smoothing:antialiased;letter-spacing:-.005em}
+button{font-family:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2.5px solid var(--leaf-bright);outline-offset:2px;border-radius:6px}
+
+/* ---- asztali színpad ---- */
+#stage{min-height:100%;display:flex;flex-direction:column;background:var(--paper)}
+.stage-head{display:none}
+@media (min-width:920px){
+  #stage{align-items:center;justify-content:center;gap:20px;padding:30px;
+    background:
+      radial-gradient(120% 90% at 80% -10%, #10351f 0%, transparent 55%),
+      radial-gradient(90% 70% at 0% 110%, #1a1408 0%, transparent 50%),
+      var(--backdrop);}
+  .stage-head{display:flex;flex-direction:column;gap:12px;align-items:center;
+    max-width:440px;text-align:center;color:#EAF0E8}
+  .stage-head .mk{font-family:var(--serif);font-weight:600;font-size:22px;
+    letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+  .stage-head .mk b{color:#45D197}
+  .stage-head p{margin:0;color:#9FB0A2;font-size:13.5px;line-height:1.5;max-width:380px}
+  .stage-head .plats{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+  .stage-head .plats span{font-size:11px;font-weight:600;letter-spacing:.02em;
+    padding:5px 11px;border-radius:999px;border:1px solid #2b3a2d;color:#CFE0D2;
+    background:rgba(255,255,255,.03)}
+  .stage-head .plats span.soon{color:#77857A;border-style:dashed}
+}
+
+/* ---- app keret ---- */
+#app{position:relative;width:100%;max-width:440px;height:100%;margin:0 auto;
+  display:flex;flex-direction:column;background:var(--paper);overflow:hidden}
+@media (min-width:920px){
+  #app{height:min(900px,calc(100dvh - 150px));border-radius:34px;
+    box-shadow:var(--shadow);outline:1px solid rgba(255,255,255,.06)}
+}
+
+/* ---- felső sáv ---- */
+.appbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;
+  padding:14px max(16px,env(safe-area-inset-left,0px)) 12px max(16px,env(safe-area-inset-right,0px));
+  background:var(--surface);border-bottom:1px solid var(--line-soft);z-index:5}
+.brand{display:flex;align-items:center;gap:8px;margin-right:auto}
+.brand .dot{width:26px;height:26px;border-radius:8px;flex:0 0 auto;
+  background:linear-gradient(145deg,var(--leaf-bright),var(--leaf));
+  display:grid;place-items:center}
+.brand .dot svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2}
+.brand .wm{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:-.02em;line-height:1}
+.brand .wm span{color:var(--leaf)}
+.brand .sub{font-size:10px;color:var(--ink-faint);letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+.demo-pill{font-size:9.5px;font-weight:700;letter-spacing:.1em;color:var(--amber);
+  background:var(--amber-soft);padding:4px 7px;border-radius:999px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface-2);flex:0 0 auto}
+.lang button{border:0;background:none;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:5px 9px;color:var(--ink-faint)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.th-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.th-opt{display:flex;flex-direction:column;align-items:flex-start;gap:10px;border:1.5px solid var(--line);background:var(--surface);border-radius:16px;padding:14px;text-align:left;position:relative}
+.th-opt[aria-pressed="true"]{border-color:var(--leaf);box-shadow:0 0 0 3px var(--sprout)}
+.th-opt .sw3{display:flex;gap:5px}
+.th-opt .sw3 i{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.th-opt b{font-size:13.5px;font-weight:600}
+.th-opt .th-aa{position:absolute;top:12px;right:14px;font-size:19px;color:var(--ink-faint);line-height:1}
+#theme{z-index:62}
+.icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
+  background:var(--surface-2);display:grid;place-items:center;position:relative}
+.icon-btn svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:1.8}
+.icon-btn .ndot{position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;
+  background:var(--tomato);border:2px solid var(--surface-2)}
+
+/* ---- görgő rész ---- */
+#screens{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;
+  overscroll-behavior:contain}
+.screen{padding:16px max(16px,env(safe-area-inset-left,0px)) 26px max(16px,env(safe-area-inset-right,0px))}
+.screen[hidden]{display:none!important}
+
+/* ---- tipográfia segédek ---- */
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-faint)}
+.sec{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 2px 11px}
+.sec h2{font-family:var(--serif);font-weight:600;font-size:18.5px;letter-spacing:-.02em;margin:0}
+.sec .more{font-size:12.5px;font-weight:600;color:var(--leaf);background:none;border:0;padding:4px}
+.greet{margin:4px 2px 2px}
+.greet .hi{font-family:var(--serif);font-weight:600;font-size:25px;letter-spacing:-.025em;margin:0;text-wrap:balance}
+.loc{display:inline-flex;align-items:center;gap:6px;margin-top:7px;font-size:13px;color:var(--ink-soft);
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 11px}
+.loc svg{width:14px;height:14px;stroke:var(--leaf);fill:none;stroke-width:1.9}
+.loc b{color:var(--ink);font-weight:600}
+
+/* ---- szállítási / határidő kártya ---- */
+.deliver{margin-top:16px;border-radius:var(--r);overflow:hidden;position:relative;
+  background:
+    radial-gradient(130% 120% at 100% 0%, rgba(255,255,255,.1), transparent 60%),
+    linear-gradient(150deg,var(--leaf) 0%, var(--leaf-ink) 100%);
+  color:#EAF6EE;padding:16px 16px 15px}
+.deliver .row1{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.deliver .pulse{width:8px;height:8px;border-radius:50%;background:#7CFJ;background:#86F0BE;
+  box-shadow:0 0 0 0 rgba(134,240,190,.7);animation:pulse 2.4s infinite}
+.deliver .when{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:-.02em;margin:9px 0 2px;color:#fff}
+.deliver .sub{font-size:12.5px;color:rgba(255,255,255,.8)}
+.cutoff{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;
+  background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.14);border-radius:13px;padding:10px 13px}
+.cutoff .lab{font-size:11.5px;color:rgba(255,255,255,.82);line-height:1.3}
+.cutoff .lab b{color:#fff;display:block;font-size:12.5px}
+.cutoff .clock{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;color:#fff;white-space:nowrap}
+.cutoff.soon{background:rgba(223,79,44,.22);border-color:rgba(255,150,120,.4)}
+
+/* ---- újrarendelés sáv ---- */
+.again{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 6px;margin:0 -2px;
+  scroll-snap-type:x proximity;scrollbar-width:none}
+.again::-webkit-scrollbar{display:none}
+.again>*{scroll-snap-align:start;flex:0 0 auto}
+.again-cta{width:150px;border-radius:var(--r);border:1.5px solid var(--leaf);
+  background:var(--sprout);color:var(--leaf-ink);padding:13px;display:flex;flex-direction:column;
+  justify-content:space-between;text-align:left}
+.again-cta .t{font-family:var(--serif);font-weight:600;font-size:15px;line-height:1.15;letter-spacing:-.01em}
+.again-cta .arr{align-self:flex-end;width:30px;height:30px;border-radius:50%;background:var(--leaf);
+  display:grid;place-items:center;margin-top:12px}
+.again-cta .arr svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2}
+.mini{width:82px;text-align:center}
+.mini .tile{width:82px;height:72px;border-radius:14px;display:grid;place-items:center;font-size:34px;
+  position:relative}
+.mini .q{position:absolute;right:5px;bottom:5px;background:var(--ink);color:var(--paper);
+  font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:999px}
+.mini .n{font-size:11px;color:var(--ink-soft);margin-top:5px;line-height:1.2;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ---- termékcsempe szín ---- */
+.tile{background:hsl(var(--h,120) 46% 90%);color:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tile{background:hsl(var(--h,120) 28% 17%)}}
+:root[data-theme="dark"] .tile{background:hsl(var(--h,120) 28% 17%)}
+
+/* ---- kiemelt (ma a piacon) ---- */
+.feat-row{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none}
+.feat-row::-webkit-scrollbar{display:none}
+.feat{flex:0 0 auto;width:158px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;text-align:left;display:flex;flex-direction:column}
+.feat .ph{height:104px;display:grid;place-items:center;font-size:52px;position:relative}
+.feat .reason{position:absolute;left:8px;top:8px;font-size:10px;font-weight:700;letter-spacing:.02em;
+  background:var(--surface);color:var(--ink);padding:4px 8px;border-radius:999px;border:1px solid var(--line)}
+.feat .reason.hot{color:var(--tomato-ink);background:var(--tomato-soft);border-color:transparent}
+.feat .body{padding:11px 12px 13px;display:flex;flex-direction:column;gap:3px;flex:1}
+.feat .nm{font-weight:600;font-size:14px;letter-spacing:-.01em;line-height:1.2}
+.feat .og{font-size:11.5px;color:var(--ink-soft);display:flex;align-items:center;gap:5px}
+.feat .pr{margin-top:auto;padding-top:9px;display:flex;align-items:center;justify-content:space-between}
+.feat .pr b{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.feat .pr small{color:var(--ink-faint);font-weight:500}
+
+/* ---- élő a földekről ---- */
+.fields{margin-top:12px;border-radius:var(--r);background:var(--backdrop-2);color:#E6EEE7;
+  border:1px solid rgba(255,255,255,.07);padding:14px}
+.fields .hd{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#9FB0A2}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#45D197;box-shadow:0 0 0 0 rgba(69,209,151,.7);animation:pulse 2.4s infinite}
+.fields .f{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);margin-top:10px}
+.fields .f:first-of-type{border-top:0;margin-top:6px}
+.fields .fl{font-size:21px;width:26px;text-align:center}
+.fields .ft{flex:1;min-width:0}
+.fields .ft b{font-size:13px;font-weight:600;color:#fff}
+.fields .ft span{display:block;font-size:11.5px;color:#9FB0A2}
+.fields .tmp{font-family:var(--serif);font-weight:600;font-size:19px;color:#fff;font-variant-numeric:tabular-nums}
+
+/* ---- keresés + kategóriák ---- */
+.search{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);
+  border-radius:13px;padding:11px 13px;margin:2px 0 2px}
+.search svg{width:18px;height:18px;stroke:var(--ink-faint);fill:none;stroke-width:1.9;flex:0 0 auto}
+.search input{border:0;background:none;outline:none;font-size:14.5px;color:var(--ink);width:100%}
+.search input::placeholder{color:var(--ink-faint)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;margin:0 -2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
+  font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ---- terméklista ---- */
+.plist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.prod{display:flex;align-items:stretch;gap:12px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:10px;position:relative}
+.prod-open{flex:1;min-width:0;display:flex;gap:12px;align-items:center;background:none;border:0;padding:0;text-align:left}
+.prod .tile{width:62px;height:62px;flex:0 0 auto;border-radius:14px;display:grid;place-items:center;font-size:33px}
+.prod-main{min-width:0;display:flex;flex-direction:column;gap:3px}
+.prod-name{font-weight:600;font-size:14.5px;letter-spacing:-.01em;color:var(--ink);line-height:1.2}
+.prod-meta{font-size:11.5px;color:var(--ink-soft);display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.prod-meta .fl{font-size:13px}
+.prod-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.bdg{font-size:10px;font-weight:700;letter-spacing:.01em;padding:3px 7px;border-radius:999px}
+.bdg.leaf{color:var(--leaf-ink);background:var(--sprout)}
+.bdg.bright{color:#fff;background:var(--leaf-bright)}
+.bdg.amber{color:var(--amber);background:var(--amber-soft)}
+.bdg.tomato{color:var(--tomato-ink);background:var(--tomato-soft)}
+.bdg.plum{color:var(--plum);background:var(--plum-soft)}
+.prod-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;flex:0 0 auto;gap:8px}
+.price{font-size:14.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;line-height:1.1}
+.price small{display:block;font-size:10.5px;color:var(--ink-faint);font-weight:500}
+.add{width:34px;height:34px;border-radius:11px;border:0;background:var(--tomato);display:grid;place-items:center}
+.add svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.4}
+.add.in{background:var(--leaf)}
+
+/* ---- nudge kártya ---- */
+.nudge{display:flex;align-items:center;gap:12px;background:var(--amber-soft);border-radius:var(--r);
+  padding:12px 14px;margin-top:12px}
+.nudge .ic{font-size:26px}
+.nudge .tx{flex:1;min-width:0;font-size:12.5px;color:var(--ink);line-height:1.35}
+.nudge .tx b{font-weight:700}
+.nudge button{flex:0 0 auto;font-size:12.5px;font-weight:700;color:#fff;background:var(--amber);
+  border:0;border-radius:999px;padding:8px 13px}
+
+/* ---- trust csík ---- */
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;margin-top:14px}
+.trust div{background:var(--surface);padding:13px 8px;text-align:center}
+.trust b{display:block;font-family:var(--serif);font-weight:600;font-size:18px;color:var(--leaf);letter-spacing:-.02em}
+.trust span{font-size:10.5px;color:var(--ink-soft);line-height:1.25;display:block;margin-top:2px}
+
+/* ---- termék részletek (fedő réteg) ---- */
+.detail{position:absolute;inset:0;background:var(--paper);z-index:30;display:flex;flex-direction:column;
+  transform:translateY(14px);opacity:0;transition:transform .24s ease,opacity .2s ease}
+.detail.open{transform:none;opacity:1}
+.detail[hidden]{display:none!important}
+.d-top{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:13px max(16px,env(safe-area-inset-left,0px));
+  background:var(--surface);border-bottom:1px solid var(--line-soft)}
+.d-top .back{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--surface-2);
+  display:grid;place-items:center}
+.d-top .back svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:2}
+.d-top .t{font-weight:600;font-size:14px;color:var(--ink-soft)}
+.d-body{flex:1;min-height:0;overflow-y:auto;padding-bottom:12px}
+.d-hero{height:186px;display:grid;place-items:center;font-size:92px;position:relative}
+.d-flag{position:absolute;left:16px;top:14px;display:flex;align-items:center;gap:7px;
+  background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600}
+.d-flag .fl{font-size:16px}
+.d-wrap{padding:16px max(16px,env(safe-area-inset-left,0px)) 0}
+.d-name{font-family:var(--serif);font-weight:600;font-size:26px;letter-spacing:-.025em;margin:0;line-height:1.08;text-wrap:balance}
+.d-grade{margin-top:6px;font-size:13px;color:var(--ink-soft)}
+.d-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.d-desc{margin-top:14px;font-size:14px;line-height:1.5;color:var(--ink-soft)}
+.d-qc{display:flex;gap:11px;align-items:flex-start;margin-top:14px;background:var(--sprout);
+  border-radius:var(--r);padding:13px 14px}
+.d-qc svg{width:20px;height:20px;stroke:var(--leaf);fill:none;stroke-width:1.9;flex:0 0 auto;margin-top:1px}
+.d-qc .tx{font-size:12.5px;color:var(--leaf-ink);line-height:1.4}
+.d-qc .tx b{font-weight:700;display:block;margin-bottom:2px}
+.seg{display:flex;gap:7px;margin-top:16px}
+.seg button{flex:1;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 6px;
+  font-size:12.5px;font-weight:600;color:var(--ink-soft);display:flex;flex-direction:column;gap:3px;align-items:center}
+.seg button b{font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.seg button[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout);color:var(--leaf-ink)}
+.seg button[aria-pressed="true"] b{color:var(--leaf-ink)}
+.d-sub{display:flex;align-items:flex-start;gap:9px;margin-top:14px;font-size:12px;color:var(--ink-soft);line-height:1.4}
+.d-sub input{margin-top:2px;accent-color:var(--leaf);width:16px;height:16px;flex:0 0 auto}
+.qty{display:inline-flex;align-items:center;gap:0;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.qty button{width:40px;height:40px;background:var(--surface);border:0;font-size:20px;color:var(--ink);display:grid;place-items:center}
+.qty button:active{background:var(--line-soft)}
+.qty .v{min-width:42px;text-align:center;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+
+/* ---- alsó akciósáv (részletek + kosár) ---- */
+.d-foot{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:12px max(16px,env(safe-area-inset-left,0px));
+  padding-bottom:max(12px,env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line)}
+.btn{flex:1;border:0;border-radius:14px;padding:15px;font-size:15px;font-weight:700;letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:9px}
+.btn.primary{background:var(--tomato);color:#fff}
+.btn.leaf{background:var(--leaf);color:#fff}
+.btn.ghost{background:var(--surface-2);color:var(--ink);border:1.5px solid var(--line);flex:0 0 auto;width:54px;padding:15px 0}
+.btn .pz{opacity:.85;font-weight:600}
+.btn svg{width:19px;height:19px;stroke:#fff;fill:none;stroke-width:2.2}
+
+/* ---- kosár ---- */
+.cart-empty{text-align:center;padding:60px 20px;color:var(--ink-soft)}
+.cart-empty .em{font-size:52px}
+.cart-empty h3{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--ink);margin:14px 0 6px}
+.cart-empty p{font-size:13.5px;margin:0 0 18px;line-height:1.5}
+.cart-line{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:10px;margin-bottom:9px}
+.cart-line .tile{width:54px;height:54px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;font-size:28px}
+.cart-line .ci{flex:1;min-width:0}
+.cart-line .ci b{font-weight:600;font-size:14px;display:block;line-height:1.2}
+.cart-line .ci span{font-size:11.5px;color:var(--ink-soft)}
+.cart-line .ci .lp{font-weight:700;font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums}
+.qty.sm button{width:32px;height:32px;font-size:17px}
+.qty.sm .v{min-width:30px;font-size:13.5px}
+.cline-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+.rm{background:none;border:0;color:var(--ink-faint);font-size:11.5px;font-weight:600;padding:2px}
+
+.block{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-top:12px}
+.block h3{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 11px}
+.dates{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:0 -2px;padding:0 2px}
+.dates::-webkit-scrollbar{display:none}
+.date{flex:0 0 auto;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:9px 12px;
+  text-align:center;min-width:58px}
+.date span{display:block;font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.04em}
+.date b{font-size:16px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.date[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout)}
+.date[aria-pressed="true"] b,.date[aria-pressed="true"] span{color:var(--leaf-ink)}
+.win{margin-top:10px;font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+.win svg{width:15px;height:15px;stroke:var(--leaf);fill:none;stroke-width:1.9}
+.note-in{width:100%;border:1.5px solid var(--line);background:var(--surface-2);border-radius:12px;padding:11px 13px;
+  font-family:inherit;font-size:13.5px;color:var(--ink);resize:none;min-height:56px}
+.note-in::placeholder{color:var(--ink-faint)}
+.toggle{display:flex;align-items:center;gap:11px;margin-top:11px}
+.toggle .tx{flex:1;font-size:13px;color:var(--ink);line-height:1.35}
+.toggle .tx span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.sw{width:46px;height:27px;border-radius:999px;background:var(--line);border:0;position:relative;flex:0 0 auto;transition:background .2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.sw[aria-pressed="true"]{background:var(--leaf)}
+.sw[aria-pressed="true"]::after{left:22px}
+
+.totals{margin-top:12px;padding:0 2px}
+.totals .t{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);padding:4px 0}
+.totals .t.grand{font-size:17px;color:var(--ink);font-weight:700;padding-top:10px;margin-top:6px;border-top:1px solid var(--line)}
+.totals .t b,.totals .t.grand b{font-variant-numeric:tabular-nums}
+.minbar{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 13px}
+.minbar .mt{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink-soft);margin-bottom:8px}
+.minbar .mt b{color:var(--ink)}
+.track{height:7px;border-radius:999px;background:var(--line-soft);overflow:hidden}
+.track i{display:block;height:100%;background:var(--leaf);border-radius:999px;transition:width .3s}
+.track i.ok{background:var(--leaf-bright)}
+
+/* ---- megerősítés ---- */
+.confirm{text-align:center;padding:30px 20px 20px}
+.check{width:78px;height:78px;border-radius:50%;margin:10px auto 0;background:var(--sprout);display:grid;place-items:center}
+.check svg{width:38px;height:38px;stroke:var(--leaf);fill:none;stroke-width:2.4}
+.confirm h2{font-family:var(--serif);font-weight:600;font-size:25px;letter-spacing:-.02em;margin:18px 0 6px;text-wrap:balance}
+.confirm p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0 auto;max-width:300px}
+.conf-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:20px 0;text-align:left}
+.conf-card .r{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:13.5px}
+.conf-card .r+.r{border-top:1px solid var(--line-soft)}
+.conf-card .r span{color:var(--ink-soft)}
+.conf-card .r b{font-weight:600;font-variant-numeric:tabular-nums}
+
+/* ---- rendelések ---- */
+.ord{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:11px}
+.ord .oh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ord .on{font-weight:700;font-size:14.5px}
+.ord .od{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.st{font-size:11px;font-weight:700;letter-spacing:.02em;padding:5px 9px;border-radius:999px;white-space:nowrap}
+.st.prep{color:var(--amber);background:var(--amber-soft)}
+.st.way{color:#fff;background:var(--leaf-bright)}
+.st.done{color:var(--leaf-ink);background:var(--sprout)}
+.steps{display:flex;align-items:center;gap:0;margin:14px 0 4px}
+.steps .s{flex:1;text-align:center;position:relative}
+.steps .s .b{width:15px;height:15px;border-radius:50%;background:var(--line);margin:0 auto;border:3px solid var(--surface);position:relative;z-index:2}
+.steps .s.on .b{background:var(--leaf)}
+.steps .s.now .b{background:var(--leaf-bright);box-shadow:0 0 0 4px var(--sprout)}
+.steps .s::before{content:"";position:absolute;top:7px;left:-50%;width:100%;height:3px;background:var(--line);z-index:1}
+.steps .s:first-child::before{display:none}
+.steps .s.on::before{background:var(--leaf)}
+.steps .s em{display:block;font-size:10px;color:var(--ink-soft);font-style:normal;margin-top:7px}
+.steps .s.now em{color:var(--leaf-ink);font-weight:700}
+.osum{display:flex;align-items:center;justify-content:space-between;margin-top:13px;padding-top:12px;border-top:1px solid var(--line-soft)}
+.osum .ot{font-size:12.5px;color:var(--ink-soft)}
+.osum .ot b{display:block;font-size:16px;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.oacts{display:flex;gap:8px}
+.oacts button{font-size:12px;font-weight:700;border-radius:11px;padding:9px 12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.oacts button.prim{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+
+/* ---- alsó fülsáv ---- */
+.tabbar{flex:0 0 auto;display:flex;background:var(--surface);border-top:1px solid var(--line);
+  padding:8px max(10px,env(safe-area-inset-left,0px)) 8px max(10px,env(safe-area-inset-right,0px))}
+.tab{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:5px 0;color:var(--ink-faint);position:relative}
+.tab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8}
+.tab span{font-size:10.5px;font-weight:600;letter-spacing:.01em}
+.tab[aria-selected="true"]{color:var(--leaf)}
+.tab .cbadge{position:absolute;top:-1px;right:50%;transform:translateX(16px);background:var(--tomato);color:#fff;
+  font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:999px;display:grid;place-items:center;padding:0 4px;border:2px solid var(--surface)}
+
+/* ---- toast ---- */
+.toast{position:absolute;left:16px;right:16px;bottom:84px;z-index:50;background:var(--ink);color:var(--paper);
+  border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;
+  box-shadow:0 12px 30px rgba(0,0,0,.28);transform:translateY(12px);opacity:0;transition:transform .22s,opacity .22s}
+.toast.show{transform:none;opacity:1}
+.toast svg{width:19px;height:19px;stroke:var(--leaf-bright);fill:none;stroke-width:2.2;flex:0 0 auto}
+
+/* ---- általános fedőréteg (sheet) ---- */
+.sheet{position:absolute;inset:0;background:var(--paper);z-index:34;display:flex;flex-direction:column;
+  transform:translateY(16px);opacity:0;transition:transform .24s ease,opacity .2s ease}
+.sheet.l2{z-index:46}
+.sheet.open{transform:none;opacity:1}
+.sheet[hidden]{display:none!important}
+.s-top{flex:0 0 auto;display:flex;align-items:center;gap:10px;
+  padding:13px max(16px,env(safe-area-inset-left,0px));background:var(--surface);border-bottom:1px solid var(--line-soft)}
+.s-top .back,.s-top .x{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto}
+.s-top .back svg,.s-top .x svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:2}
+.s-top .tt{font-weight:600;font-size:15px;min-width:0}
+.s-top .tt small{display:block;font-size:11px;color:var(--ink-faint);font-weight:500}
+.s-body{flex:1;min-height:0;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-left,0px)) 24px}
+.s-foot{flex:0 0 auto;display:flex;gap:11px;align-items:center;
+  padding:12px max(16px,env(safe-area-inset-left,0px));padding-bottom:max(12px,env(safe-area-inset-bottom,0px));
+  background:var(--surface);border-top:1px solid var(--line)}
+
+/* ---- onboarding / regisztráció ---- */
+.ob{z-index:60}
+.ob-wrap{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;
+  padding:30px max(22px,env(safe-area-inset-left,0px)) 24px}
+.ob-logo{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:-.02em}
+.ob-logo span{color:var(--leaf)}
+.ob-logo .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(145deg,var(--leaf-bright),var(--leaf));display:grid;place-items:center}
+.ob-logo .dot svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:2}
+.ob h1{font-family:var(--serif);font-weight:600;font-size:27px;letter-spacing:-.025em;line-height:1.1;margin:24px 0 10px;text-wrap:balance}
+.ob p{font-size:14.5px;color:var(--ink-soft);line-height:1.5;margin:0 0 6px}
+.ob .spacer{flex:1;min-height:14px}
+.field{margin-top:20px}
+.field>label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:9px}
+.phone{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:14px;padding:0 6px 0 0;background:var(--surface)}
+.phone .cc{font-weight:700;font-size:16px;color:var(--ink);padding:0 13px;border-right:1px solid var(--line)}
+.phone input{border:0;outline:none;background:none;font-size:17px;font-weight:600;color:var(--ink);padding:15px 12px;width:100%;letter-spacing:.03em;min-width:0}
+.otp{display:flex;gap:9px}
+.otp input{width:100%;aspect-ratio:1;text-align:center;font-size:22px;font-weight:700;border:1.5px solid var(--line);border-radius:13px;background:var(--surface);color:var(--ink);font-variant-numeric:tabular-nums;min-width:0;outline:none}
+.otp input:focus{border-color:var(--leaf)}
+.hint{font-size:12px;color:var(--ink-faint);margin-top:13px;text-align:center;line-height:1.5}
+.opt{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:16px;padding:15px;background:var(--surface);text-align:left;width:100%;margin-top:11px}
+.opt[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout)}
+.opt .oic{font-size:24px;flex:0 0 auto}
+.opt .ob-t{font-weight:700;font-size:14.5px}
+.opt .ob-d{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+.bigbtn{width:100%;border:0;border-radius:15px;padding:16px;font-size:15.5px;font-weight:700;background:var(--tomato);color:#fff;margin-top:20px}
+.bigbtn.leaf{background:var(--leaf)}
+.ghostbtn{width:100%;background:none;border:0;color:var(--ink-soft);font-size:13.5px;font-weight:600;padding:13px;margin-top:2px}
+.ob-dots{display:flex;gap:6px;justify-content:center;margin-top:4px}
+.ob-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
+.ob-dots i.on{background:var(--leaf);width:20px;border-radius:999px}
+
+/* ---- folyamat-banner (Ma) ---- */
+.flow-banner{display:flex;align-items:center;gap:13px;margin-top:16px;border-radius:var(--r);padding:15px;
+  color:#EAF0E8;background:linear-gradient(135deg,#17251a,#0f3322);border:1px solid rgba(255,255,255,.07);width:100%;text-align:left}
+.flow-banner .fb-ic{width:42px;height:42px;border-radius:12px;background:rgba(69,209,151,.16);display:grid;place-items:center;flex:0 0 auto}
+.flow-banner .fb-ic svg{width:22px;height:22px;stroke:#45D197;fill:none;stroke-width:1.9}
+.flow-banner .fb-t{flex:1;min-width:0}
+.flow-banner .fb-t b{font-family:var(--serif);font-weight:600;font-size:15.5px}
+.flow-banner .fb-t span{display:block;font-size:12px;color:#9FB0A2;margin-top:2px;line-height:1.35}
+.flow-banner .fb-arr{color:#45D197;flex:0 0 auto}
+.flow-banner .fb-arr svg{width:20px;height:20px;stroke:#45D197;fill:none;stroke-width:2.2}
+
+/* ---- fiók / központi + alárendelt számok ---- */
+.acct-hero{background:linear-gradient(140deg,var(--leaf),var(--leaf-ink));color:#fff;border-radius:var(--r);padding:16px}
+.acct-hero .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.75)}
+.acct-hero .nm{font-family:var(--serif);font-weight:600;font-size:22px;margin:7px 0 3px;letter-spacing:-.02em}
+.acct-hero .num{font-size:14px;color:rgba(255,255,255,.92);font-variant-numeric:tabular-nums}
+.acct-hero .meta{display:flex;gap:18px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.18)}
+.acct-hero .meta div{font-size:11px;color:rgba(255,255,255,.78)}
+.acct-hero .meta b{display:block;font-size:14px;color:#fff;font-weight:700;margin-bottom:2px;font-variant-numeric:tabular-nums}
+.sub-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px}
+.sub-row .av{width:40px;height:40px;border-radius:50%;background:var(--sprout);color:var(--leaf-ink);display:grid;place-items:center;font-weight:700;font-size:15px;flex:0 0 auto}
+.sub-row .si{flex:1;min-width:0}
+.sub-row .si b{font-size:14px;font-weight:600;display:block}
+.sub-row .si span{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.role{font-size:10.5px;font-weight:700;padding:5px 9px;border-radius:999px;white-space:nowrap;flex:0 0 auto}
+.role.can{color:var(--leaf-ink);background:var(--sprout)}
+.role.appr{color:var(--amber);background:var(--amber-soft)}
+.role.view{color:var(--ink-soft);background:var(--line-soft)}
+.add-sub{width:100%;border:1.5px dashed var(--line);background:none;border-radius:14px;padding:13px;margin-top:10px;font-size:13.5px;font-weight:700;color:var(--leaf)}
+/* ---- fizetés ---- */
+.pm{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:var(--surface);margin-top:10px;width:100%;text-align:left}
+.pm[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout)}
+.pm .pmic{width:40px;height:40px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.pm[aria-pressed="true"] .pmic{background:#fff}
+.pm .pmi{flex:1;min-width:0}
+.pm .pmi b{font-size:14px;font-weight:600;display:block}
+.pm .pmi span{font-size:12px;color:var(--ink-soft)}
+.pm .tick{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:0 0 auto;display:grid;place-items:center}
+.pm[aria-pressed="true"] .tick{border-color:var(--leaf);background:var(--leaf)}
+.pm[aria-pressed="true"] .tick::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.est-note{display:flex;gap:10px;background:var(--amber-soft);border-radius:14px;padding:13px;margin-top:14px;font-size:12.5px;color:var(--ink);line-height:1.45}
+.est-note svg{width:18px;height:18px;stroke:var(--amber);fill:none;stroke-width:2;flex:0 0 auto;margin-top:1px}
+.est-note b{color:var(--amber-ink,var(--amber))}
+.credit-bar{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 13px}
+.credit-bar .cl{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-bottom:8px}
+.credit-bar .cl b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---- rendeléskövetés ---- */
+.track-hero{text-align:center;padding:8px 0 2px}
+.track-hero .big{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:-.02em;margin:10px 0 4px;text-wrap:balance}
+.track-hero .sm{font-size:13px;color:var(--ink-soft)}
+.status-chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;padding:6px 13px;border-radius:999px;background:var(--sprout);color:var(--leaf-ink)}
+.status-chip .d{width:8px;height:8px;border-radius:50%;background:var(--leaf-bright);animation:pulse 2.4s infinite}
+.driver-card{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-top:14px}
+.driver-card .dav{width:48px;height:48px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:700;font-size:16px;flex:0 0 auto}
+.driver-card .di{flex:1;min-width:0}
+.driver-card .di b{font-size:14.5px;font-weight:600;display:block}
+.driver-card .di span{font-size:12px;color:var(--ink-soft)}
+.driver-card .call{width:42px;height:42px;border-radius:12px;border:1.5px solid var(--leaf);background:var(--sprout);display:grid;place-items:center;flex:0 0 auto}
+.driver-card .call svg{width:18px;height:18px;stroke:var(--leaf-ink);fill:none;stroke-width:1.9}
+.eta{display:flex;align-items:center;justify-content:space-between;background:var(--backdrop-2);color:#E6EEE7;border-radius:var(--r);padding:14px 15px;margin-top:12px;border:1px solid rgba(255,255,255,.07)}
+.eta .el{font-size:11.5px;color:#9FB0A2}
+.eta .el b{display:block;font-family:var(--serif);font-size:21px;color:#fff;font-weight:600;margin-top:2px}
+.eta .route{display:flex;align-items:center;gap:4px}
+.eta .stop{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22)}
+.eta .stop.on{background:#45D197}
+.eta .stop.cur{background:#45D197;box-shadow:0 0 0 4px rgba(69,209,151,.25)}
+.eta .ln{width:15px;height:2px;background:rgba(255,255,255,.22)}
+.eta .ln.on{background:#45D197}
+.ctx{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px;margin-top:14px}
+.ctx .ch{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px}
+.ctx .pk{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);padding:3px 0}
+.ctx .pk b{color:var(--ink)}
+.bigcta{width:100%;border:0;border-radius:15px;padding:16px;font-size:15.5px;font-weight:700;color:#fff;background:var(--tomato);margin-top:14px;display:flex;align-items:center;justify-content:center;gap:9px}
+.bigcta svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2}
+.bigcta.leaf{background:var(--leaf)}
+
+/* ---- GRN / szállítólevél elszámolás (tolerancia) ---- */
+.grn{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:12px}
+.grn .gl{display:flex;align-items:center;gap:11px;padding:11px 13px;border-top:1px solid var(--line-soft)}
+.grn .gl:first-child{border-top:0}
+.grn .gtile{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.grn .gn{flex:1;min-width:0}
+.grn .gn b{font-size:13.5px;font-weight:600;display:block;line-height:1.2}
+.grn .gn span{font-size:11.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.grn .gok{font-size:10px;font-weight:700;padding:3px 7px;border-radius:999px;white-space:nowrap}
+.grn .gok.in{color:var(--leaf-ink);background:var(--sprout)}
+.grn .gok.out{color:var(--tomato-ink);background:var(--tomato-soft)}
+.grn .gp{font-weight:700;font-size:13.5px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.grn .claim{padding:10px 13px;border-top:1px dashed var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2)}
+.grn .claim span{font-size:11.5px;color:var(--ink-soft)}
+.grn .claim button{font-size:11.5px;font-weight:700;color:var(--tomato-ink);background:var(--tomato-soft);border:0;border-radius:999px;padding:7px 12px}
+.settle-tot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;background:var(--sprout);border-radius:14px;padding:13px 14px}
+.settle-tot .sl2{font-size:12px;color:var(--leaf-ink)}
+.settle-tot .sl2 b{display:block;font-family:var(--serif);font-size:20px;color:var(--leaf-ink);font-weight:600;font-variant-numeric:tabular-nums}
+.settle-tot .adj{font-size:11.5px;color:var(--leaf-ink);text-align:right;line-height:1.4;font-variant-numeric:tabular-nums}
+
+/* ---- demó folyamat-léptető ---- */
+.demo-step{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px;background:var(--amber-soft);border-radius:13px;padding:8px 9px 8px 13px}
+.demo-step .dl{font-size:11px;font-weight:700;color:var(--amber);letter-spacing:.04em;line-height:1.3}
+.demo-step .db{display:flex;gap:7px;flex:0 0 auto}
+.demo-step button{width:38px;height:38px;border-radius:10px;border:0;background:var(--amber);color:#fff;font-size:17px;display:grid;place-items:center}
+.demo-step button:disabled{opacity:.3}
+
+/* ---- QR átvétel ---- */
+.qr-wrap{text-align:center;padding:12px 0}
+.qr-box{width:196px;height:196px;margin:16px auto 10px;background:#fff;border-radius:18px;padding:13px;box-shadow:0 12px 34px rgba(0,0,0,.14)}
+.qr-box canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.qr-code{font-family:var(--serif);font-weight:600;font-size:17px;letter-spacing:.12em;margin-top:2px;color:var(--ink)}
+
+/* ---- futár app ---- */
+.drv{z-index:46}
+.drv-head{background:var(--backdrop-2);color:#E8F0E9;padding:16px}
+.drv-head .dh1{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-weight:600;font-size:18px}
+.drv-head .dh1 span{color:#45D197}
+.drv-head .dh2{font-size:12px;color:#9FB0A2;margin-top:4px}
+.stop-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:9px;opacity:.5}
+.stop-row.cur{opacity:1;border-color:var(--leaf);box-shadow:0 0 0 3px var(--sprout)}
+.stop-row .snum{width:28px;height:28px;border-radius:50%;background:var(--line-soft);color:var(--ink-soft);font-weight:700;font-size:13px;display:grid;place-items:center;flex:0 0 auto}
+.stop-row.cur .snum{background:var(--leaf);color:#fff}
+.stop-row.done .snum{background:var(--sprout);color:var(--leaf-ink)}
+.stop-row .sti{flex:1;min-width:0}
+.stop-row .sti b{font-size:13.5px;display:block}
+.stop-row .sti span{font-size:11.5px;color:var(--ink-soft)}
+.drv-meas{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--line-soft);font-size:13px}
+.drv-meas:first-of-type{border-top:0}
+.drv-meas .dm1{flex:1;min-width:0}
+.drv-meas .dm1 b{font-weight:600;display:block;font-size:13px}
+.drv-meas .dm1 span{font-size:11.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.drv-meas .scale{font-family:var(--serif);font-weight:600;font-size:16px;font-variant-numeric:tabular-nums;color:var(--leaf-ink)}
+
+/* ---- emberi kapcsolattartó ---- */
+.rep{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-top:12px}
+.rep .rav{width:42px;height:42px;border-radius:50%;background:var(--sprout);color:var(--leaf-ink);display:grid;place-items:center;font-weight:700;flex:0 0 auto}
+.rep .ri{flex:1;min-width:0}
+.rep .ri b{font-size:13.5px;font-weight:600;display:block}
+.rep .ri span{font-size:11.5px;color:var(--ink-soft)}
+.rep .rb{display:flex;gap:7px;flex:0 0 auto}
+.rep .rb button{width:38px;height:38px;border-radius:11px;border:1.5px solid var(--line);background:var(--surface-2);display:grid;place-items:center}
+.rep .rb button svg{width:17px;height:17px;stroke:var(--leaf);fill:none;stroke-width:1.9}
+
+/* ---- készlet jelzés ---- */
+.stock{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600}
+.stock .sd{width:7px;height:7px;border-radius:50%}
+.stock.hi{color:var(--leaf)} .stock.hi .sd{background:var(--leaf-bright)}
+.stock.lo{color:var(--amber)} .stock.lo .sd{background:var(--amber)}
+.stock.out{color:var(--tomato-ink)} .stock.out .sd{background:var(--tomato)}
+.prod.oos{opacity:.72}
+.prod.oos .tile{filter:grayscale(.6)}
+.subst{font-size:11px;color:var(--leaf);font-weight:600;background:var(--sprout);border:0;border-radius:999px;padding:5px 10px}
+
+/* ---- folyamat-térkép (hub) ---- */
+.hub-intro{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin:0 0 16px}
+.hub-stage{display:flex;gap:14px;width:100%;text-align:left;background:none;border:0;padding:0;position:relative}
+.hub-stage .hn{width:34px;height:34px;border-radius:50%;background:var(--sprout);color:var(--leaf-ink);font-weight:700;display:grid;place-items:center;flex:0 0 auto;font-size:14px;z-index:2;border:3px solid var(--paper);font-variant-numeric:tabular-nums}
+.hub-stage .hb{flex:1;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:9px;display:flex;align-items:center;gap:8px}
+.hub-stage .hbt{flex:1;min-width:0}
+.hub-stage .hb b{font-size:14px;font-weight:600;display:block}
+.hub-stage .hb span{font-size:11.5px;color:var(--ink-soft);line-height:1.35;display:block;margin-top:2px}
+.hub-stage .hb .chev{color:var(--ink-faint);flex:0 0 auto}
+.hub-stage .hb .chev svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.hub-stage::before{content:"";position:absolute;left:16px;top:34px;bottom:3px;width:2px;background:var(--line);z-index:1}
+.hub-stage:last-child::before{display:none}
+/*CSS-MORE*/
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(69,209,151,.6)}70%{box-shadow:0 0 0 9px rgba(69,209,151,0)}100%{box-shadow:0 0 0 0 rgba(69,209,151,0)}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+
+<div id="stage">
+  <div class="stage-head">
+    <div class="mk"><b>PilPel</b> Konyha</div>
+    <p>A legjobb zöldség-gyümölcs rendelő, séf-szemmel. Kattintható prototípus – minden adat demó.</p>
+    <div class="plats"><span>Web</span><span>Android</span><span>Windows</span><span class="soon">iOS · 2027</span></div>
+  </div>
+
+  <div id="app">
+    <header class="appbar">
+      <div class="brand" role="button" tabindex="0" aria-label="Folyamat áttekintése" onclick="openSheet('hub')">
+        <span class="dot"><svg viewBox="0 0 24 24"><path d="M12 3c4 2 6 5 6 9a6 6 0 0 1-12 0c0-2 .7-3.6 2-5"/><path d="M12 21V9"/></svg></span>
+        <div>
+          <div class="wm"><span>PilPel</span> Konyha</div>
+          <div class="sub" data-t="sub">Séf-rendelő</div>
+        </div>
+      </div>
+      <div class="lang" role="group" aria-label="Nyelv / Language">
+        <button data-l="hu" aria-pressed="true" onclick="setLang('hu')">HU</button>
+        <button data-l="en" aria-pressed="false" onclick="setLang('en')">EN</button>
+      </div>
+      <span class="demo-pill">DEMÓ</span>
+      <button class="icon-btn" aria-label="Fiók és számok" onclick="openSheet('fiok')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20c0-3.3 3-5 6.5-5s6.5 1.7 6.5 5"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Téma / Theme" onclick="openSheet('theme')">
+        <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.3 0 2-.9 2-1.9 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4A8.9 8.9 0 0 0 12 3Z"/><circle cx="8" cy="9" r="1.1"/><circle cx="12" cy="7" r="1.1"/><circle cx="16" cy="9.5" r="1.1"/></svg>
+      </button>
+    </header>
+
+    <main id="screens">
+      <!-- ===== MA ===== -->
+      <section class="screen" data-screen="ma">
+        <div class="greet">
+          <p class="hi" data-t="greet">Jó reggelt, Dániel séf</p>
+          <button class="loc" onclick="toast('Konyha-váltás: Kóstoló Bisztró / Lánchíd Kávéház','loc')">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10Z"/><circle cx="12" cy="11" r="2"/></svg>
+            <b>Kóstoló Bisztró</b> · Budapest, V.
+          </button>
+        </div>
+
+        <button class="flow-banner" onclick="openSheet('hub')">
+          <span class="fb-ic"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 12h7M4 17h12"/><path d="M16 5l3 3-3 3"/></svg></span>
+          <span class="fb-t"><b data-t="flow_title">Teljes folyamat</b><span data-t="flow_sub">Regisztráció → rendelés → fizetés → komissiózás → futár → QR‑átvétel → elszámolás</span></span>
+          <span class="fb-arr"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+        </button>
+
+        <div class="deliver">
+          <div class="row1"><span class="pulse"></span> <span data-t="next_delivery">Következő szállítás</span></div>
+          <div class="when" id="delWhen">holnap reggel, 5:00–12:00</div>
+          <div class="sub" data-t="del_sub">PilPel futár · Budapest &amp; Balaton · &lt;72 óra a földtől</div>
+          <div class="cutoff" id="cutoffBox">
+            <div class="lab"><span data-t="cutoff">Rendelési határidő</span><b id="cutLab">ma 20:00</b></div>
+            <div class="clock" id="clock">–:–:–</div>
+          </div>
+        </div>
+
+        <div class="sec"><h2 data-t="again">Rendeld újra</h2><button class="more" data-t="myorders" onclick="go('rendelesek')">Rendeléseim</button></div>
+        <div class="again" id="againRow"></div>
+
+        <div class="sec"><h2 data-t="market_today">Ma a piacon</h2><button class="more" data-t="all" onclick="go('piac')">Mind</button></div>
+        <div class="feat-row" id="featRow"></div>
+
+        <div class="nudge" id="lowNudge"></div>
+
+        <div class="sec"><h2 data-t="live_fields">Élő a földekről</h2></div>
+        <div class="fields">
+          <div class="hd"><span class="live-dot"></span> <span data-t="fields_hd">Valós idejű · termőhelyeink</span></div>
+          <div class="f"><span class="fl">🇭🇺</span><div class="ft"><b data-t="f1">Szentes, saját gazdaság</b><span data-t="f1s">Úton: Paprika, TV paprika</span></div><span class="tmp">15°</span></div>
+          <div class="f"><span class="fl">🇲🇦</span><div class="ft"><b data-t="f2">Agadir, saját farm</b><span data-t="f2s">Úton: Citrom, citrus</span></div><span class="tmp">31°</span></div>
+          <div class="f"><span class="fl">🇮🇱</span><div class="ft"><b data-t="f3">Moshav Zeitan</b><span data-t="f3s">Úton: Fűszernövények, ehető virágok</span></div><span class="tmp">27°</span></div>
+        </div>
+
+        <div class="sec"><h2 data-t="contact">A kapcsolattartód</h2></div>
+        <div class="rep">
+          <span class="rav">TA</span>
+          <div class="ri"><b>Tóth Anna · PilPel</b><span data-t="rep_sub">Hívd bármikor, ha valami nem stimmel</span></div>
+          <div class="rb">
+            <button aria-label="Hívás" onclick="toast('Hívás: +36 30 789 0967 · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button>
+            <button aria-label="Üzenet" onclick="toast('Üzenet a kapcsolattartónak · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></button>
+          </div>
+        </div>
+
+        <div class="trust">
+          <div><b>700+</b><span data-t="trust1">prémium termék</span></div>
+          <div><b>950+</b><span data-t="trust2">étterem partner</span></div>
+          <div><b>H–Szo</b><span data-t="trust3">napi szállítás</span></div>
+        </div>
+      </section>
+
+      <!-- ===== PIAC ===== -->
+      <section class="screen" data-screen="piac" hidden>
+        <div class="greet"><p class="hi" style="font-size:22px" data-t="market">Piac</p></div>
+        <label class="search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="searchIn" type="search" data-tph="search_ph" placeholder="Keress 700+ termék között…" autocomplete="off">
+        </label>
+        <div class="chips" id="chips"></div>
+        <ul class="plist" id="catalog"></ul>
+      </section>
+
+      <!-- ===== KOSÁR ===== -->
+      <section class="screen" data-screen="kosar" hidden>
+        <div class="greet"><p class="hi" style="font-size:22px" data-t="cart">Kosár</p></div>
+        <div id="cartBody"></div>
+      </section>
+
+      <!-- ===== RENDELÉSEK ===== -->
+      <section class="screen" data-screen="rendelesek" hidden>
+        <div class="greet"><p class="hi" style="font-size:22px" data-t="myorders">Rendeléseim</p></div>
+
+        <div class="sec" style="margin-top:14px"><h2 data-t="arriving">Érkezik</h2></div>
+        <div id="ordActive"></div>
+
+        <div class="sec"><h2 data-t="previous">Korábbi</h2></div>
+        <div class="ord">
+          <div class="oh">
+            <div><div class="on">#PP-25884</div><div class="od">Leszállítva · tegnap 6:40 · 14 tétel</div></div>
+            <span class="st done" data-t="delivered">Leszállítva</span>
+          </div>
+          <div class="osum">
+            <div class="ot"><span data-t="end_final">Végösszeg</span><b>52 100 Ft</b></div>
+            <div class="oacts">
+              <button data-t="claim" onclick="toast('Minőségi reklamáció megnyitva · demó','qc')">Reklamáció</button>
+              <button class="prim" data-t="reorder" onclick="reorderLast()">Újra</button>
+            </div>
+          </div>
+        </div>
+        <div class="ord">
+          <div class="oh">
+            <div><div class="on">#PP-25717</div><div class="od">Leszállítva · okt. 20. · 9 tétel</div></div>
+            <span class="st done" data-t="delivered">Leszállítva</span>
+          </div>
+          <div class="osum">
+            <div class="ot"><span data-t="end_final">Végösszeg</span><b>39 700 Ft</b></div>
+            <div class="oacts"><button class="prim" data-t="reorder" onclick="reorderLast()">Újra</button></div>
+          </div>
+        </div>
+
+        <div class="sec"><h2 data-t="recurring_orders">Ismétlődő rendelések</h2></div>
+        <div class="block" style="margin-top:0">
+          <div class="toggle" style="margin-top:0">
+            <div class="tx">Szokásos hétfő<span>12 tétel · minden hétfőre</span></div>
+            <button class="sw" aria-pressed="true" onclick="tgl(this)"></button>
+          </div>
+          <div class="toggle">
+            <div class="tx">Szerda – saláták<span>5 tétel · minden szerdára</span></div>
+            <button class="sw" aria-pressed="false" onclick="tgl(this)"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== MEGERŐSÍTÉS ===== -->
+      <section class="screen" data-screen="confirm" hidden>
+        <div class="confirm">
+          <div class="check"><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg></div>
+          <h2 data-t="conf_t">Rendelés leadva</h2>
+          <p data-t="conf_p">Összeállítjuk a konyhádra és szólunk, amint a futár elindul hajnalban.</p>
+          <div class="conf-card">
+            <div class="r"><span data-t="conf_no">Rendelésszám</span><b id="confNo">#PP-26052</b></div>
+            <div class="r"><span data-t="conf_del">Szállítás</span><b id="confWhen">holnap 5:00–12:00</b></div>
+            <div class="r"><span data-t="conf_items">Tételek</span><b id="confItems">0</b></div>
+            <div class="r"><span data-t="conf_total">Végösszeg</span><b id="confTotal">0 Ft</b></div>
+          </div>
+          <div style="display:flex;gap:11px">
+            <button class="btn ghost" style="width:auto;flex:1" data-t="conf_follow" onclick="openTrack()">Követés</button>
+            <button class="btn leaf" data-t="conf_home" onclick="go('ma')">Vissza a főoldalra</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="ma" onclick="go('ma')">
+        <svg viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9h12v-9"/></svg><span data-t="tab_ma">Ma</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="piac" onclick="go('piac')">
+        <svg viewBox="0 0 24 24"><path d="M4 9h16l-1.2-4H5.2L4 9Z"/><path d="M5 9v10h14V9"/><path d="M10 19v-5h4v5"/></svg><span data-t="tab_piac">Piac</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="kosar" onclick="go('kosar')">
+        <svg viewBox="0 0 24 24"><path d="M6.5 8h11l-1 11.5h-9L6.5 8Z"/><path d="M9.3 8V6.2a2.7 2.7 0 0 1 5.4 0V8"/></svg><span data-t="tab_kosar">Kosár</span>
+        <span class="cbadge" id="tabBadge" hidden>0</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="rendelesek" onclick="go('rendelesek')">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9.5 8h5M9.5 12h5"/></svg><span data-t="tab_rend">Rendelések</span></button>
+    </nav>
+
+    <!-- ===== ONBOARDING ===== -->
+    <div id="onboard" class="sheet ob" hidden>
+      <div class="ob-wrap">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="ob-logo"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c4 2 6 5 6 9a6 6 0 0 1-12 0c0-2 .7-3.6 2-5"/><path d="M12 21V9"/></svg></span><span>PilPel</span> Konyha</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="icon-btn" style="width:34px;height:34px;border-radius:9px" aria-label="Téma / Theme" onclick="openSheet('theme')"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.3 0 2-.9 2-1.9 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4A8.9 8.9 0 0 0 12 3Z"/><circle cx="8" cy="9" r="1.1"/><circle cx="12" cy="7" r="1.1"/><circle cx="16" cy="9.5" r="1.1"/></svg></button>
+            <div class="lang" role="group" aria-label="Nyelv / Language"><button data-l="hu" aria-pressed="true" onclick="setLang('hu')">HU</button><button data-l="en" aria-pressed="false" onclick="setLang('en')">EN</button></div>
+          </div>
+        </div>
+
+        <div data-ob="0">
+          <h1 data-t="ob_h0">Friss zöldség‑gyümölcs, egyenesen a konyhádba.</h1>
+          <p data-t="ob_p0">Farm‑to‑kitchen, napi szállítással. Rendelj percek alatt, akár szolgálat után is.</p>
+          <p style="color:var(--leaf);font-weight:600" data-t="ob_p0b">Már 950+ étterem dolgozik velünk.</p>
+          <div class="spacer"></div>
+          <button class="bigbtn leaf" data-t="ob_login" onclick="obStep(1)">Belépés telefonszámmal</button>
+          <button class="ghostbtn" data-t="ob_browse" onclick="finishOnboard()">Körülnézek előbb</button>
+        </div>
+
+        <div data-ob="1" hidden>
+          <h1 data-t="ob_h1">Add meg a telefonszámod</h1>
+          <p data-t="ob_p1">Küldünk egy belépési kódot SMS‑ben. Új konyhánál ez lesz a <b>központi szám</b>.</p>
+          <div class="field"><label data-t="ob_mobile">Mobilszám</label>
+            <div class="phone"><span class="cc">+36</span><input id="obPhone" type="tel" inputmode="numeric" value="30 123 4567"></div>
+          </div>
+          <div class="spacer"></div>
+          <button class="bigbtn leaf" data-t="ob_code" onclick="obStep(2)">Kód kérése</button>
+          <button class="ghostbtn" data-t="ob_back" onclick="obStep(0)">Vissza</button>
+        </div>
+
+        <div data-ob="2" hidden>
+          <h1 data-t="ob_h2">Írd be a kódot</h1>
+          <p data-t="ob_p2">Elküldtük a +36 30 123 4567 számra.</p>
+          <div class="field"><label data-t="ob_code6">6 jegyű kód</label>
+            <div class="otp">
+              <input value="4" maxlength="1" inputmode="numeric" aria-label="1. számjegy">
+              <input value="2" maxlength="1" inputmode="numeric" aria-label="2. számjegy">
+              <input value="3" maxlength="1" inputmode="numeric" aria-label="3. számjegy">
+              <input value="9" maxlength="1" inputmode="numeric" aria-label="4. számjegy">
+              <input value="1" maxlength="1" inputmode="numeric" aria-label="5. számjegy">
+              <input value="8" maxlength="1" inputmode="numeric" aria-label="6. számjegy">
+            </div>
+          </div>
+          <div class="hint" data-t="ob_hint">Demó: a kód előre kitöltve. Újraküldés 29 mp múlva.</div>
+          <div class="spacer"></div>
+          <button class="bigbtn leaf" data-t="ob_enter" onclick="obStep(3)">Belépés</button>
+          <button class="ghostbtn" data-t="ob_other" onclick="obStep(1)">Másik szám</button>
+        </div>
+
+        <div data-ob="3" hidden>
+          <h1 data-t="ob_h3">Új konyha vagy csatlakozás?</h1>
+          <p data-t="ob_p3">A <b>központi szám</b> kezeli a számlázást és a jóváhagyásokat. Később meghívhatsz további számokat: séfek, beszerzés, több telephely.</p>
+          <button class="opt" aria-pressed="true" onclick="obPick(this)"><span class="oic">🏠</span><span><span class="ob-t" data-t="ob_opt1">Új konyha regisztrálása</span><span class="ob-d" data-t="ob_opt1s">Ez a szám lesz a központi szám (admin + számlázás).</span></span></button>
+          <button class="opt" aria-pressed="false" onclick="obPick(this)"><span class="oic">👥</span><span><span class="ob-t" data-t="ob_opt2">Csatlakozás meglévő konyhához</span><span class="ob-d" data-t="ob_opt2s">Meghívóval, a központi szám jóváhagyásával.</span></span></button>
+          <div class="field"><label data-t="ob_kname">Konyha / vállalkozás neve</label>
+            <div class="phone"><input id="obName" type="text" value="Kóstoló Bisztró" style="padding:15px 14px"></div>
+          </div>
+          <div class="spacer"></div>
+          <button class="bigbtn" data-t="ob_create" onclick="obStep(4)">Konyha létrehozása</button>
+        </div>
+
+        <div data-ob="4" hidden>
+          <div style="text-align:center;padding-top:16px"><div class="check" style="margin:0 auto"><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7"/></svg></div></div>
+          <h1 style="text-align:center" data-t="ob_h4">Készen állsz, Dániel séf</h1>
+          <p style="text-align:center" data-t="ob_p4">A <b>Kóstoló Bisztró</b> központi száma beállítva. Nézzük a piacot.</p>
+          <div class="field" style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px">
+            <label style="margin-bottom:4px" data-t="central_num">Központi szám</label>
+            <div style="font-size:16px;font-weight:700">+36 30 123 4567 · admin</div>
+          </div>
+          <div class="spacer"></div>
+          <button class="bigbtn leaf" data-t="go_market" onclick="finishOnboard()">Irány a piac</button>
+        </div>
+
+        <div class="ob-dots" id="obDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <!-- ===== FOLYAMAT-TÉRKÉP ===== -->
+    <div id="hub" class="sheet" hidden>
+      <div class="s-top">
+        <button class="x" aria-label="Bezárás" onclick="closeSheet('hub')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <div class="tt"><span data-t="hub_title">Teljes folyamat</span><small data-t="hub_sub">Kattints bármelyik lépésre</small></div>
+      </div>
+      <div class="s-body">
+        <p class="hub-intro" data-t="hub_intro">A séf‑app és a <b>futár‑app</b> egy láncban dolgozik: a rendeléstől a QR‑es átvételig és a mennyiségi elszámolásig. Minden lépés élő demó.</p>
+        <button class="hub-stage" onclick="closeSheet('hub');openOnboard()"><span class="hn">1</span><span class="hb"><span class="hbt"><b data-t="hs1">Regisztráció telefonszámmal</b><span data-t="hs1s">OTP‑kód, központi szám létrehozása</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openSheet('fiok')"><span class="hn">2</span><span class="hb"><span class="hbt"><b data-t="hs2">Konyha &amp; alárendelt számok</b><span data-t="hs2s">Szerepkörök, keret, jóváhagyás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');go('piac')"><span class="hn">3</span><span class="hb"><span class="hbt"><b data-t="hs3">Rendelés összeállítása</b><span data-t="hs3s">Piac, kereső, kosár, catchweight</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openPay(true)"><span class="hn">4</span><span class="hb"><span class="hbt"><b data-t="hs4">Fizetés &amp; elszámolási mód</b><span data-t="hs4s">Céges átutalás, kártya, átvételkor</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openTrack(2)"><span class="hn">5</span><span class="hb"><span class="hbt"><b data-t="hs5">Komissiózás (raktár)</b><span data-t="hs5s">Tételek összeszedése, tömeg mérése</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openDriver()"><span class="hn">6</span><span class="hb"><span class="hbt"><b data-t="hs6">Kiszállítás – futár app</b><span data-t="hs6s">Útvonal, státusz, élő kapcsolat</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openTrack(5)"><span class="hn">7</span><span class="hb"><span class="hbt"><b data-t="hs7">Átvétel QR‑kóddal</b><span data-t="hs7s">Szállítólevél, helyszíni ellenőrzés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openTrack(7)"><span class="hn">8</span><span class="hb"><span class="hbt"><b data-t="hs8">Mennyiségi elszámolás &amp; számla</b><span data-t="hs8s">Rendelt vs. kiszedett tömeg, jóváírás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');reorderLast()"><span class="hn">9</span><span class="hb"><span class="hbt"><b data-t="hs9">Újrarendelés</b><span data-t="hs9s">Egy koppintás, vagy ismétlődő rendelés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+      </div>
+    </div>
+
+    <!-- ===== FIÓK / SZÁMOK ===== -->
+    <div id="fiok" class="sheet" hidden>
+      <div class="s-top">
+        <button class="x" aria-label="Bezárás" onclick="closeSheet('fiok')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <div class="tt"><span data-t="fiok_title">Konyha &amp; számok</span><small data-t="fiok_sub">Központi és alárendelt számok</small></div>
+      </div>
+      <div class="s-body">
+        <div class="acct-hero">
+          <div class="lbl" data-t="central_num">Központi szám</div>
+          <div class="nm">Kóstoló Bisztró</div>
+          <div class="num">+36 30 123 4567 · Dániel séf (admin)</div>
+          <div class="meta">
+            <div><b data-t="acct_transfer">Átutalás</b><span data-t="meta_terms">15 napos határidő</span></div>
+            <div><b>800 000 Ft</b><span data-t="meta_credit">hitelkeret</span></div>
+            <div><b data-t="meta_sites">2 telephely</b>Budapest</div>
+          </div>
+        </div>
+        <div class="sec"><h2 data-t="sub_numbers">Alárendelt számok</h2></div>
+        <div class="sub-row"><span class="av">GB</span><div class="si"><b>Gábor · sous‑chef</b><span>+36 30 ••• 2211</span></div><span class="role can" data-t="role_can">Rendelhet · 150e</span></div>
+        <div class="sub-row"><span class="av">L2</span><div class="si"><b>Lánchíd Kávéház · konyha 2</b><span>+36 70 ••• 4480</span></div><span class="role appr" data-t="role_appr">Jóváhagyással</span></div>
+        <div class="sub-row"><span class="av">BE</span><div class="si"><b>Beszerzés</b><span>+36 20 ••• 9075</span></div><span class="role view" data-t="role_view">Megtekintés</span></div>
+        <button class="add-sub" data-t="invite_num" onclick="toast('Új szám meghívása SMS‑ben · demó')">+ Szám meghívása</button>
+        <div class="est-note" style="margin-top:16px"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="wf_note">A „Jóváhagyással" számok rendelése és a keret feletti tételek a <b>központi számra</b> futnak be jóváhagyásra.</div></div>
+      </div>
+    </div>
+
+    <!-- ===== FIZETÉS ===== -->
+    <div id="pay" class="sheet" hidden>
+      <div class="s-top">
+        <button class="back" aria-label="Vissza" onclick="closeSheet('pay')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="tt"><span data-t="pay_title">Fizetés &amp; elszámolás</span><small>Kóstoló Bisztró · központi számla</small></div>
+      </div>
+      <div class="s-body">
+        <label style="font:700 12px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);display:block;margin:2px 0 2px" data-t="pay_method">Fizetési mód</label>
+        <button class="pm" aria-pressed="true" onclick="payPick(this)"><span class="pmic">🧾</span><div class="pmi"><b data-t="pm1">Céges átutalás</b><span data-t="pm1s">15 napos határidő · központi számla</span></div><span class="tick"></span></button>
+        <button class="pm" aria-pressed="false" onclick="payPick(this)"><span class="pmic">💳</span><div class="pmi"><b data-t="pm2">Bankkártya</b><span data-t="pm2s">•••• 4421 · azonnali</span></div><span class="tick"></span></button>
+        <button class="pm" aria-pressed="false" onclick="payPick(this)"><span class="pmic">🚚</span><div class="pmi"><b data-t="pm3">Fizetés átvételkor</b><span data-t="pm3s">A végleges, kiszedett tömeg szerint</span></div><span class="tick"></span></button>
+        <div class="credit-bar">
+          <div class="cl"><span data-t="credit_use">Hitelkeret‑felhasználás</span><b id="credUse">— / 800 000 Ft</b></div>
+          <div class="track"><i id="credBar" style="width:18%"></i></div>
+        </div>
+        <div class="est-note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="est_note"><b>Becsült összeg.</b> A súlyra mért tételeknél a végleges ár a <b>kiszedett tömeg</b> alapján alakul (±10% tolerancia). A számla a tényleges mennyiséggel egyezik.</div></div>
+        <div class="totals" id="payTotals"></div>
+      </div>
+      <div class="s-foot">
+        <button class="btn primary" style="width:100%" id="payBtn" onclick="placeOrder()">Rendelés leadása</button>
+      </div>
+    </div>
+
+    <!-- ===== KÖVETÉS + FUTÁR (JS tölti) ===== -->
+    <div id="track" class="sheet" hidden></div>
+    <div id="driver" class="sheet drv l2" hidden></div>
+
+    <!-- ===== TÉMA ===== -->
+    <div id="theme" class="sheet" hidden>
+      <div class="s-top">
+        <button class="x" aria-label="Bezárás" onclick="closeSheet('theme')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <div class="tt" data-t="theme_title">Téma</div>
+      </div>
+      <div class="s-body">
+        <div class="th-grid">
+          <button class="th-opt" data-th="auto" onclick="setTheme('auto')"><span class="sw3"><i style="background:linear-gradient(135deg,#F6F7F2 50%,#0C0F0C 50%)"></i><i style="background:#17A866"></i><i style="background:#DF4F2C"></i></span><b data-t="th_auto">Automatikus</b><span class="th-aa" style="font-family:'Bricolage Grotesque',sans-serif">Aa</span></button>
+          <button class="th-opt" data-th="piac" onclick="setTheme('piac')"><span class="sw3"><i style="background:#F6F7F2"></i><i style="background:#0E6B45"></i><i style="background:#DF4F2C"></i></span><b data-t="th_piac">Piac · világos</b><span class="th-aa" style="font-family:'Bricolage Grotesque',sans-serif">Aa</span></button>
+          <button class="th-opt" data-th="ejfel" onclick="setTheme('ejfel')"><span class="sw3"><i style="background:#0C0F0C"></i><i style="background:#45D197"></i><i style="background:#FF6D47"></i></span><b data-t="th_ejfel">Éjfél · sötét</b><span class="th-aa" style="font-family:'Bricolage Grotesque',sans-serif">Aa</span></button>
+          <button class="th-opt" data-th="lovable" onclick="setTheme('lovable')"><span class="sw3"><i style="background:#F4F1E8"></i><i style="background:#2E6B4F"></i><i style="background:#C8352B"></i></span><b data-t="th_lovable">Lovable</b><span class="th-aa" style="font-family:Fraunces,serif">Aa</span></button>
+        </div>
+        <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;margin:16px 2px 0" data-t="theme_hint">A dizájn és a betűtípus kipróbálható. Az „Automatikus" a készülék beállítását követi.</p>
+      </div>
+    </div>
+
+    <div id="detail" class="detail" hidden></div>
+    <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
+  </div>
+</div>
+
+<script>
+/* ============ ADAT (demó) — valódi PilPel kínálat ============ */
+const B = {
+  sajat:{t:'Saját gazdaság',en:'Own farm',c:'leaf'}, import:{t:'Közvetlen import',en:'Direct import',c:'amber'},
+  friss:{t:'Ma szedve',en:'Picked today',c:'bright'}, kesz:{t:'Konyhakész',en:'Ready to use',c:'leaf'},
+  szezon:{t:'Szezon csúcsán',en:'Peak season',c:'tomato'}, plating:{t:'Plating',en:'Plating',c:'plum'},
+  minta:{t:'Mintacikk',en:'Sample item',c:'amber'}, kimeros:{t:'Kimérős',en:'Loose · by weight',c:'plum'}
+};
+const P = [
+  {id:'tvpaprika',n:'TV paprika',cat:'zoldseg',e:'🫑',h:8,fl:'🇭🇺',og:'Szentes',gr:'I. osztály · saját termesztés',
+    b:['sajat','friss','szezon'],u:[{u:'kg',p:890},{u:'láda · 5 kg',p:4350}],
+    d:'Édes, vékony héjú, tölteni való paprika a saját szentesi gazdaságunkból. Reggel szedve, délre a konyhádban.'},
+  {id:'kaliforniai',n:'Kaliforniai paprika, piros',cat:'zoldseg',e:'🫑',h:5,fl:'🇭🇺',og:'Szentes',gr:'Extra',
+    b:['sajat','friss'],u:[{u:'kg',p:1290},{u:'láda · 5 kg',p:6350}],
+    d:'Vastag húsú, ropogós, mélypiros kaliforniai. Grillhez, pecsenyéhez, nyersen is.'},
+  {id:'koktelparadicsom',n:'Koktélparadicsom',cat:'zoldseg',e:'🍅',h:4,fl:'🇭🇺',og:'Szombathely',gr:'Extra',
+    b:['friss','szezon'],u:[{u:'tálca · 3 kg',p:4350},{u:'kg',p:1490}],
+    d:'Fürtös koktélparadicsom, intenzív édes-savas ízzel. Partner-termelőnktől, napi frissességgel.'},
+  {id:'kigyouborka',n:'Kígyóuborka',cat:'zoldseg',e:'🥒',h:95,fl:'🇭🇺',og:'Szombathely',gr:'I. osztály',
+    b:['friss'],u:[{u:'db',p:290},{u:'láda · 12 db',p:3200}],
+    d:'Hosszú, magtalan kígyóuborka, ropogós héjjal. Salátákhoz, savanyításhoz.'},
+  {id:'romanesco',n:'Pagodakarfiol (Romanesco)',cat:'zoldseg',e:'🥦',h:112,fl:'🇫🇷',og:'Franciaország / Olaszország',gr:'Extra',
+    b:['import','plating'],u:[{u:'db',p:1490}],
+    d:'A természet matematikai remekműve – Fibonacci-spirálok, diós-édes ízvilág. Tányéron látványelem.'},
+  {id:'mangold',n:'Mangold Szivárvány',cat:'zoldseg',e:'🥬',h:330,fl:'🇮🇹',og:'Olaszország',gr:'Extra',
+    b:['import','plating'],u:[{u:'csomag',p:1690}],
+    d:'Piros, sárga, narancssárga, rózsaszín szárú mangold – vizuális show a tányéron.'},
+  {id:'ratte',n:'Ratte burgonya',cat:'zoldseg',e:'🥔',h:40,fl:'🇳🇱',og:'Hollandia',gr:'I. osztály',
+    b:['import'],u:[{u:'kg',p:1890},{u:'zsák · 5 kg',p:8900}],
+    d:'A francia gasztronómia ikonikus burgonyája – gesztenyés, vajas ízvilág, kis méret.'},
+  {id:'lilaburgonya',n:'Lila burgonya',cat:'zoldseg',e:'🥔',h:280,fl:'🇫🇷',og:'Franciaország',gr:'I. osztály',
+    b:['import'],u:[{u:'kg',p:2290}],
+    d:'Antocianin-gazdag lila hús – természetes ételfesték, puré és chips különlegesség.'},
+
+  {id:'mosottrukkola',n:'Mosott rukkola',cat:'salata',e:'🥬',h:100,fl:'🇭🇺',og:'Szombathely',gr:'Konyhakész',
+    b:['kesz','friss'],u:[{u:'kg',p:2890},{u:'tasak · 500 g',p:1550}],
+    d:'Mosott, konyhakész rukkola – azonnal tányérra. Borsos, mogyorós karakter.'},
+  {id:'babaspenot',n:'Babaspenót, mosott',cat:'salata',e:'🥬',h:120,fl:'🇭🇺',og:'Szombathely',gr:'Konyhakész',
+    b:['kesz'],u:[{u:'kg',p:2690},{u:'tasak · 500 g',p:1450}],
+    d:'Fiatal, mosott babaspenót – nyersen salátába, melegen köretnek. Használatra kész.'},
+  {id:'fejessalata',n:'Fejes saláta',cat:'salata',e:'🥬',h:92,fl:'🇭🇺',og:'Szombathely',gr:'I. osztály',
+    b:['friss'],u:[{u:'db',p:320}],
+    d:'Klasszikus puha fejes saláta, friss, ropogós levelekkel.'},
+
+  {id:'barnacsiperke',n:'Barna csiperke',cat:'gomba',e:'🍄',h:28,fl:'🇭🇺',og:'Magyarország',gr:'I. osztály',
+    b:['friss'],u:[{u:'kg',p:1190},{u:'láda · 2,5 kg',p:2850}],
+    d:'Teltebb ízű barna csiperke, folyamatos készlettel. Pörköltbe, raguba, grillre.'},
+  {id:'laska',n:'Laskagomba',cat:'gomba',e:'🍄',h:35,fl:'🇭🇺',og:'Magyarország',gr:'Extra',
+    b:[],u:[{u:'kg',p:2490}],
+    d:'Selymes textúrájú laskagomba, hazai termelőtől. Serpenyőben, tempurában.'},
+  {id:'shiitake',n:'Shiitake',cat:'gomba',e:'🍄',h:22,fl:'🇳🇱',og:'Hollandia',gr:'Extra',
+    b:['import'],u:[{u:'kg',p:4900}],
+    d:'Umami-gazdag shiitake, húsos kalappal. Ázsiai fogásokhoz, erőlevesekhez.'},
+
+  {id:'citrom',n:'Citrom',cat:'gyumolcs',e:'🍋',h:52,fl:'🇲🇦',og:'Agadir, saját farm',gr:'Extra',
+    b:['sajat','import'],u:[{u:'kg',p:790},{u:'láda · 5 kg',p:3750}],
+    d:'Saját marokkói farmunkról, közvetlen import – közvetítők nélkül. Lédús, vékony héjú.'},
+  {id:'avokado',n:'Avokádó Hass, érett',cat:'gyumolcs',e:'🥑',h:70,fl:'🇵🇪',og:'Peru',gr:'I. osztály',
+    b:['import'],u:[{u:'db',p:690},{u:'karton · 12 db',p:7800}],
+    d:'Fogyasztásra érett Hass avokádó – krémes, vajas. Közvetlen import, kóstolásra kész.'},
+  {id:'medjool',n:'Medjool datolya',cat:'gyumolcs',e:'🌴',h:28,fl:'🇮🇱',og:'Izrael',gr:'Extra',
+    b:['import'],u:[{u:'kg',p:6900}],
+    d:'A datolyák királya – karamell, méz, toffee. Természetes édesítő, töltve is tökéletes.'},
+  {id:'sarkany',n:'Sárkánygyümölcs, piros',cat:'gyumolcs',e:'🍈',h:328,fl:'🇵🇪',og:'Peru / Thaiföld',gr:'Extra',
+    b:['import','plating'],u:[{u:'db',p:1290},{u:'kg',p:4900}],
+    d:'Mélybíbor húsú pitaya – természetes betacianin antioxidánsokkal. Látványos desszert-elem.'},
+  {id:'mangosteen',n:'Mangosteen',cat:'gyumolcs',e:'🍈',h:300,fl:'🇮🇩',og:'Indonézia',gr:'Extra',
+    b:['import'],u:[{u:'kg',p:8900}],
+    d:'A gyümölcsök királynője – hófehér, krémes, licsi-őszibarack ízvilág.'},
+  {id:'physalis',n:'Physalis (Inka bogyó)',cat:'gyumolcs',e:'🌼',h:46,fl:'🇨🇴',og:'Kolumbia',gr:'Extra',
+    b:['import','plating'],u:[{u:'tálca · 250 g',p:1650}],
+    d:'Aranysárga lampion-bogyó – fine dining garnír klasszikus, édes-savas ízzel.'},
+  {id:'kumquat',n:'Kumquat',cat:'gyumolcs',e:'🍋',h:38,fl:'🇪🇸',og:'Spanyolország',gr:'Extra',
+    b:['import'],u:[{u:'kg',p:3900}],
+    d:'Az egyetlen citrus, amit héjastul fogyasztunk – édes héj, savanyú hús.'},
+  {id:'babyananasz',n:'Baby ananász',cat:'gyumolcs',e:'🍍',h:48,fl:'🇿🇦',og:'Dél-Afrika',gr:'Extra',
+    b:['import'],u:[{u:'db',p:1890}],
+    d:'Tenyérnyi, extra édes baby ananász – héjastól ehető maggal.'},
+
+  {id:'bazsalikom',n:'Bazsalikom',cat:'fuszer',e:'🌿',h:125,fl:'🇮🇱',og:'Moshav Zeitan',gr:'Extra',
+    b:['import','friss'],u:[{u:'csomag',p:450}],
+    d:'Illóolajban gazdag izraeli bazsalikom – repülővel, közvetlenül partnergazdaságainkból.'},
+  {id:'kaffir',n:'Kaffir lime levél',cat:'fuszer',e:'🌿',h:115,fl:'🇮🇩',og:'Indonézia',gr:'Extra',
+    b:['import'],u:[{u:'csomag',p:690}],
+    d:'A thai konyha ikonikus aromája – levele és héja egyaránt felhasználható.'},
+  {id:'galanga',n:'Galanga gyökér',cat:'fuszer',e:'🫚',h:55,fl:'🇹🇭',og:'Thaiföld',gr:'I. osztály',
+    b:['import'],u:[{u:'kg',p:2490}],
+    d:'A thai konyha alapja – citrusos-borsos-gyömbéres gyökér, currykhez, levesekhez.'},
+  {id:'kurkuma',n:'Friss kurkuma',cat:'fuszer',e:'🫚',h:36,fl:'🇹🇭',og:'Thaiföld',gr:'I. osztály',
+    b:['import'],u:[{u:'kg',p:2190}],
+    d:'Élénk narancssárga friss gyökér – gyulladáscsökkentő kurkumin, intenzív szín.'},
+
+  {id:'viragok',n:'Ehető virágok',cat:'kulon',e:'🌼',h:320,fl:'🇮🇱',og:'Izrael',gr:'Extra',
+    b:['import','plating'],u:[{u:'tálca',p:2490}],
+    d:'Viola, begónia, ibolya – a Michelin plating elengedhetetlen eleme. Vegyes tálcán.'},
+  {id:'sakura',n:'Sakura mix mikrozöld',cat:'kulon',e:'🌸',h:335,fl:'🇳🇱',og:'Hollandia',gr:'Konyhakész',
+    b:['import','kesz','plating'],u:[{u:'tálca',p:1690}],
+    d:'Prémium mikrozöld koktél – plating, saláta, szendvics. Konyhakész, élő tálcán.'},
+  {id:'feketefokhagyma',n:'Fekete fokhagyma',cat:'kulon',e:'🧄',h:20,fl:'🇪🇸',og:'Spanyolország',gr:'Extra',
+    b:['import'],u:[{u:'kg',p:9900},{u:'fej · db',p:390}],
+    d:'Fermentált fokhagyma – karamelles, umami-gazdag, szaga nincs. Szószokhoz, pürékhez.'},
+  {id:'safrany',n:'Sáfrány',cat:'kulon',e:'🌼',h:40,fl:'🇮🇷',og:'Irán',gr:'Extra',
+    b:['import','plating'],u:[{u:'g',p:980},{u:'doboz · 2 g',p:1850}],
+    d:'A világ legdrágább fűszere – 150 000 virágból 1 kg. Rizottóhoz, halhoz, pár szál is elég.'}
+];
+const BYID = Object.fromEntries(P.map(p=>[p.id,p]));
+const CATS = [['mind','Mind'],['zoldseg','Zöldség'],['gyumolcs','Gyümölcs'],['salata','Saláták'],['gomba','Gombák'],['fuszer','Fűszernövény'],['kulon','Különlegesség']];
+const LAST = [
+  {id:'tvpaprika',q:2,ui:1},{id:'koktelparadicsom',q:3,ui:0},{id:'kigyouborka',q:2,ui:1},
+  {id:'mosottrukkola',q:2,ui:0},{id:'citrom',q:3,ui:0},{id:'avokado',q:1,ui:1},
+  {id:'bazsalikom',q:5,ui:0},{id:'barnacsiperke',q:3,ui:0}
+];
+const FEAT = [
+  {id:'koktelparadicsom',r:'Ma szedve',hot:true},{id:'romanesco',r:'Új import'},
+  {id:'feketefokhagyma',r:'Séfkedvenc'},{id:'sakura',r:'Frissen érkezett'},
+  {id:'medjool',r:'Szezon'},{id:'viragok',r:'Plating'}
+];
+const MIN_ORDER = 15000, VAT = 0.27;
+
+/* ============ ÁLLAPOT ============ */
+let cart = [];            // {id,q,ui}
+let activeCat = 'mind', query = '';
+let detailId = null, detailUi = 0, detailQty = 1;
+
+/* ============ KÉTNYELVŰSÉG (HU / EN) ============ */
+let lang = 'hu';
+const TR = {
+  sub:{hu:'Séf-rendelő',en:'Chef ordering'},
+  tab_ma:{hu:'Ma',en:'Today'}, tab_piac:{hu:'Piac',en:'Market'}, tab_kosar:{hu:'Kosár',en:'Cart'}, tab_rend:{hu:'Rendelések',en:'Orders'},
+  greet:{hu:'Jó reggelt, Dániel séf',en:'Good morning, chef Dániel'},
+  flow_title:{hu:'Teljes folyamat',en:'Full process'},
+  flow_sub:{hu:'Regisztráció → rendelés → fizetés → komissiózás → futár → QR‑átvétel → elszámolás',en:'Sign‑up → order → payment → picking → courier → QR handover → settlement'},
+  again:{hu:'Rendeld újra',en:'Order again'}, myorders:{hu:'Rendeléseim',en:'My orders'},
+  market_today:{hu:'Ma a piacon',en:"Today's market"}, all:{hu:'Mind',en:'All'},
+  live_fields:{hu:'Élő a földekről',en:'Live from the fields'}, contact:{hu:'A kapcsolattartód',en:'Your contact'},
+  next_delivery:{hu:'Következő szállítás',en:'Next delivery'},
+  del_sub:{hu:'PilPel futár · Budapest &amp; Balaton · &lt;72 óra a földtől',en:'PilPel courier · Budapest &amp; Balaton · &lt;72h from field'},
+  cutoff:{hu:'Rendelési határidő',en:'Order cut-off'},
+  fields_hd:{hu:'Valós idejű · termőhelyeink',en:'Real-time · our growers'},
+  f1:{hu:'Szentes, saját gazdaság',en:'Szentes, own farm'}, f1s:{hu:'Úton: Paprika, TV paprika',en:'On the way: Pepper, TV pepper'},
+  f2:{hu:'Agadir, saját farm',en:'Agadir, own farm'}, f2s:{hu:'Úton: Citrom, citrus',en:'On the way: Lemon, citrus'},
+  f3:{hu:'Moshav Zeitan',en:'Moshav Zeitan'}, f3s:{hu:'Úton: Fűszernövények, ehető virágok',en:'On the way: Herbs, edible flowers'},
+  repeat_last:{hu:'Előző rendelés megismétlése',en:'Repeat last order'},
+  nudge:{hu:'A szokásos <b>Hass avokádódból</b> 1 karton maradt a mai járatra.',en:'Only 1 carton of your usual <b>Hass avocado</b> left for today’s run.'},
+  add_cart:{hu:'+ Kosár',en:'+ Cart'},
+  trust1:{hu:'prémium termék',en:'premium products'}, trust2:{hu:'étterem partner',en:'restaurant partners'}, trust3:{hu:'napi szállítás',en:'daily delivery'},
+  rep_sub:{hu:'Hívd bármikor, ha valami nem stimmel',en:'Call anytime if something is off'},
+  market:{hu:'Piac',en:'Market'}, search_ph:{hu:'Keress 700+ termék között…',en:'Search 700+ products…'},
+  cat_mind:{hu:'Mind',en:'All'}, cat_zoldseg:{hu:'Zöldség',en:'Vegetables'}, cat_gyumolcs:{hu:'Gyümölcs',en:'Fruit'}, cat_salata:{hu:'Saláták',en:'Salads'}, cat_gomba:{hu:'Gombák',en:'Mushrooms'}, cat_fuszer:{hu:'Fűszernövény',en:'Herbs'}, cat_kulon:{hu:'Különlegesség',en:'Specialty'},
+  no_result:{hu:'Nincs találat erre',en:'No results for'},
+  cart:{hu:'Kosár',en:'Cart'}, cart_empty_t:{hu:'A kosarad üres',en:'Your cart is empty'},
+  cart_empty_p:{hu:'Indíts az előző rendelésedből, vagy böngéssz a piacon 700+ friss termék között.',en:'Start from your last order, or browse 700+ fresh products in the market.'},
+  prev_order:{hu:'Előző rendelés',en:'Last order'},
+  del_block:{hu:'Szállítás',en:'Delivery'}, del_window:{hu:'Szállítási ablak:',en:'Delivery window:'}, courier:{hu:'PilPel futár',en:'PilPel courier'},
+  min_order:{hu:'Minimum rendelés',en:'Minimum order'}, min_reached:{hu:'Elérted a minimumot',en:'Minimum reached'},
+  min_left:{hu:'Még %A% a díjmentes hajnali szállításhoz.',en:'%A% more for free early‑morning delivery.'},
+  msg_pilpel:{hu:'Üzenet a PilPelnek',en:'Message to PilPel'},
+  msg_ph:{hu:'Pl. Kérlek jól érett avokádót, és a paprikát külön ládában.',en:'E.g. Please send ripe avocado, and peppers in a separate crate.'},
+  save_tpl:{hu:'Mentés sablonként',en:'Save as template'}, save_tpl_s:{hu:'Gyors újrarendelés egy koppintással',en:'One‑tap reordering'},
+  recurring:{hu:'Ismétlődő rendelés',en:'Recurring order'}, recurring_s:{hu:'Minden hétfőre automatikusan',en:'Automatically every Monday'},
+  net:{hu:'Nettó',en:'Net'}, vat:{hu:'ÁFA (27%)',en:'VAT (27%)'}, total:{hu:'Összesen',en:'Total'},
+  to_pay:{hu:'Tovább a fizetéshez',en:'Continue to payment'},
+  cutnote:{hu:'Rendelési határidő: <b id="cartCut">ma 20:00</b> · utána a következő járatra kerül.',en:'Order cut-off: <b id="cartCut">today 20:00</b> · after that it moves to the next run.'},
+  pay_title:{hu:'Fizetés & elszámolás',en:'Payment & settlement'}, pay_method:{hu:'Fizetési mód',en:'Payment method'},
+  pm1:{hu:'Céges átutalás',en:'Company transfer'}, pm1s:{hu:'15 napos határidő · központi számla',en:'15‑day terms · central account'},
+  pm2:{hu:'Bankkártya',en:'Card'}, pm2s:{hu:'•••• 4421 · azonnali',en:'•••• 4421 · instant'},
+  pm3:{hu:'Fizetés átvételkor',en:'Pay on delivery'}, pm3s:{hu:'A végleges, kiszedett tömeg szerint',en:'By the final picked weight'},
+  credit_use:{hu:'Hitelkeret‑felhasználás',en:'Credit line usage'},
+  est_note:{hu:'<b>Becsült összeg.</b> A súlyra mért tételeknél a végleges ár a <b>kiszedett tömeg</b> alapján alakul (±10% tolerancia). A számla a tényleges mennyiséggel egyezik.',en:'<b>Estimated total.</b> For weighed items the final price depends on the <b>picked weight</b> (±10% tolerance). The invoice matches the actual quantity.'},
+  est_net:{hu:'Becsült nettó',en:'Estimated net'}, est_total:{hu:'Becsült összesen',en:'Estimated total'}, place_order:{hu:'Rendelés leadása',en:'Place order'},
+  arriving:{hu:'Érkezik',en:'Arriving'}, previous:{hu:'Korábbi',en:'Previous'}, recurring_orders:{hu:'Ismétlődő rendelések',en:'Recurring orders'},
+  invoice:{hu:'Számla',en:'Invoice'}, claim:{hu:'Reklamáció',en:'Claim'}, reorder:{hu:'Újra',en:'Reorder'}, track:{hu:'Követés',en:'Track'},
+  end_final:{hu:'Végösszeg',en:'Total'}, end_est:{hu:'Becsült összeg',en:'Estimated'}, items:{hu:'tétel',en:'items'},
+  conf_t:{hu:'Rendelés leadva',en:'Order placed'}, conf_p:{hu:'Összeállítjuk a konyhádra és szólunk, amint a futár elindul hajnalban.',en:'We will pick it for your kitchen and ping you as soon as the courier sets off at dawn.'},
+  conf_no:{hu:'Rendelésszám',en:'Order no.'}, conf_del:{hu:'Szállítás',en:'Delivery'}, conf_items:{hu:'Tételek',en:'Items'}, conf_total:{hu:'Végösszeg',en:'Total'},
+  conf_follow:{hu:'Követés',en:'Track'}, conf_home:{hu:'Vissza a főoldalra',en:'Back to home'},
+  mystatus:{hu:'Állapot',en:'Status'}, qty:{hu:'Mennyiség',en:'Quantity'}, to_cart:{hu:'Kosárba',en:'Add to cart'}, delete:{hu:'Törlés',en:'Remove'},
+  st_pending:{hu:'visszaigazolásra vár',en:'awaiting confirmation'},
+  del_slip:{hu:'Szállítólevél · mennyiségi elszámolás',en:'Delivery note · quantity settlement'},
+  claim_q:{hu:'Hiányzik vagy nem megfelelő tétel?',en:'Missing or substandard item?'}, claim_btn:{hu:'Hiány / reklamáció',en:'Shortage / claim'},
+  settle_final:{hu:'Végleges, kiszedett tömeg szerint',en:'Final, by picked weight'}, estimate:{hu:'Becsült',en:'Estimated'}, correction:{hu:'korrekció',en:'correction'},
+  finalize:{hu:'Elszámolás véglegesítése',en:'Finalize settlement'},
+  qr_title:{hu:'Átvételi kód',en:'Handover code'}, qr_show:{hu:'Mutasd a futárnak, vagy olvassátok be',en:'Show it to the courier, or scan it'},
+  qr_note:{hu:'Beolvasás után megnyílik a szállítólevél a rendelt és a ténylegesen kiszedett tömeggel.',en:'After scanning, the delivery note opens with ordered and actually picked weights.'},
+  qr_scanned:{hu:'Beolvasva ✓ (demó)',en:'Scanned ✓ (demo)'}, driver_side:{hu:'A futár oldala',en:'The courier side'},
+  driver_app:{hu:'Futár app',en:'Courier app'}, route_today:{hu:'Mai útvonal',en:"Today's route"}, cur_stop:{hu:'Aktuális megálló',en:'Current stop'},
+  drv_scale:{hu:'Mérleg a kocsin · tényleges tömeg',en:'Scale in the van · actual weight'}, drv_note:{hu:'A futár műveletei élőben léptetik a séf‑app státuszát. Nyisd meg a Követést is.',en:'The courier’s actions advance the chef app status live. Open Track too.'},
+  look_driver:{hu:'Nézd a futár oldaláról',en:'See it from the courier side'}, qr_handover:{hu:'Átvétel QR‑kóddal',en:'Handover with QR'},
+  demo_step:{hu:'DEMÓ · léptesd végig<br>a folyamatot',en:'DEMO · step through<br>the process'},
+  eta:{hu:'Érkezés',en:'ETA'}, central_num:{hu:'Központi szám',en:'Central number'},
+  go_market:{hu:'Irány a piac',en:'To the market'},
+  ob_h0:{hu:'Friss zöldség‑gyümölcs, egyenesen a konyhádba.',en:'Fresh fruit &amp; veg, straight to your kitchen.'},
+  ob_p0:{hu:'Farm‑to‑kitchen, napi szállítással. Rendelj percek alatt, akár szolgálat után is.',en:'Farm‑to‑kitchen, delivered daily. Order in minutes, even after service.'},
+  ob_p0b:{hu:'Már 950+ étterem dolgozik velünk.',en:'950+ restaurants already work with us.'},
+  ob_login:{hu:'Belépés telefonszámmal',en:'Sign in with your phone'}, ob_browse:{hu:'Körülnézek előbb',en:'Browse first'},
+  ob_h1:{hu:'Add meg a telefonszámod',en:'Enter your phone number'},
+  ob_p1:{hu:'Küldünk egy belépési kódot SMS‑ben. Új konyhánál ez lesz a <b>központi szám</b>.',en:'We’ll text you a sign‑in code. For a new kitchen this becomes the <b>central number</b>.'},
+  ob_mobile:{hu:'Mobilszám',en:'Mobile number'}, ob_code:{hu:'Kód kérése',en:'Send code'}, ob_back:{hu:'Vissza',en:'Back'},
+  ob_h2:{hu:'Írd be a kódot',en:'Enter the code'}, ob_p2:{hu:'Elküldtük a +36 30 123 4567 számra.',en:'Sent to +36 30 123 4567.'},
+  ob_code6:{hu:'6 jegyű kód',en:'6‑digit code'}, ob_hint:{hu:'Demó: a kód előre kitöltve. Újraküldés 29 mp múlva.',en:'Demo: code pre‑filled. Resend in 29s.'},
+  ob_enter:{hu:'Belépés',en:'Sign in'}, ob_other:{hu:'Másik szám',en:'Another number'},
+  ob_h3:{hu:'Új konyha vagy csatlakozás?',en:'New kitchen or join one?'},
+  ob_p3:{hu:'A <b>központi szám</b> kezeli a számlázást és a jóváhagyásokat. Később meghívhatsz további számokat: séfek, beszerzés, több telephely.',en:'The <b>central number</b> handles billing and approvals. You can invite more numbers later: chefs, purchasing, multiple sites.'},
+  ob_opt1:{hu:'Új konyha regisztrálása',en:'Register a new kitchen'}, ob_opt1s:{hu:'Ez a szám lesz a központi szám (admin + számlázás).',en:'This number becomes the central number (admin + billing).'},
+  ob_opt2:{hu:'Csatlakozás meglévő konyhához',en:'Join an existing kitchen'}, ob_opt2s:{hu:'Meghívóval, a központi szám jóváhagyásával.',en:'By invitation, approved by the central number.'},
+  ob_kname:{hu:'Konyha / vállalkozás neve',en:'Kitchen / business name'}, ob_create:{hu:'Konyha létrehozása',en:'Create kitchen'},
+  ob_h4:{hu:'Készen állsz, Dániel séf',en:'You’re all set, chef Dániel'}, ob_p4:{hu:'A <b>Kóstoló Bisztró</b> központi száma beállítva. Nézzük a piacot.',en:'The central number for <b>Kóstoló Bisztró</b> is set. Let’s see the market.'},
+  pick:{hu:'Összeszedve',en:'Picked'}, weighed:{hu:'Súlyra mért tételek',en:'Weighed items'}, scale_now:{hu:'mérleg alatt',en:'on the scale'},
+  pick_note:{hu:'Minden láda mögött személyes minőségellenőrzés. A súlyra mért tételek tényleges tömegét most rögzítjük a szállítólevélre.',en:'Personal quality control behind every crate. The actual weight of weighed items is being recorded on the delivery note now.'},
+  packed_note:{hu:'Készen áll a futárnak',en:'Ready for the courier'}, on_site:{hu:'A futár a helyszínen',en:'The courier is on site'},
+  on_site_note:{hu:'Mutasd az átvételi QR‑kódot a futárnak. A szállítólevélen ellenőrzöd a rendelt és a ténylegesen kiszedett tömeget, mielőtt átveszed.',en:'Show the handover QR to the courier. On the delivery note you check the ordered vs. actually picked weight before you accept.'},
+  felvettem:{hu:'Felvettem · Indulás a konyhához',en:'Picked up · heading to the kitchen'}, arrived_btn:{hu:'Megérkeztem a helyszínre',en:'Arrived on site'}, scan_btn:{hu:'QR beolvasása az átvételhez',en:'Scan QR for handover'}, finalize_handover:{hu:'Átadás véglegesítése',en:'Finalize handover'},
+  pay_settled:{hu:'Elszámolva',en:'Settled'}, invoice_no:{hu:'Számla',en:'Invoice'},
+  ok_in:{hu:'rendben',en:'ok'}, exact:{hu:'pontos',en:'exact'}, ordered:{hu:'Rendelt',en:'Ordered'}, picked_w:{hu:'kiszedve',en:'picked'},
+  wf_note:{hu:'A „Jóváhagyással" számok rendelése és a keret feletti tételek a <b>központi számra</b> futnak be jóváhagyásra.',en:'Orders from “Approval required” numbers and items above the limit go to the <b>central number</b> for approval.'},
+  invite_num:{hu:'+ Szám meghívása',en:'+ Invite a number'}, sub_numbers:{hu:'Alárendelt számok',en:'Linked numbers'},
+  hub_title:{hu:'Teljes folyamat',en:'Full process'}, hub_sub:{hu:'Kattints bármelyik lépésre',en:'Tap any step'},
+  hub_intro:{hu:'A séf‑app és a <b>futár‑app</b> egy láncban dolgozik: a rendeléstől a QR‑es átvételig és a mennyiségi elszámolásig. Minden lépés élő demó.',en:'The chef app and the <b>courier app</b> work in one chain: from order to QR handover and quantity settlement. Every step is a live demo.'},
+  hs1:{hu:'Regisztráció telefonszámmal',en:'Sign-up with phone'}, hs1s:{hu:'OTP‑kód, központi szám létrehozása',en:'OTP code, create central number'},
+  hs2:{hu:'Konyha &amp; alárendelt számok',en:'Kitchen &amp; linked numbers'}, hs2s:{hu:'Szerepkörök, keret, jóváhagyás',en:'Roles, limits, approval'},
+  hs3:{hu:'Rendelés összeállítása',en:'Build the order'}, hs3s:{hu:'Piac, kereső, kosár, catchweight',en:'Market, search, cart, catchweight'},
+  hs4:{hu:'Fizetés &amp; elszámolási mód',en:'Payment &amp; settlement method'}, hs4s:{hu:'Céges átutalás, kártya, átvételkor',en:'Transfer, card, on delivery'},
+  hs5:{hu:'Komissiózás (raktár)',en:'Picking (warehouse)'}, hs5s:{hu:'Tételek összeszedése, tömeg mérése',en:'Collecting items, weighing'},
+  hs6:{hu:'Kiszállítás – futár app',en:'Delivery – courier app'}, hs6s:{hu:'Útvonal, státusz, élő kapcsolat',en:'Route, status, live link'},
+  hs7:{hu:'Átvétel QR‑kóddal',en:'Handover with QR'}, hs7s:{hu:'Szállítólevél, helyszíni ellenőrzés',en:'Delivery note, on-site check'},
+  hs8:{hu:'Mennyiségi elszámolás &amp; számla',en:'Quantity settlement &amp; invoice'}, hs8s:{hu:'Rendelt vs. kiszedett tömeg, jóváírás',en:'Ordered vs. picked weight, credit'},
+  hs9:{hu:'Újrarendelés',en:'Reorder'}, hs9s:{hu:'Egy koppintás, vagy ismétlődő rendelés',en:'One tap, or a recurring order'},
+  fiok_title:{hu:'Konyha &amp; számok',en:'Kitchen &amp; numbers'}, fiok_sub:{hu:'Központi és alárendelt számok',en:'Central and linked numbers'},
+  meta_terms:{hu:'15 napos határidő',en:'15-day terms'}, meta_credit:{hu:'hitelkeret',en:'credit line'}, meta_sites:{hu:'2 telephely',en:'2 locations'}, acct_transfer:{hu:'Átutalás',en:'Transfer'},
+  role_can:{hu:'Rendelhet · 150e',en:'Can order · 150k'}, role_appr:{hu:'Jóváhagyással',en:'Approval req.'}, role_view:{hu:'Megtekintés',en:'View only'},
+  delivered:{hu:'Leszállítva',en:'Delivered'},
+  theme_title:{hu:'Téma',en:'Theme'},
+  th_auto:{hu:'Automatikus',en:'Auto'}, th_piac:{hu:'Piac · világos',en:'Market · light'}, th_ejfel:{hu:'Éjfél · sötét',en:'Midnight · dark'}, th_lovable:{hu:'Lovable',en:'Lovable'},
+  theme_hint:{hu:'A dizájn és a betűtípus kipróbálható. Az „Automatikus" a készülék beállítását követi.',en:'Try out the look and typeface. “Auto” follows your device setting.'}
+};
+const STATUS_L={hu:['Leadva','Visszaigazolva','Komissiózás','Becsomagolva','Úton','Megérkezett','Átvéve','Elszámolva'],
+  en:['Placed','Confirmed','Picking','Packed','On the way','Arrived','Received','Settled']};
+const TITLE_L={hu:['Rendelés leadva','Visszaigazolva','Összeszedés a raktárban','Becsomagolva, indulásra kész','A futár úton van hozzád','A futár megérkezett','Átvéve – köszönjük!','Elszámolva'],
+  en:['Order placed','Confirmed','Picking in the warehouse','Packed, ready to go','The courier is on the way','The courier has arrived','Received – thank you!','Settled']};
+const STEP_L={hu:['Leadva','Komissiózás','Becsomagolva','Úton','Átvétel','Elszámolva'],
+  en:['Placed','Picking','Packed','On the way','Handover','Settled']};
+function t(k){const e=TR[k]; return e ? (e[lang]||e.hu) : k;}
+function applyStatic(){
+  document.querySelectorAll('[data-t]').forEach(el=>{ el.innerHTML = t(el.getAttribute('data-t')); });
+  document.querySelectorAll('[data-tph]').forEach(el=>{ el.setAttribute('placeholder', t(el.getAttribute('data-tph'))); });
+  try{ document.documentElement.lang = lang; }catch(e){}
+}
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
+  applyStatic();
+  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderCatalog(); renderOrders();
+  const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
+  if(!$('#track').hidden) buildTrack();
+  if(!$('#driver').hidden) buildDriver();
+  if(!$('#detail').hidden && detailId) openDetail(detailId);
+}
+
+/* ============ TÉMÁK ============ */
+const TK=['--paper','--surface','--surface-2','--ink','--ink-soft','--ink-faint','--line','--line-soft','--leaf','--leaf-ink','--leaf-bright','--sprout','--tomato','--tomato-ink','--tomato-soft','--amber','--amber-soft','--plum','--plum-soft','--backdrop','--backdrop-2','--serif','--sans'];
+const FONT_MOD={'--serif':'"Bricolage Grotesque","Hanken Grotesk",ui-sans-serif,system-ui,sans-serif','--sans':'"Hanken Grotesk",ui-sans-serif,system-ui,sans-serif'};
+const FONT_LOV={'--serif':'"Fraunces",Georgia,serif','--sans':'"Inter",ui-sans-serif,system-ui,sans-serif'};
+const THEMES={
+  auto:null,
+  piac:Object.assign({'--paper':'#F6F7F2','--surface':'#FFFFFF','--surface-2':'#FBFCF8','--ink':'#16201A','--ink-soft':'#5C675E','--ink-faint':'#8B948C','--line':'#E7EAE0','--line-soft':'#EFF1EA','--leaf':'#0E6B45','--leaf-ink':'#0A5235','--leaf-bright':'#17A866','--sprout':'#E4F0E7','--tomato':'#DF4F2C','--tomato-ink':'#B63C1E','--tomato-soft':'#FBE7DF','--amber':'#C98A13','--amber-soft':'#F6EACB','--plum':'#7A4A86','--plum-soft':'#F0E6F2','--backdrop':'#0B0F0B','--backdrop-2':'#11170F','color-scheme':'light'},FONT_MOD),
+  ejfel:Object.assign({'--paper':'#0C0F0C','--surface':'#141A14','--surface-2':'#10150F','--ink':'#ECEFE6','--ink-soft':'#9BA79C','--ink-faint':'#6D7A6F','--line':'#242C22','--line-soft':'#1B211A','--leaf':'#36C089','--leaf-ink':'#8FE5BE','--leaf-bright':'#45D197','--sprout':'#16271D','--tomato':'#FF6D47','--tomato-ink':'#FF8E70','--tomato-soft':'#2C1811','--amber':'#E7B048','--amber-soft':'#2A2213','--plum':'#C79BD1','--plum-soft':'#241A28','--backdrop':'#060806','--backdrop-2':'#0B0F0A','color-scheme':'dark'},FONT_MOD),
+  lovable:Object.assign({'--paper':'#F4F1E8','--surface':'#FFFDF7','--surface-2':'#FAF7EE','--ink':'#1E241F','--ink-soft':'#5E655C','--ink-faint':'#949A8F','--line':'#E7E1D3','--line-soft':'#F0ECE0','--leaf':'#2E6B4F','--leaf-ink':'#1E4A36','--leaf-bright':'#3E8B66','--sprout':'#E3EDE4','--tomato':'#C8352B','--tomato-ink':'#A62820','--tomato-soft':'#F6E2DE','--amber':'#B07D12','--amber-soft':'#F1E7CD','--plum':'#7A4A86','--plum-soft':'#EFE6F0','--backdrop':'#10231A','--backdrop-2':'#17351F','color-scheme':'light'},FONT_LOV)
+};
+let theme='auto';
+function setTheme(name){
+  if(!(name in THEMES)) name='auto';
+  theme=name;
+  const r=document.documentElement;
+  TK.forEach(k=>r.style.removeProperty(k)); r.style.removeProperty('color-scheme');
+  const th=THEMES[name];
+  if(th){ Object.keys(th).forEach(k=>r.style.setProperty(k, th[k])); }
+  document.querySelectorAll('#theme .th-opt').forEach(b=>b.setAttribute('aria-pressed', b.dataset.th===name));
+  try{ localStorage.setItem('pp_theme', name); }catch(e){}
+}
+
+/* ============ SEGÉDEK ============ */
+const $ = s=>document.querySelector(s);
+const ft = n=>Math.round(n).toLocaleString('hu-HU')+' Ft';
+const unitShort = u=>u.split(' · ')[0];
+const lineTotal = c=>BYID[c.id].u[c.ui].p*c.q;
+const cartCount = ()=>cart.reduce((s,c)=>s+c.q,0);
+const cartNet = ()=>cart.reduce((s,c)=>s+lineTotal(c),0);
+function badges(ids,max){let a=ids.filter(k=>B[k]).slice(0,max||99).map(k=>`<span class="bdg ${B[k].c}">${(lang=='en'&&B[k].en)?B[k].en:B[k].t}</span>`);return a.join('');}
+function gradeL(g){const M={'I. osztály':'Class I','Konyhakész':'Ready to use','kimérős, súlyra':'loose, by weight'};return (lang=='en'&&M[g])?M[g]:g;}
+
+/* ============ NAVIGÁCIÓ ============ */
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.hidden = s.dataset.screen!==name);
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', t.dataset.tab===name));
+  $('#screens').scrollTop = 0;
+  if(name==='kosar') renderCart();
+  closeDetail();
+}
+
+/* ============ KOSÁR MŰVELETEK ============ */
+function findLine(id,ui){return cart.find(c=>c.id===id && c.ui===ui);}
+function addToCart(id,q,ui){
+  let l=findLine(id,ui);
+  if(l) l.q+=q; else cart.push({id,q,ui});
+  syncBadge();
+}
+function setQty(id,ui,q){
+  let l=findLine(id,ui); if(!l)return;
+  l.q=q; if(l.q<=0) cart=cart.filter(c=>c!==l);
+  syncBadge(); renderCart();
+}
+function syncBadge(){
+  const n=cartCount(), b=$('#tabBadge');
+  b.textContent=n; b.hidden = n===0;
+}
+function reorderLast(){
+  cart = LAST.map(x=>({...x}));
+  syncBadge(); go('kosar');
+  toast('Előző rendelés a kosárban','cart');
+}
+
+/* ============ RENDERELÉS: MA ============ */
+function renderAgain(){
+  let html = `<button class="again-cta" onclick="reorderLast()">
+      <div class="t">${t('repeat_last')}</div>
+      <div style="font-size:11.5px;color:var(--leaf-ink);opacity:.8">${LAST.length} ${t('items')} · ~63 400 Ft</div>
+      <span class="arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </button>`;
+  html += LAST.map(x=>{const p=BYID[x.id];return `
+    <button class="mini" onclick="openDetail('${p.id}')">
+      <span class="tile" style="--h:${p.h}">${p.e}<span class="q">${x.q}×</span></span>
+      <span class="n">${p.n}</span>
+    </button>`;}).join('');
+  $('#againRow').innerHTML = html;
+}
+function renderFeat(){
+  $('#featRow').innerHTML = FEAT.map(f=>{const p=BYID[f.id];const u=p.u[0];return `
+    <button class="feat" onclick="openDetail('${p.id}')">
+      <span class="ph tile" style="--h:${p.h}">${p.e}<span class="reason ${f.hot?'hot':''}">${f.r}</span></span>
+      <span class="body">
+        <span class="nm">${p.n}</span>
+        <span class="og"><span style="font-size:13px">${p.fl}</span> ${p.og}</span>
+        <span class="pr"><b>${u.p.toLocaleString('hu-HU')} Ft</b><small>/${unitShort(u.u)}</small></span>
+      </span>
+    </button>`;}).join('');
+}
+function renderNudge(){
+  $('#lowNudge').innerHTML = `<span class="ic">🥑</span>
+    <div class="tx">${t('nudge')}</div>
+    <button onclick="addToCart('avokado',1,1);syncBadge();toast('Avokádó karton a kosárban','cart')">${t('add_cart')}</button>`;
+}
+
+/* ============ RENDERELÉS: PIAC ============ */
+function renderChips(){
+  $('#chips').innerHTML = CATS.map(([id,l])=>
+    `<button class="chip" aria-pressed="${id===activeCat}" onclick="setCat('${id}')">${t('cat_'+id)}</button>`).join('');
+}
+function setCat(id){activeCat=id;renderChips();renderCatalog();}
+function renderCatalog(){
+  let list = P.filter(p=>(activeCat==='mind'||p.cat===activeCat) &&
+    (query==='' || (p.n+' '+p.og).toLowerCase().includes(query)));
+  if(!list.length){$('#catalog').innerHTML=`<li style=”text-align:center;color:var(--ink-soft);padding:40px 10px;font-size:13.5px”>${t('no_result')}: „${query}”.</li>`;return;}
+  $('#catalog').innerHTML = list.map(p=>{const u=p.u[0];const inCart=cart.some(c=>c.id===p.id);return `
+    <li class="prod">
+      <button class="prod-open" onclick="openDetail('${p.id}')">
+        <span class="tile" style="--h:${p.h}">${p.e}</span>
+        <span class="prod-main">
+          <span class="prod-name">${p.n}</span>
+          <span class="prod-meta"><span class="fl">${p.fl}</span> ${p.og} · ${gradeL(p.gr.split(' · ')[0])}</span>
+          <span class="prod-badges">${badges(p.b,2)}${stockTag(p.id)}</span>
+        </span>
+      </button>
+      <span class="prod-right">
+        <span class="price">${u.p.toLocaleString('hu-HU')} Ft<small>/${unitShort(u.u)}</small></span>
+        <button class="add ${inCart?'in':''}" aria-label="Kosárba: ${p.n}" onclick="quickAdd('${p.id}')">
+          <svg viewBox="0 0 24 24">${inCart?'<path d="m5 13 4 4L19 7"/>':'<path d="M12 5v14M5 12h14"/>'}</svg>
+        </button>
+      </span>
+    </li>`;}).join('');
+}
+function quickAdd(id){addToCart(id,1,0);const p=BYID[id];toast(p.n+' a kosárban','cart');renderCatalog();}
+
+/* ============ TERMÉK RÉSZLETEK ============ */
+function openDetail(id){
+  detailId=id; detailUi=0; detailQty=1;
+  const p=BYID[id];
+  const d=$('#detail');
+  d.innerHTML = `
+    <div class="d-top">
+      <button class="back" aria-label="Vissza" onclick="closeDetail()"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <span class="t">${t('cat_'+p.cat)}</span>
+    </div>
+    <div class="d-body">
+      <div class="d-hero tile" style="--h:${p.h}">${p.e}
+        <span class="d-flag"><span class="fl">${p.fl}</span> ${p.og}</span>
+      </div>
+      <div class="d-wrap">
+        <h1 class="d-name">${p.n}</h1>
+        <div class="d-grade">${gradeL(p.gr)}</div>
+        <div class="d-badges">${badges(p.b)} ${stockTag(p.id)}</div>
+        ${availLine(p.id)}
+        <p class="d-desc">${p.d}</p>
+        <div class="d-qc">
+          <svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.2-2.8 7.8-7 9-4.2-1.2-7-4.8-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div class="tx"><b>Személyes minőségellenőrzés</b>Minden láda mögött kézi ellenőrzés áll. &lt;72 óra a földtől a konyhádig.</div>
+        </div>
+        <div class="seg" id="segUnits">${p.u.map((x,i)=>`
+          <button aria-pressed="${i===0}" onclick="setUnit(${i})">${unitShort(x.u)}<b>${x.p.toLocaleString('hu-HU')} Ft</b>${x.u.includes(' · ')?`<small style="color:var(--ink-faint)">${x.u.split(' · ')[1]}</small>`:''}</button>`).join('')}
+        </div>
+        <label class="d-sub"><input type="checkbox" checked> Ha elfogy, a séf jóváhagyásával <b>hasonló minőségre cserélhető</b> (pl. másik termőhely).</label>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
+          <span style="font-size:13px;color:var(--ink-soft)">${t('qty')}</span>
+          <span class="qty"><button aria-label="Kevesebb" onclick="dq(-1)">−</button><span class="v" id="dQ">1</span><button aria-label="Több" onclick="dq(1)">+</button></span>
+        </div>
+      </div>
+    </div>
+    <div class="d-foot">
+      <button class="btn ghost" aria-label="Kedvenc" onclick="toast('Hozzáadva a kedvencekhez','star')">
+        <svg viewBox="0 0 24 24" style="stroke:var(--ink)"><path d="M12 4l2.4 5 5.6.6-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.6-.6L12 4Z"/></svg></button>
+      <button class="btn primary" onclick="addFromDetail()"><span id="dAddLab">${t('to_cart')}</span> · <span class="pz" id="dAddPz"></span></button>
+    </div>`;
+  d.hidden=false;
+  requestAnimationFrame(()=>d.classList.add('open'));
+  updateDetailPrice();
+}
+function closeDetail(){const d=$('#detail');d.classList.remove('open');setTimeout(()=>{d.hidden=true;},220);}
+function setUnit(i){detailUi=i;document.querySelectorAll('#segUnits button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));updateDetailPrice();}
+function dq(delta){detailQty=Math.max(1,detailQty+delta);$('#dQ').textContent=detailQty;updateDetailPrice();}
+function updateDetailPrice(){const p=BYID[detailId];$('#dAddPz').textContent=ft(p.u[detailUi].p*detailQty);}
+function addFromDetail(){
+  addToCart(detailId,detailQty,detailUi);
+  const p=BYID[detailId];
+  closeDetail(); toast(p.n+' a kosárban','cart');
+}
+
+/* ============ RENDERELÉS: KOSÁR ============ */
+function renderCart(){
+  const box=$('#cartBody');
+  if(!cart.length){
+    box.innerHTML = `<div class="cart-empty">
+      <div class="em">🧺</div><h3>${t('cart_empty_t')}</h3>
+      <p>${t('cart_empty_p')}</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn leaf" style="flex:0 1 auto;padding:13px 20px" onclick="reorderLast()">${t('prev_order')}</button>
+        <button class="btn ghost" style="width:auto;flex:0 1 auto;padding:13px 20px" onclick="go('piac')">${t('market')}</button>
+      </div></div>`;
+    return;
+  }
+  const net=cartNet(), vat=net*VAT, gross=net+vat;
+  const pct=Math.min(100,Math.round(net/MIN_ORDER*100)), ok=net>=MIN_ORDER;
+  let html = cart.map(c=>{const p=BYID[c.id];const u=p.u[c.ui];return `
+    <div class="cart-line">
+      <span class="tile" style="--h:${p.h}">${p.e}</span>
+      <div class="ci">
+        <b>${p.n}</b>
+        <span>${unitShort(u.u)} · ${u.p.toLocaleString('hu-HU')} Ft${u.u.includes(' · ')?' · '+u.u.split(' · ')[1]:''}</span>
+        <div class="lp">${ft(lineTotal(c))}</div>
+      </div>
+      <div class="cline-right">
+        <span class="qty sm"><button aria-label="Kevesebb" onclick="setQty('${c.id}',${c.ui},${c.q-1})">−</button><span class="v">${c.q}</span><button aria-label="Több" onclick="setQty('${c.id}',${c.ui},${c.q+1})">+</button></span>
+        <button class="rm" onclick="setQty('${c.id}',${c.ui},0)">${t('delete')}</button>
+      </div>
+    </div>`;}).join('');
+
+  html += `<div class="minbar">
+    <div class="mt"><span>${ok?t('min_reached'):t('min_order')}</span><b>${ft(MIN_ORDER)}</b></div>
+    <div class="track"><i class="${ok?'ok':''}" style="width:${pct}%"></i></div>
+    ${ok?'':`<div style="font-size:11.5px;color:var(--ink-soft);margin-top:7px">${t('min_left').replace('%A%',ft(MIN_ORDER-net))}</div>`}
+  </div>`;
+
+  html += `<div class="block"><h3>${t('del_block')}</h3>
+    <div class="dates" id="dates"></div>
+    <div class="win"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> ${t('del_window')} <b style="margin:0 3px">5:00–12:00</b> · ${t('courier')}</div>
+  </div>`;
+
+  html += `<div class="block"><h3>${t('msg_pilpel')}</h3>
+    <textarea class="note-in" placeholder="${t('msg_ph')}"></textarea>
+    <div class="toggle"><div class="tx">${t('save_tpl')}<span>${t('save_tpl_s')}</span></div><button class="sw" aria-pressed="false" onclick="tgl(this)"></button></div>
+    <div class="toggle"><div class="tx">${t('recurring')}<span>${t('recurring_s')}</span></div><button class="sw" aria-pressed="false" onclick="tgl(this)"></button></div>
+  </div>`;
+
+  html += `<div class="totals">
+    <div class="t"><span>${t('net')}</span><b>${ft(net)}</b></div>
+    <div class="t"><span>${t('vat')}</span><b>${ft(vat)}</b></div>
+    <div class="t grand"><span>${t('total')}</span><b>${ft(gross)}</b></div>
+  </div>
+  <button class="btn primary" style="margin-top:14px;width:100%" onclick="openPay()">
+    ${t('to_pay')} · ${ft(gross)}</button>
+  <p style="text-align:center;font-size:11.5px;color:var(--ink-faint);margin:12px 0 0">${t('cutnote')}</p>`;
+
+  box.innerHTML = html;
+  renderDates();
+  $('#cartCut').textContent = cutLabel;
+}
+let pickedDate = 1;
+function renderDates(){
+  const names=['vas','hét','kedd','sze','csüt','pén','szo'];
+  let out=[];
+  for(let i=1;i<=6;i++){
+    const dt=new Date(); dt.setDate(dt.getDate()+i);
+    const dow=dt.getDay(); if(dow===0) continue; // vasárnap nincs szállítás
+    out.push(`<button class="date" aria-pressed="${i===pickedDate}" onclick="pickDate(${i})">
+      <span>${names[dow]}</span><b>${dt.getDate()}</b></button>`);
+  }
+  $('#dates').innerHTML=out.join('');
+}
+function pickDate(i){pickedDate=i;document.querySelectorAll('#dates .date').forEach(b=>b.setAttribute('aria-pressed',false));event.currentTarget.setAttribute('aria-pressed',true);}
+
+function tgl(b){const on=b.getAttribute('aria-pressed')==='true';b.setAttribute('aria-pressed',!on);}
+
+/* ============ RENDELÉS LEADÁSA ============ */
+function placeOrder(){
+  if(!cart.length){toast('A kosár üres');return;}
+  order = makeOrder(cart, payMethod); order.status=0;
+  const items=order.lines.length;
+  $('#confItems').textContent=items+' tétel';
+  $('#confTotal').textContent=ft(estTotal(order)*(1+VAT));
+  $('#confWhen').textContent=delWhenText;
+  $('#confNo').textContent=order.no;
+  cart=[]; syncBadge();
+  closeSheet('pay'); go('confirm'); renderOrders();
+}
+
+/* ============ VISSZASZÁMLÁLÓ + SZÁLLÍTÁS ============ */
+let cutLabel='ma 20:00', delWhenText='holnap reggel, 5:00–12:00', cutTarget=null;
+function initDelivery(){
+  const now=new Date();
+  const cut=new Date(); cut.setHours(20,0,0,0);
+  const past = now>=cut;
+  if(past) cut.setDate(cut.getDate()+1);
+  cutTarget=cut;
+  const wd=new Intl.DateTimeFormat('hu-HU',{weekday:'long'});
+  cutLabel = (past?'holnap':'ma')+' 20:00';
+  // szállítás = a határidő utáni reggel
+  const del=new Date(cut); del.setDate(del.getDate()+1);
+  const d0=new Date(); d0.setHours(0,0,0,0);
+  const diffDays=Math.round((new Date(del.getFullYear(),del.getMonth(),del.getDate())-d0)/864e5);
+  const rel = diffDays===1?'holnap':(diffDays===2?'holnapután':wd.format(del));
+  delWhenText = rel+' reggel, 5:00–12:00';
+  $('#delWhen').textContent = delWhenText;
+  $('#cutLab').textContent = cutLabel;
+}
+function tick(){
+  if(!cutTarget)return;
+  let ms=cutTarget-new Date();
+  const box=$('#cutoffBox');
+  if(ms<=0){$('#clock').textContent='Lezárva';return;}
+  if(box) box.classList.toggle('soon', ms < 2*3600*1000);
+  const h=Math.floor(ms/3600000), m=Math.floor(ms%3600000/60000), s=Math.floor(ms%60000/1000);
+  const z=n=>String(n).padStart(2,'0');
+  $('#clock').textContent=`${z(h)}:${z(m)}:${z(s)}`;
+}
+
+/* ============ TOAST ============ */
+let toastT=null;
+function toast(msg){
+  const t=$('#toast'); $('#toastMsg').textContent=msg;
+  t.hidden=false; requestAnimationFrame(()=>t.classList.add('show'));
+  clearTimeout(toastT); toastT=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.hidden=true,220);},2200);
+}
+
+/* ============ KERESÉS ============ */
+$('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();renderCatalog();});
+
+/* ============ FOLYAMAT: fedőrétegek ============ */
+function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;requestAnimationFrame(()=>el.classList.add('open'));}
+function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
+
+/* ---- onboarding / regisztráció ---- */
+function openOnboard(){showOb(0);openSheet('onboard');}
+function finishOnboard(){closeSheet('onboard');go('ma');}
+function showOb(n){
+  document.querySelectorAll('#onboard [data-ob]').forEach(d=>d.hidden = +d.dataset.ob!==n);
+  document.querySelectorAll('#obDots i').forEach((d,i)=>d.classList.toggle('on',i===n));
+  const w=document.querySelector('#onboard .ob-wrap'); if(w) w.scrollTop=0;
+}
+function obStep(n){ if(n>4){finishOnboard();return;} showOb(n); }
+function obPick(btn){ document.querySelectorAll('#onboard .opt').forEach(o=>o.setAttribute('aria-pressed',o===btn)); }
+
+/* ---- fizetés ---- */
+let payMethod='Céges átutalás · 15 nap';
+function openPay(loadSample){
+  if(!cart.length){ if(loadSample){cart=LAST.map(x=>({...x}));syncBadge();} else {toast('A kosár üres');go('piac');return;} }
+  const net=cartNet(), gross=net*(1+VAT);
+  $('#payTotals').innerHTML =
+    `<div class="t"><span>${t('est_net')}</span><b>${ft(net)}</b></div>
+     <div class="t"><span>${t('vat')}</span><b>${ft(net*VAT)}</b></div>
+     <div class="t grand"><span>${t('est_total')}</span><b>${ft(gross)}</b></div>`;
+  $('#credUse').textContent = ft(gross)+' / 800 000 Ft';
+  $('#credBar').style.width = Math.min(100,Math.round(gross/800000*100))+'%';
+  $('#payBtn').textContent = t('place_order')+' · '+ft(gross);
+  openSheet('pay');
+}
+function payPick(btn){
+  document.querySelectorAll('#pay .pm').forEach(o=>o.setAttribute('aria-pressed',o===btn));
+  payMethod = btn.querySelector('.pmi b').textContent;
+}
+
+/* ============ RENDELÉS-MODELL (catchweight / mennyiségi tolerancia) ============ */
+const STATUS=['Leadva','Visszaigazolva','Komissiózás','Becsomagolva','Úton','Megérkezett','Átvéve','Elszámolva'];
+const WFACT=[0.97,1.03,0.96,1.01,0.95,1.04,0.98,1.02];
+const SEED_ORDER=[
+  {id:'koktelparadicsom',q:3,ui:1},{id:'kigyouborka',q:24,ui:0},{id:'mosottrukkola',q:2,ui:0},
+  {id:'citrom',q:5,ui:0},{id:'avokado',q:12,ui:0},{id:'bazsalikom',q:6,ui:0},
+  {id:'barnacsiperke',q:4,ui:0},{id:'ratte',q:3,ui:0},{id:'fejessalata',q:8,ui:0},
+  {id:'romanesco',q:4,ui:0},{id:'galanga',q:1,ui:0}
+];
+let order=null;
+function unitKg(uStr){ if(uStr==='kg')return 1; const m=uStr.match(/([\d.,]+)\s*kg/); return m?parseFloat(m[1].replace(',','.')):0; }
+function nf(n){return n.toLocaleString('hu-HU',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function makeOrder(lines, method){
+  const o={no:'#PP-'+(26052+Math.floor(Math.random()*40)),status:0,method:method||payMethod,deliveryText:delWhenText,
+    driver:{name:'Kovács Zoltán',init:'KZ',plate:'PIL‑204',phone:'+36 30 ••• 5512'},lines:[]};
+  let wi=0;
+  lines.forEach(l=>{const p=BYID[l.id];const uStr=p.u[l.ui].u;const ukg=unitKg(uStr);
+    const o2={id:l.id,q:l.q,ui:l.ui,catch:ukg>0};
+    if(ukg>0){o2.ordKg=+(l.q*ukg).toFixed(2);o2.ppk=p.u[l.ui].p/ukg;o2.f=WFACT[wi++%WFACT.length];o2.actKg=+(o2.ordKg*o2.f).toFixed(2);}
+    o.lines.push(o2);});
+  return o;
+}
+function estTotal(o){return o.lines.reduce((s,l)=>s+(l.catch? l.ppk*l.ordKg : BYID[l.id].u[l.ui].p*l.q),0);}
+function finalTotal(o){return o.lines.reduce((s,l)=>s+(l.catch? l.ppk*l.actKg : BYID[l.id].u[l.ui].p*l.q),0);}
+function orderItems(o){return o.lines.reduce((s,l)=>s+l.q,0);}
+
+/* ---- készlet / helyettesítő ---- */
+const STOCK={feketefokhagyma:'out',mangosteen:'lo',safrany:'lo',viragok:'lo'};
+const SUBST={feketefokhagyma:'galanga'};
+function stockOf(id){return STOCK[id]||'hi';}
+function stockTag(id){const s=stockOf(id);
+  if(s==='out')return `<span class="stock out"><span class="sd"></span>${lang=='en'?'Out of stock':'Elfogyott'}</span>`;
+  if(s==='lo')return `<span class="stock lo"><span class="sd"></span>${lang=='en'?'Low':'Kevés'}</span>`;
+  return `<span class="stock hi"><span class="sd"></span>${lang=='en'?'In stock':'Raktáron'}</span>`;}
+function availLine(id){const s=stockOf(id);if(s!=='out')return '';
+  const sub=SUBST[id],sp=sub?BYID[sub]:null;
+  return `<div class="est-note" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div><b>Most elfogyott.</b> Kérj értesítést, amint újra lesz.${sp?` Ajánlott helyettesítő: <b onclick="openDetail('${sub}')" style="color:var(--leaf);cursor:pointer;text-decoration:underline">${sp.n}</b>.`:''}</div></div>`;}
+
+/* ============ RENDELÉSEIM: aktív kártya ============ */
+function stepperHTML(st){
+  const nodes=STEP_L[lang];
+  const now=[0,0,1,2,3,4,4,5][st];
+  return '<div class="steps">'+nodes.map((n,i)=>{
+    const cls=i<now?'s on':(i===now?'s on now':'s');
+    return `<div class="${cls}"><span class="b"></span><em>${n}</em></div>`;}).join('')+'</div>';
+}
+function renderOrders(){
+  const box=$('#ordActive'); if(!box||!order)return;
+  const st=order.status, items=order.lines.length;
+  const chip = st>=7?`<span class="st done">${STATUS_L[lang][7]}</span>`:st>=6?`<span class="st done">${STATUS_L[lang][6]}</span>`:st>=4?`<span class="st way">${STATUS_L[lang][4]}</span>`:`<span class="st prep">${STATUS_L[lang][st]}</span>`;
+  const tot = st>=6? finalTotal(order) : estTotal(order);
+  box.innerHTML = `<div class="ord">
+    <div class="oh"><div><div class="on">${order.no}</div><div class="od">${t('del_block')}: ${order.deliveryText} · ${items} ${t('items')}</div></div>${chip}</div>
+    ${stepperHTML(st)}
+    <div class="osum"><div class="ot">${st>=6?t('end_final'):t('end_est')}<b>${ft(tot*(1+VAT))}</b></div>
+      <div class="oacts"><button class="prim" onclick="openTrack()">${t('track')}</button></div></div>
+  </div>`;
+}
+
+/* ============ KÖVETÉS ============ */
+function openTrack(stOverride){
+  if(!order) order=makeOrder(LAST,payMethod);
+  if(typeof stOverride==='number') order.status=stOverride;
+  buildTrack(); openSheet('track');
+}
+function setStatus(n){
+  if(!order)return; order.status=Math.max(0,Math.min(7,n));
+  if(!$('#track').hidden) buildTrack();
+  if(!$('#driver').hidden) buildDriver();
+  renderOrders();
+}
+function trackTitle(st){return TITLE_L[lang][st];}
+function buildTrack(){
+  const o=order, st=o.status, items=o.lines.length;
+  let ctx='';
+  if(st<=1){
+    ctx=`<div class="ctx"><div class="ch">${t('mystatus')}</div>
+      <div class="pk"><span>${st===0?(lang=='en'?'Received, awaiting confirmation':'Beérkezett, visszaigazolásra vár'):(lang=='en'?'PilPel confirmed it':'A PilPel visszaigazolta')}</span></div>
+      <div class="pk"><span>${t('conf_items')}</span><b>${items}</b></div>
+      <div class="pk"><span>${t('end_est')}</span><b>${ft(estTotal(o)*(1+VAT))}</b></div></div>`;
+  } else if(st===2){
+    ctx=`<div class="ctx"><div class="ch">${lang=='en'?'Picking in the warehouse':'Komissiózás a raktárban'}</div>
+      <div class="pk"><span>${t('pick')}</span><b>${Math.round(items*0.6)}/${items} ${t('items')}</b></div>
+      <div class="pk"><span>${t('weighed')}</span><b>${t('scale_now')}</b></div>
+      <div style="font-size:12px;color:var(--ink-soft);margin-top:9px;line-height:1.45">${t('pick_note')}</div></div>`;
+  } else if(st===3){
+    ctx=`<div class="ctx"><div class="ch">${lang=='en'?'Packed':'Becsomagolva'}</div><div class="pk"><span>${t('packed_note')}</span><b>${items} ${t('items')}</b></div></div>`;
+  } else if(st===4){
+    ctx=`<div class="driver-card"><span class="dav">${o.driver.init}</span>
+        <div class="di"><b>${o.driver.name}</b><span>${t('courier')} · ${o.driver.plate}</span></div>
+        <button class="call" aria-label="Futár hívása" onclick="toast('Futár hívása: ${o.driver.phone} · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button></div>
+      <div class="eta"><div class="el">${t('eta')}<b>${lang=='en'?'~18 min':'~ 18 perc'}</b></div>
+        <div class="route"><span class="stop on"></span><span class="ln on"></span><span class="stop cur"></span><span class="ln"></span><span class="stop"></span></div></div>
+      <button class="bigcta leaf" onclick="openDriver()"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13l2-5h9l3 4h4v4h-2M5 17h1m11 0h2"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg> ${t('look_driver')}</button>`;
+  } else if(st===5){
+    ctx=`<div class="ctx"><div class="ch">${t('on_site')}</div><div style="font-size:13px;color:var(--ink-soft);line-height:1.5">${t('on_site_note')}</div></div>
+      <button class="bigcta" onclick="openQR()"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM15 15h2v2h-2zM19 15h1v5h-5v-1"/></svg> ${t('qr_handover')}</button>`;
+  } else {
+    ctx=settlementHTML(o, st);
+  }
+  $('#track').innerHTML = `
+    <div class="s-top">
+      <button class="back" aria-label="Vissza" onclick="closeSheet('track')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <div class="tt">${o.no}<small>Kóstoló Bisztró · ${o.deliveryText}</small></div>
+    </div>
+    <div class="s-body">
+      <div class="track-hero">
+        <span class="status-chip">${(st>=4&&st<=5)?'<span class="d"></span>':''}${STATUS_L[lang][st]}</span>
+        <div class="big">${trackTitle(st)}</div>
+        <div class="sm">${items} ${t('items')} · ${o.method}</div>
+      </div>
+      ${stepperHTML(st)}
+      ${ctx}
+      <div class="demo-step"><span class="dl">${t('demo_step')}</span>
+        <div class="db"><button onclick="setStatus(order.status-1)" ${st===0?'disabled':''} aria-label="Előző lépés">‹</button><button onclick="setStatus(order.status+1)" ${st===7?'disabled':''} aria-label="Következő lépés">›</button></div></div>
+    </div>`;
+}
+function settlementHTML(o, st){
+  const rows=o.lines.map(l=>{const p=BYID[l.id];
+    if(l.catch){const ok=Math.abs(l.f-1)<=0.10;
+      return `<div class="gl"><span class="gtile tile" style="--h:${p.h}">${p.e}</span>
+        <span class="gn"><b>${p.n}</b><span>${t('ordered')} ${nf(l.ordKg)} kg → ${t('picked_w')} ${nf(l.actKg)} kg</span></span>
+        <span class="gok ${ok?'in':'out'}">${ok?'±10% ✓':(lang=='en'?'deviation':'eltérés')}</span>
+        <span class="gp">${ft(l.ppk*l.actKg)}</span></div>`;}
+    return `<div class="gl"><span class="gtile tile" style="--h:${p.h}">${p.e}</span>
+      <span class="gn"><b>${p.n}</b><span>${l.q} ${unitShort(p.u[l.ui].u)} · ${t('exact')}</span></span>
+      <span class="gok in">${t('ok_in')}</span><span class="gp">${ft(p.u[l.ui].p*l.q)}</span></div>`;}).join('');
+  const est=estTotal(o), fin=finalTotal(o), diff=fin-est;
+  return `<div class="ctx" style="padding:0;overflow:hidden">
+      <div style="padding:13px 15px 0"><div class="ch">${t('del_slip')}</div></div>
+      <div class="grn">${rows}
+        <div class="claim"><span>${t('claim_q')}</span><button onclick="toast('Reklamáció a szállítólevélhez rögzítve · jóváírás indítva · demó')">${t('claim_btn')}</button></div>
+      </div></div>
+    <div class="settle-tot"><div class="sl2">${t('settle_final')}<b>${ft(fin*(1+VAT))}</b></div>
+      <div class="adj">${t('estimate')}: ${ft(est*(1+VAT))}<br>${diff>=0?'+':'−'}${ft(Math.abs(diff)*(1+VAT))} ${t('correction')}</div></div>
+    ${st===7
+      ?`<div class="ctx"><div class="ch">${lang=='en'?'Payment &amp; invoice':'Fizetés &amp; számla'}</div><div class="pk"><span>${o.method}</span><b>${t('pay_settled')}</b></div><div class="pk"><span>${t('invoice_no')}</span><b>#SZ‑${o.no.slice(4)}</b></div></div>
+        <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost" style="width:auto;flex:1" onclick="toast('Számla (PDF) · demó')">${t('invoice')}</button><button class="btn leaf" onclick="closeSheet('track');reorderLast()">${lang=='en'?'Reorder':'Újrarendelés'}</button></div>`
+      :`<button class="bigcta leaf" onclick="setStatus(7)">${t('finalize')}</button>`}`;
+}
+function openQR(){
+  const o=order;
+  $('#track').innerHTML = `
+    <div class="s-top"><button class="back" aria-label="Vissza" onclick="buildTrack()"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button><div class="tt">${t('qr_title')}<small>${o.no}</small></div></div>
+    <div class="s-body"><div class="qr-wrap">
+      <div style="font-size:14px;color:var(--ink-soft)">${t('qr_show')}</div>
+      <div class="qr-box"><canvas id="qrc" width="25" height="25"></canvas></div>
+      <div class="qr-code">${o.no.replace('#','')}</div>
+      <div style="font-size:12.5px;color:var(--ink-soft);margin:14px auto 0;line-height:1.5;max-width:280px">${t('qr_note')}</div>
+      <button class="bigcta leaf" style="max-width:280px;margin:18px auto 0" onclick="setStatus(6)">${t('qr_scanned')}</button>
+      <button class="ghostbtn" onclick="openDriver()">${t('driver_side')}</button>
+    </div></div>`;
+  drawQR($('#qrc'), o.no);
+}
+function drawQR(cv, seed){
+  if(!cv)return; const n=25, ctx=cv.getContext('2d'); let s=0;
+  for(let i=0;i<seed.length;i++) s=(s*31+seed.charCodeAt(i))>>>0;
+  const rnd=()=>{s=(s*1103515245+12345)&0x7fffffff; return s/0x7fffffff;};
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,n,n); ctx.fillStyle='#16201A';
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){ if(rnd()>0.5) ctx.fillRect(x,y,1,1); }
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,8,8); ctx.fillRect(n-8,0,8,8); ctx.fillRect(0,n-8,8,8);
+  const fp=(ox,oy)=>{ctx.fillStyle='#16201A';ctx.fillRect(ox,oy,7,7);ctx.fillStyle='#fff';ctx.fillRect(ox+1,oy+1,5,5);ctx.fillStyle='#16201A';ctx.fillRect(ox+2,oy+2,3,3);};
+  fp(0,0); fp(n-7,0); fp(0,n-7);
+}
+
+/* ============ FUTÁR APP ============ */
+function openDriver(){ if(!order) order=makeOrder(LAST,payMethod); buildDriver(); openSheet('driver'); }
+function buildDriver(){
+  const o=order, st=o.status, items=o.lines.length;
+  let action='';
+  if(st<3){ action=`<div style="font-size:13px;color:var(--ink-soft);padding:8px 0;line-height:1.45">${lang=='en'?'The order is still being prepared in the warehouse. Once packed, you can set off.':'A rendelés még a raktárban készül. Amint becsomagolták, indulhatsz.'}</div>`; }
+  else if(st===3){ action=`<button class="bigcta leaf" onclick="setStatus(4)">${t('felvettem')}</button>`; }
+  else if(st===4){ action=`<button class="bigcta leaf" onclick="setStatus(5)">${t('arrived_btn')}</button>`; }
+  else if(st===5){ action=`<button class="bigcta" onclick="setStatus(6)"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/></svg> ${t('scan_btn')}</button>`; }
+  else if(st===6){
+    const meas=o.lines.filter(l=>l.catch).map(l=>{const p=BYID[l.id];return `<div class="drv-meas"><span class="gtile tile" style="--h:${p.h};width:34px;height:34px;font-size:18px">${p.e}</span><div class="dm1"><b>${p.n}</b><span>${t('ordered').toLowerCase()} ${nf(l.ordKg)} kg</span></div><span class="scale">${nf(l.actKg)} kg</span></div>`;}).join('');
+    action=`<div class="ctx"><div class="ch">${t('drv_scale')}</div>${meas}</div><button class="bigcta leaf" onclick="setStatus(7)">${t('finalize_handover')}</button>`;
+  } else { action=`<div class="status-chip" style="margin-top:8px"><span class="d" style="animation:none"></span>${lang=='en'?'Handed over · settled':'Átadva · elszámolva'}</div>`; }
+  $('#driver').innerHTML = `
+    <div class="drv-head">
+      <div class="s-top" style="background:none;border:0;padding:0">
+        <button class="x" aria-label="Bezárás" onclick="closeSheet('driver')" style="background:rgba(255,255,255,.12);border-color:transparent"><svg viewBox="0 0 24 24" fill="none" style="stroke:#fff"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <div class="tt" style="color:#fff">${t('driver_app')}<small style="color:#9FB0A2">${o.driver.name} · ${o.driver.plate}</small></div>
+      </div>
+    </div>
+    <div class="s-body">
+      <div class="sec" style="margin-top:2px"><h2>${t('route_today')}</h2></div>
+      <div class="stop-row done"><span class="snum">1</span><div class="sti"><b>Lánchíd Kávéház</b><span>V. ker. · ${lang=='en'?'delivered 6:10':'leszállítva 6:10'}</span></div></div>
+      <div class="stop-row cur"><span class="snum">2</span><div class="sti"><b>Kóstoló Bisztró · ${o.no}</b><span>V. ker. · ${items} ${t('items')}</span></div></div>
+      <div class="stop-row"><span class="snum">3</span><div class="sti"><b>Mák Bisztró</b><span>V. ker. · 9 ${t('items')}</span></div></div>
+      <div class="sec"><h2>${t('cur_stop')}</h2></div>
+      ${action}
+      <div style="font-size:11.5px;color:var(--ink-faint);text-align:center;margin-top:16px;line-height:1.5">${t('drv_note')}</div>
+    </div>`;
+}
+
+/* ============ INDÍTÁS ============ */
+initDelivery();
+renderAgain(); renderFeat(); renderNudge(); renderChips(); renderCatalog(); syncBadge();
+order = makeOrder(SEED_ORDER, 'Céges átutalás · 15 nap'); order.status = 2; renderOrders();
+applyStatic();
+setTheme((()=>{try{return localStorage.getItem('pp_theme')||'auto';}catch(e){return 'auto';}})());
+tick(); setInterval(tick,1000);
+openOnboard();
+</script>
