@@ -648,7 +648,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 <div id="stage">
   <div class="stage-head">
     <div class="mk"><b>PilPel</b> Konyha</div>
-    <p>A legjobb zöldség-gyümölcs rendelő, séf-szemmel. Kattintható prototípus – minden adat demó.</p>
+    <p data-t="stage_head_p">A legjobb zöldség-gyümölcs rendelő, séf-szemmel. Kattintható prototípus – minden adat demó.</p>
     <div class="plats"><span>Web</span><span>Android</span><span>Windows</span><span class="soon">iOS · 2027</span></div>
   </div>
 
@@ -665,7 +665,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <button data-l="hu" aria-pressed="true" onclick="setLang('hu')">HU</button>
         <button data-l="en" aria-pressed="false" onclick="setLang('en')">EN</button>
       </div>
-      <span class="demo-pill">DEMÓ</span>
+      <span class="demo-pill" data-t="demo">DEMÓ</span>
       <button class="icon-btn" aria-label="Fiók és számok" onclick="openSheet('fiok')">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20c0-3.3 3-5 6.5-5s6.5 1.7 6.5 5"/></svg>
       </button>
@@ -761,7 +761,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="sec"><h2 data-t="previous">Korábbi</h2></div>
         <div class="ord">
           <div class="oh">
-            <div><div class="on">#PP-25884</div><div class="od">Leszállítva · tegnap 6:40 · 14 tétel</div></div>
+            <div><div class="on">#PP-25884</div><div class="od" data-t="ord1_od">Leszállítva · tegnap 6:40 · 14 tétel</div></div>
             <span class="st done" data-t="delivered">Leszállítva</span>
           </div>
           <div class="osum">
@@ -774,7 +774,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         </div>
         <div class="ord">
           <div class="oh">
-            <div><div class="on">#PP-25717</div><div class="od">Leszállítva · okt. 20. · 9 tétel</div></div>
+            <div><div class="on">#PP-25717</div><div class="od" data-t="ord2_od">Leszállítva · okt. 20. · 9 tétel</div></div>
             <span class="st done" data-t="delivered">Leszállítva</span>
           </div>
           <div class="osum">
@@ -786,11 +786,11 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="sec"><h2 data-t="recurring_orders">Ismétlődő rendelések</h2></div>
         <div class="block" style="margin-top:0">
           <div class="toggle" style="margin-top:0">
-            <div class="tx">Szokásos hétfő<span>12 tétel · minden hétfőre</span></div>
+            <div class="tx"><b data-t="standing1">Szokásos hétfő</b><span data-t="standing1s">12 tétel · minden hétfőre</span></div>
             <button class="sw" aria-pressed="true" onclick="tgl(this)"></button>
           </div>
           <div class="toggle">
-            <div class="tx">Szerda – saláták<span>5 tétel · minden szerdára</span></div>
+            <div class="tx"><b data-t="standing2">Szerda – saláták</b><span data-t="standing2s">5 tétel · minden szerdára</span></div>
             <button class="sw" aria-pressed="false" onclick="tgl(this)"></button>
           </div>
         </div>
@@ -956,7 +956,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
     <div id="pay" class="sheet" hidden>
       <div class="s-top">
         <button class="back" aria-label="Vissza" onclick="closeSheet('pay')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button>
-        <div class="tt"><span data-t="pay_title">Fizetés &amp; elszámolás</span><small>Kóstoló Bisztró · központi számla</small></div>
+        <div class="tt"><span data-t="pay_title">Fizetés &amp; elszámolás</span><small>Kóstoló Bisztró · <span data-t="central_acct">központi számla</span></small></div>
       </div>
       <div class="s-body">
         <label style="font:700 12px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-faint);display:block;margin:2px 0 2px" data-t="pay_method">Fizetési mód</label>
@@ -971,7 +971,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="totals" id="payTotals"></div>
       </div>
       <div class="s-foot">
-        <button class="btn primary" style="width:100%" id="payBtn" onclick="placeOrder()">Rendelés leadása</button>
+        <button class="btn primary" style="width:100%" id="payBtn" data-t="place_order" onclick="placeOrder()">Rendelés leadása</button>
       </div>
     </div>
 
@@ -1234,6 +1234,12 @@ const TR = {
   delivered:{hu:'Leszállítva',en:'Delivered'},
   theme_title:{hu:'Téma',en:'Theme'},
   th_auto:{hu:'Automatikus',en:'Auto'}, th_piac:{hu:'Piac · világos',en:'Market · light'}, th_ejfel:{hu:'Éjfél · sötét',en:'Midnight · dark'}, th_lovable:{hu:'Lovable',en:'Lovable'},
+  stage_head_p:{hu:'A legjobb zöldség-gyümölcs rendelő, séf-szemmel. Kattintható prototípus – minden adat demó.',en:'The best fruit &amp; veg ordering, chef-first. A clickable prototype – all data is demo.'},
+  demo:{hu:'DEMÓ',en:'DEMO'}, central_acct:{hu:'központi számla',en:'central account'},
+  standing1:{hu:'Szokásos hétfő',en:'Usual Monday'}, standing1s:{hu:'12 tétel · minden hétfőre',en:'12 items · every Monday'},
+  standing2:{hu:'Szerda – saláták',en:'Wednesday – salads'}, standing2s:{hu:'5 tétel · minden szerdára',en:'5 items · every Wednesday'},
+  ord1_od:{hu:'Leszállítva · tegnap 6:40 · 14 tétel',en:'Delivered · yesterday 6:40 · 14 items'},
+  ord2_od:{hu:'Leszállítva · okt. 20. · 9 tétel',en:'Delivered · Oct 20 · 9 items'},
   theme_hint:{hu:'A dizájn és a betűtípus kipróbálható. Az „Automatikus" a készülék beállítását követi.',en:'Try out the look and typeface. “Auto” follows your device setting.'}
 };
 const STATUS_L={hu:['Leadva','Visszaigazolva','Komissiózás','Becsomagolva','Úton','Megérkezett','Átvéve','Elszámolva'],
@@ -1251,7 +1257,7 @@ function applyStatic(){
 function setLang(l){
   lang = l;
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
-  applyStatic();
+  applyStatic(); updateDeliveryLabels();
   renderAgain(); renderFeat(); renderNudge(); renderChips(); renderCatalog(); renderOrders();
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden) buildTrack();
@@ -1285,6 +1291,9 @@ function setTheme(name){
 const $ = s=>document.querySelector(s);
 const ft = n=>Math.round(n).toLocaleString('hu-HU')+' Ft';
 const unitShort = u=>u.split(' · ')[0];
+function unitL(u){ if(lang!=='en') return u; const M={'db':'pcs','tálca':'tray','láda':'crate','csomag':'pack','karton':'carton','zsák':'sack','doboz':'box','tasak':'pouch','fej':'head'}; return (''+u).replace(/\b(db|tálca|láda|csomag|karton|zsák|doboz|tasak|fej)\b/g,m=>M[m]||m); }
+function methodL(m){ if(lang!=='en') return m; const M={'Céges átutalás · 15 nap':'Company transfer · 15 days','Céges átutalás':'Company transfer','Bankkártya':'Card','Fizetés átvételkor':'Pay on delivery'}; return M[m]||m; }
+function reasonL(r){ if(lang!=='en') return r; const M={'Ma szedve':'Picked today','Ma érkezett':'Arrived today','Új import':'New import','Séfkedvenc':'Chef favourite','Frissen érkezett':'Just arrived','Szezon':'In season','Plating':'Plating','Mintacikk':'Sample item'}; return M[r]||r; }
 const lineTotal = c=>BYID[c.id].u[c.ui].p*c.q;
 const cartCount = ()=>cart.reduce((s,c)=>s+c.q,0);
 const cartNet = ()=>cart.reduce((s,c)=>s+lineTotal(c),0);
@@ -1319,7 +1328,7 @@ function syncBadge(){
 function reorderLast(){
   cart = LAST.map(x=>({...x}));
   syncBadge(); go('kosar');
-  toast('Előző rendelés a kosárban','cart');
+  toast(lang=='en'?'Last order added to cart':'Előző rendelés a kosárban');
 }
 
 /* ============ RENDERELÉS: MA ============ */
@@ -1339,18 +1348,18 @@ function renderAgain(){
 function renderFeat(){
   $('#featRow').innerHTML = FEAT.map(f=>{const p=BYID[f.id];const u=p.u[0];return `
     <button class="feat" onclick="openDetail('${p.id}')">
-      <span class="ph tile" style="--h:${p.h}">${p.e}<span class="reason ${f.hot?'hot':''}">${f.r}</span></span>
+      <span class="ph tile" style="--h:${p.h}">${p.e}<span class="reason ${f.hot?'hot':''}">${reasonL(f.r)}</span></span>
       <span class="body">
         <span class="nm">${p.n}</span>
         <span class="og"><span style="font-size:13px">${p.fl}</span> ${p.og}</span>
-        <span class="pr"><b>${u.p.toLocaleString('hu-HU')} Ft</b><small>/${unitShort(u.u)}</small></span>
+        <span class="pr"><b>${u.p.toLocaleString('hu-HU')} Ft</b><small>/${unitL(unitShort(u.u))}</small></span>
       </span>
     </button>`;}).join('');
 }
 function renderNudge(){
   $('#lowNudge').innerHTML = `<span class="ic">🥑</span>
     <div class="tx">${t('nudge')}</div>
-    <button onclick="addToCart('avokado',1,1);syncBadge();toast('Avokádó karton a kosárban','cart')">${t('add_cart')}</button>`;
+    <button onclick="addToCart('avokado',1,1);syncBadge();toast(lang=='en'?'Avocado carton added to cart':'Avokádó karton a kosárban')">${t('add_cart')}</button>`;
 }
 
 /* ============ RENDERELÉS: PIAC ============ */
@@ -1374,14 +1383,14 @@ function renderCatalog(){
         </span>
       </button>
       <span class="prod-right">
-        <span class="price">${u.p.toLocaleString('hu-HU')} Ft<small>/${unitShort(u.u)}</small></span>
+        <span class="price">${u.p.toLocaleString('hu-HU')} Ft<small>/${unitL(unitShort(u.u))}</small></span>
         <button class="add ${inCart?'in':''}" aria-label="Kosárba: ${p.n}" onclick="quickAdd('${p.id}')">
           <svg viewBox="0 0 24 24">${inCart?'<path d="m5 13 4 4L19 7"/>':'<path d="M12 5v14M5 12h14"/>'}</svg>
         </button>
       </span>
     </li>`;}).join('');
 }
-function quickAdd(id){addToCart(id,1,0);const p=BYID[id];toast(p.n+' a kosárban','cart');renderCatalog();}
+function quickAdd(id){addToCart(id,1,0);const p=BYID[id];toast(p.n+(lang=='en'?' added to cart':' a kosárban'));renderCatalog();}
 
 /* ============ TERMÉK RÉSZLETEK ============ */
 function openDetail(id){
@@ -1408,7 +1417,7 @@ function openDetail(id){
           <div class="tx"><b>Személyes minőségellenőrzés</b>Minden láda mögött kézi ellenőrzés áll. &lt;72 óra a földtől a konyhádig.</div>
         </div>
         <div class="seg" id="segUnits">${p.u.map((x,i)=>`
-          <button aria-pressed="${i===0}" onclick="setUnit(${i})">${unitShort(x.u)}<b>${x.p.toLocaleString('hu-HU')} Ft</b>${x.u.includes(' · ')?`<small style="color:var(--ink-faint)">${x.u.split(' · ')[1]}</small>`:''}</button>`).join('')}
+          <button aria-pressed="${i===0}" onclick="setUnit(${i})">${unitL(unitShort(x.u))}<b>${x.p.toLocaleString('hu-HU')} Ft</b>${x.u.includes(' · ')?`<small style="color:var(--ink-faint)">${x.u.split(' · ')[1]}</small>`:''}</button>`).join('')}
         </div>
         <label class="d-sub"><input type="checkbox" checked> Ha elfogy, a séf jóváhagyásával <b>hasonló minőségre cserélhető</b> (pl. másik termőhely).</label>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
@@ -1433,7 +1442,7 @@ function updateDetailPrice(){const p=BYID[detailId];$('#dAddPz').textContent=ft(
 function addFromDetail(){
   addToCart(detailId,detailQty,detailUi);
   const p=BYID[detailId];
-  closeDetail(); toast(p.n+' a kosárban','cart');
+  closeDetail(); toast(p.n+(lang=='en'?' added to cart':' a kosárban'));
 }
 
 /* ============ RENDERELÉS: KOSÁR ============ */
@@ -1456,7 +1465,7 @@ function renderCart(){
       <span class="tile" style="--h:${p.h}">${p.e}</span>
       <div class="ci">
         <b>${p.n}</b>
-        <span>${unitShort(u.u)} · ${u.p.toLocaleString('hu-HU')} Ft${u.u.includes(' · ')?' · '+u.u.split(' · ')[1]:''}</span>
+        <span>${unitL(unitShort(u.u))} · ${u.p.toLocaleString('hu-HU')} Ft${u.u.includes(' · ')?' · '+unitL(u.u.split(' · ')[1]):''}</span>
         <div class="lp">${ft(lineTotal(c))}</div>
       </div>
       <div class="cline-right">
@@ -1493,11 +1502,11 @@ function renderCart(){
 
   box.innerHTML = html;
   renderDates();
-  $('#cartCut').textContent = cutLabel;
+  $('#cartCut').textContent = cutLabelL();
 }
 let pickedDate = 1;
 function renderDates(){
-  const names=['vas','hét','kedd','sze','csüt','pén','szo'];
+  const names=lang=='en'?['Sun','Mon','Tue','Wed','Thu','Fri','Sat']:['vas','hét','kedd','sze','csüt','pén','szo'];
   let out=[];
   for(let i=1;i<=6;i++){
     const dt=new Date(); dt.setDate(dt.getDate()+i);
@@ -1518,31 +1527,33 @@ function placeOrder(){
   const items=order.lines.length;
   $('#confItems').textContent=items+' tétel';
   $('#confTotal').textContent=ft(estTotal(order)*(1+VAT));
-  $('#confWhen').textContent=delWhenText;
+  $('#confWhen').textContent=delWhenTextL();
   $('#confNo').textContent=order.no;
   cart=[]; syncBadge();
   closeSheet('pay'); go('confirm'); renderOrders();
 }
 
 /* ============ VISSZASZÁMLÁLÓ + SZÁLLÍTÁS ============ */
-let cutLabel='ma 20:00', delWhenText='holnap reggel, 5:00–12:00', cutTarget=null;
+let delDate=null, cutPast=false, cutTarget=null;
 function initDelivery(){
   const now=new Date();
   const cut=new Date(); cut.setHours(20,0,0,0);
-  const past = now>=cut;
-  if(past) cut.setDate(cut.getDate()+1);
+  cutPast = now>=cut;
+  if(cutPast) cut.setDate(cut.getDate()+1);
   cutTarget=cut;
-  const wd=new Intl.DateTimeFormat('hu-HU',{weekday:'long'});
-  cutLabel = (past?'holnap':'ma')+' 20:00';
-  // szállítás = a határidő utáni reggel
-  const del=new Date(cut); del.setDate(del.getDate()+1);
-  const d0=new Date(); d0.setHours(0,0,0,0);
-  const diffDays=Math.round((new Date(del.getFullYear(),del.getMonth(),del.getDate())-d0)/864e5);
-  const rel = diffDays===1?'holnap':(diffDays===2?'holnapután':wd.format(del));
-  delWhenText = rel+' reggel, 5:00–12:00';
-  $('#delWhen').textContent = delWhenText;
-  $('#cutLab').textContent = cutLabel;
+  delDate=new Date(cut); delDate.setDate(delDate.getDate()+1);
+  updateDeliveryLabels();
 }
+function delRel(){
+  const d0=new Date(); d0.setHours(0,0,0,0);
+  const diff=Math.round((new Date(delDate.getFullYear(),delDate.getMonth(),delDate.getDate())-d0)/864e5);
+  if(diff===1) return lang=='en'?'tomorrow':'holnap';
+  if(diff===2) return lang=='en'?'the day after tomorrow':'holnapután';
+  return new Intl.DateTimeFormat(lang=='en'?'en-US':'hu-HU',{weekday:'long'}).format(delDate);
+}
+function delWhenTextL(){ return lang=='en' ? (delRel()+' morning, 5:00–12:00') : (delRel()+' reggel, 5:00–12:00'); }
+function cutLabelL(){ return (cutPast?(lang=='en'?'tomorrow':'holnap'):(lang=='en'?'today':'ma'))+' 20:00'; }
+function updateDeliveryLabels(){ const a=$('#delWhen'); if(a) a.textContent=delWhenTextL(); const b=$('#cutLab'); if(b) b.textContent=cutLabelL(); const c=$('#cartCut'); if(c) c.textContent=cutLabelL(); }
 function tick(){
   if(!cutTarget)return;
   let ms=cutTarget-new Date();
@@ -1612,7 +1623,7 @@ let order=null;
 function unitKg(uStr){ if(uStr==='kg')return 1; const m=uStr.match(/([\d.,]+)\s*kg/); return m?parseFloat(m[1].replace(',','.')):0; }
 function nf(n){return n.toLocaleString('hu-HU',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function makeOrder(lines, method){
-  const o={no:'#PP-'+(26052+Math.floor(Math.random()*40)),status:0,method:method||payMethod,deliveryText:delWhenText,
+  const o={no:'#PP-'+(26052+Math.floor(Math.random()*40)),status:0,method:method||payMethod,deliveryText:delWhenTextL(),
     driver:{name:'Kovács Zoltán',init:'KZ',plate:'PIL‑204',phone:'+36 30 ••• 5512'},lines:[]};
   let wi=0;
   lines.forEach(l=>{const p=BYID[l.id];const uStr=p.u[l.ui].u;const ukg=unitKg(uStr);
@@ -1651,7 +1662,7 @@ function renderOrders(){
   const chip = st>=7?`<span class="st done">${STATUS_L[lang][7]}</span>`:st>=6?`<span class="st done">${STATUS_L[lang][6]}</span>`:st>=4?`<span class="st way">${STATUS_L[lang][4]}</span>`:`<span class="st prep">${STATUS_L[lang][st]}</span>`;
   const tot = st>=6? finalTotal(order) : estTotal(order);
   box.innerHTML = `<div class="ord">
-    <div class="oh"><div><div class="on">${order.no}</div><div class="od">${t('del_block')}: ${order.deliveryText} · ${items} ${t('items')}</div></div>${chip}</div>
+    <div class="oh"><div><div class="on">${order.no}</div><div class="od">${t('del_block')}: ${delWhenTextL()} · ${items} ${t('items')}</div></div>${chip}</div>
     ${stepperHTML(st)}
     <div class="osum"><div class="ot">${st>=6?t('end_final'):t('end_est')}<b>${ft(tot*(1+VAT))}</b></div>
       <div class="oacts"><button class="prim" onclick="openTrack()">${t('track')}</button></div></div>
@@ -1702,13 +1713,13 @@ function buildTrack(){
   $('#track').innerHTML = `
     <div class="s-top">
       <button class="back" aria-label="Vissza" onclick="closeSheet('track')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <div class="tt">${o.no}<small>Kóstoló Bisztró · ${o.deliveryText}</small></div>
+      <div class="tt">${o.no}<small>Kóstoló Bisztró · ${delWhenTextL()}</small></div>
     </div>
     <div class="s-body">
       <div class="track-hero">
         <span class="status-chip">${(st>=4&&st<=5)?'<span class="d"></span>':''}${STATUS_L[lang][st]}</span>
         <div class="big">${trackTitle(st)}</div>
-        <div class="sm">${items} ${t('items')} · ${o.method}</div>
+        <div class="sm">${items} ${t('items')} · ${methodL(o.method)}</div>
       </div>
       ${stepperHTML(st)}
       ${ctx}
@@ -1724,7 +1735,7 @@ function settlementHTML(o, st){
         <span class="gok ${ok?'in':'out'}">${ok?'±10% ✓':(lang=='en'?'deviation':'eltérés')}</span>
         <span class="gp">${ft(l.ppk*l.actKg)}</span></div>`;}
     return `<div class="gl"><span class="gtile tile" style="--h:${p.h}">${p.e}</span>
-      <span class="gn"><b>${p.n}</b><span>${l.q} ${unitShort(p.u[l.ui].u)} · ${t('exact')}</span></span>
+      <span class="gn"><b>${p.n}</b><span>${l.q} ${unitL(unitShort(p.u[l.ui].u))} · ${t('exact')}</span></span>
       <span class="gok in">${t('ok_in')}</span><span class="gp">${ft(p.u[l.ui].p*l.q)}</span></div>`;}).join('');
   const est=estTotal(o), fin=finalTotal(o), diff=fin-est;
   return `<div class="ctx" style="padding:0;overflow:hidden">
@@ -1735,7 +1746,7 @@ function settlementHTML(o, st){
     <div class="settle-tot"><div class="sl2">${t('settle_final')}<b>${ft(fin*(1+VAT))}</b></div>
       <div class="adj">${t('estimate')}: ${ft(est*(1+VAT))}<br>${diff>=0?'+':'−'}${ft(Math.abs(diff)*(1+VAT))} ${t('correction')}</div></div>
     ${st===7
-      ?`<div class="ctx"><div class="ch">${lang=='en'?'Payment &amp; invoice':'Fizetés &amp; számla'}</div><div class="pk"><span>${o.method}</span><b>${t('pay_settled')}</b></div><div class="pk"><span>${t('invoice_no')}</span><b>#SZ‑${o.no.slice(4)}</b></div></div>
+      ?`<div class="ctx"><div class="ch">${lang=='en'?'Payment &amp; invoice':'Fizetés &amp; számla'}</div><div class="pk"><span>${methodL(o.method)}</span><b>${t('pay_settled')}</b></div><div class="pk"><span>${t('invoice_no')}</span><b>#SZ‑${o.no.slice(4)}</b></div></div>
         <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost" style="width:auto;flex:1" onclick="toast('Számla (PDF) · demó')">${t('invoice')}</button><button class="btn leaf" onclick="closeSheet('track');reorderLast()">${lang=='en'?'Reorder':'Újrarendelés'}</button></div>`
       :`<button class="bigcta leaf" onclick="setStatus(7)">${t('finalize')}</button>`}`;
 }
