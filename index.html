@@ -140,6 +140,22 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .info-flow i{color:var(--ink-faint);font-style:normal;padding:0 1px}
 .info-body{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:13px 0 0}
 .info-ok{width:100%;border:0;border-radius:13px;padding:13px;font-size:14px;font-weight:700;background:var(--leaf);color:#fff;margin-top:16px}
+/* ---- reklamáció ---- */
+.claim-lab{display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);margin:16px 2px 9px}
+.claim-items{display:flex;flex-direction:column;gap:7px}
+.claim-item{display:flex;align-items:center;gap:11px;border:1.5px solid var(--line);background:var(--surface);border-radius:13px;padding:8px 11px;text-align:left}
+.claim-item[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout)}
+.claim-item .ci-n{font-size:13.5px;font-weight:600;min-width:0}
+.claim-reasons{display:flex;flex-wrap:wrap;gap:7px}
+.claim-reasons button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;font-size:12.5px;font-weight:600;color:var(--ink-soft);padding:8px 13px}
+.claim-reasons button[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout);color:var(--leaf-ink)}
+.claim-photos{display:flex;flex-wrap:wrap;gap:9px}
+.cphoto{position:relative;width:72px;height:72px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.cphoto img{width:100%;height:100%;object-fit:cover;display:block}
+.cphoto button{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:1;display:grid;place-items:center}
+.cphoto-add{width:72px;height:72px;border-radius:12px;border:1.5px dashed var(--line);background:var(--surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink-soft)}
+.cphoto-add svg{width:20px;height:20px;stroke:var(--leaf);fill:none;stroke-width:1.8}
+.cphoto-add span{font-size:10.5px;font-weight:600}
 .icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
   background:var(--surface-2);display:grid;place-items:center;position:relative}
 .icon-btn svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:1.8}
@@ -250,6 +266,12 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .chip{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);
   font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.freqbar{display:flex;align-items:center;gap:10px;margin:12px 2px 2px;flex-wrap:wrap}
+.freqlab{font-size:12px;font-weight:600;color:var(--ink-faint)}
+.seg-days{display:inline-flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg-days button{border:0;background:none;font-size:12.5px;font-weight:700;color:var(--ink-soft);padding:5px 12px;border-radius:999px;font-variant-numeric:tabular-nums}
+.seg-days button[aria-pressed="true"]{background:var(--leaf);color:#fff}
+.seg-days .freqdays{font-size:11.5px;color:var(--ink-faint);padding:0 7px 0 3px}
 
 /* ---- terméklista ---- */
 .plist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
@@ -766,6 +788,10 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           <input id="searchIn" type="search" data-tph="search_ph" placeholder="Keress 700+ termék között…" autocomplete="off">
         </label>
         <div class="chips" id="chips"></div>
+        <div class="freqbar">
+          <span class="freqlab" data-t="freq_lab">Gyakoriság · utolsó</span>
+          <div class="seg-days" id="segDays"></div>
+        </div>
         <ul class="plist" id="catalog"></ul>
       </section>
 
@@ -791,7 +817,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           <div class="osum">
             <div class="ot"><span data-t="end_final">Végösszeg</span><b>52 100 Ft</b></div>
             <div class="oacts">
-              <button data-t="claim" onclick="toast('Minőségi reklamáció megnyitva · demó','qc')">Reklamáció</button>
+              <button data-t="claim" onclick="openClaim('#PP-25884')">Reklamáció</button>
               <button class="prim" data-t="reorder" onclick="reorderLast()">Újra</button>
             </div>
           </div>
@@ -1035,6 +1061,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
       </div>
     </div>
 
+    <div id="claim" class="sheet" hidden></div>
     <div id="detail" class="detail" hidden></div>
     <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
   </div>
@@ -1146,6 +1173,11 @@ const P = [
     d:'A világ legdrágább fűszere – 150 000 virágból 1 kg. Rizottóhoz, halhoz, pár szál is elég.'}
 ];
 const BYID = Object.fromEntries(P.map(p=>[p.id,p]));
+// Demó: rendelési gyakoriság (elmúlt 90 nap). Valós appban a BC rendelés-történetből, per vevő.
+const FREQ={tvpaprika:52,koktelparadicsom:48,kigyouborka:45,citrom:43,avokado:41,mosottrukkola:39,barnacsiperke:36,fejessalata:34,bazsalikom:32,kaliforniai:30,babaspenot:28,laska:24,ratte:22,medjool:17,lilaburgonya:14,romanesco:13,shiitake:12,kurkuma:11,galanga:10,sakura:10,kaffir:9,babyananasz:9,mangold:8,kumquat:7,sarkany:6,physalis:6,viragok:5,mangosteen:4,feketefokhagyma:4,safrany:3};
+// Demó-trend: 30 napnál a felkapott tételek előrébb, 180 napnál a korábban népszerűek.
+const TREND={koktelparadicsom:1.7,bazsalikom:1.5,sakura:1.4,viragok:1.4,avokado:1.3,romanesco:1.3,medjool:1.3,sarkany:1.3,mangosteen:1.2,citrom:0.55,barnacsiperke:0.65,fejessalata:0.7,kigyouborka:0.8,mosottrukkola:0.85,tvpaprika:0.9};
+function freqOf(id){ const b=FREQ[id]||0, t=TREND[id]||1; return freqWin===30 ? b*t : (freqWin===180 ? b/t : b); }
 const CATS = [['mind','Mind'],['zoldseg','Zöldség'],['gyumolcs','Gyümölcs'],['salata','Saláták'],['gomba','Gombák'],['fuszer','Fűszernövény'],['kulon','Különlegesség']];
 const LAST = [
   {id:'tvpaprika',q:2,ui:1},{id:'koktelparadicsom',q:3,ui:0},{id:'kigyouborka',q:2,ui:1},
@@ -1161,13 +1193,18 @@ const MIN_ORDER = 15000, VAT = 0.27;
 
 /* ============ ÁLLAPOT ============ */
 let cart = [];            // {id,q,ui}
-let activeCat = 'mind', query = '';
+let activeCat = 'mind', query = '', freqWin = 90;
 let detailId = null, detailUi = 0, detailQty = 1;
 
 /* ============ KÉTNYELVŰSÉG (HU / EN) ============ */
 let lang = 'hu';
 const TR = {
-  sub:{hu:'Séf-rendelő · demó',en:'Chef ordering · demo'}, info_ok:{hu:'Értem',en:'Got it'},
+  sub:{hu:'Séf-rendelő · demó',en:'Chef ordering · demo'}, info_ok:{hu:'Értem',en:'Got it'}, freq_lab:{hu:'Gyakoriság · utolsó',en:'Frequency · last'},
+  claim_title:{hu:'Reklamáció',en:'Claim'}, claim_which:{hu:'Melyik tétel?',en:'Which item?'}, claim_what:{hu:'Mi a gond?',en:'What’s wrong?'},
+  claim_photos:{hu:'Fotók (max 6)',en:'Photos (max 6)'}, claim_addphoto:{hu:'Fotó',en:'Photo'}, claim_note:{hu:'Megjegyzés',en:'Note'},
+  claim_note_ph:{hu:'Pl. a felét penészesen kaptuk, a láda alja nyomott.',en:'E.g. half of it arrived mouldy, the bottom of the crate was crushed.'},
+  claim_note2:{hu:'A fotó és a szállítólevél a jóváírás bizonyítéka. A PilPel kapcsolattartó még ma visszajelez.',en:'The photo and the delivery note are the evidence for the credit. Your PilPel contact replies the same day.'},
+  claim_send:{hu:'Reklamáció beküldése',en:'Submit claim'},
   tab_ma:{hu:'Ma',en:'Today'}, tab_piac:{hu:'Piac',en:'Market'}, tab_kosar:{hu:'Kosár',en:'Cart'}, tab_rend:{hu:'Rendelések',en:'Orders'},
   greet:{hu:'Jó reggelt, Dániel séf',en:'Good morning, chef Dániel'},
   flow_title:{hu:'Teljes folyamat',en:'Full process'},
@@ -1297,7 +1334,7 @@ function setLang(l){
   lang = l;
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
   applyStatic(); updateDeliveryLabels();
-  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderCatalog(); renderOrders();
+  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders();
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
   if(!$('#driver').hidden){ buildDriver(); injectUtils($('#driver')); }
@@ -1339,13 +1376,15 @@ const INFO={
   ma:{t:{hu:'Főoldal',en:'Home'}, flow:{hu:'Belépés <i>→</i> <b>Ma</b> <i>→</i> Piac',en:'Sign‑in <i>→</i> <b>Today</b> <i>→</i> Market'},
      b:{hu:'Innen indul minden: a következő szállítás és a rendelési határidő, az előző rendelés egy koppintással, a napi piac és a kedvencek. Böngéssz a Piacon, vagy nyisd a Kosarat.',en:'Everything starts here: your next delivery and order cut‑off, repeat your last order in one tap, today’s market and favourites. Browse the Market, or open the Cart.'}},
   piac:{t:{hu:'Piac',en:'Market'}, flow:{hu:'Ma <i>→</i> <b>Piac</b> <i>→</i> Kosár',en:'Today <i>→</i> <b>Market</b> <i>→</i> Cart'},
-     b:{hu:'A 700+ termék böngészése kategóriák és kereső szerint. Koppints egy termékre a részletekért, vagy a + gombbal tedd a kosárba.',en:'Browse 700+ products by category and search. Tap a product for details, or use + to add it to the cart.'}},
+     b:{hu:'A lista a fent kiválasztott időablak (30 / 90 / 180 nap) rendelési gyakorisága szerint rendezett – amit a legtöbbet rendelsz, elöl van. Böngéssz kategóriák és kereső szerint; koppints egy termékre a részletekért, vagy a + gombbal a kosárba.',en:'The list is sorted by ordering frequency over the window you pick above (30 / 90 / 180 days) – what you order most is on top. Browse by category and search; tap a product for details, or use + to add it to the cart.'}},
   kosar:{t:{hu:'Kosár',en:'Cart'}, flow:{hu:'Piac <i>→</i> <b>Kosár</b> <i>→</i> Fizetés',en:'Market <i>→</i> <b>Cart</b> <i>→</i> Payment'},
      b:{hu:'A rendelésed áttekintése: mennyiségek, szállítási nap, üzenet a PilPelnek. A súlyra mért tételeknél az ár becsült (±10% tolerancia). Tovább a fizetéshez.',en:'Review your order: quantities, delivery day, a note to PilPel. For weighed items the price is estimated (±10% tolerance). Continue to payment.'}},
   rendelesek:{t:{hu:'Rendeléseim',en:'My orders'}, flow:{hu:'Ma <i>→</i> <b>Rendelések</b> <i>→</i> Követés',en:'Today <i>→</i> <b>Orders</b> <i>→</i> Track'},
      b:{hu:'Az aktív és korábbi rendeléseid státusszal. Nyisd meg a Követést az élő állapothoz, vagy rendeld újra egy koppintással.',en:'Your active and past orders with status. Open Track for the live status, or reorder in one tap.'}},
   pay:{t:{hu:'Fizetés',en:'Payment'}, flow:{hu:'Kosár <i>→</i> <b>Fizetés</b> <i>→</i> Leadva',en:'Cart <i>→</i> <b>Payment</b> <i>→</i> Placed'},
      b:{hu:'Válaszd a fizetési módot (céges átutalás / kártya / átvételkor). A végösszeg a kiszedett tömeg alapján véglegesül. Leadás után a rendelés a Követésbe kerül.',en:'Choose a payment method (company transfer / card / on delivery). The total is finalised by the picked weight. After placing it, the order moves to Track.'}},
+  claim:{t:{hu:'Reklamáció',en:'Claim'}, flow:{hu:'Rendelések <i>→</i> <b>Reklamáció</b>',en:'Orders <i>→</i> <b>Claim</b>'},
+     b:{hu:'Jelezd a hiányt vagy a minőségi gondot – tétel, ok, fotók –, a rendeléshez kötve. A bizonyíték a szállítólevélhez rögzül, és a jóváírás azonnal indul.',en:'Report a shortage or quality issue – item, reason, photos – linked to the order. The evidence is attached to the delivery note and the credit starts immediately.'}},
   confirm:{t:{hu:'Rendelés leadva',en:'Order placed'}, flow:{hu:'Fizetés <i>→</i> <b>Leadva</b> <i>→</i> Követés',en:'Payment <i>→</i> <b>Placed</b> <i>→</i> Track'},
      b:{hu:'A rendelésed rögzítve; összeállítjuk és a futár hajnalban indul. Kövesd a Követésben.',en:'Your order is placed; we’ll pick it and the courier sets off at dawn. Follow it in Track.'}},
   driver:{t:{hu:'Futár app',en:'Courier app'}, flow:{hu:'Séf‑app <i>↔</i> <b>Futár‑app</b>',en:'Chef app <i>↔</i> <b>Courier app</b>'},
@@ -1383,6 +1422,7 @@ function currentCtx(){
   if(op('onboard')) return 'onboard';
   if(op('driver')) return 'driver';
   if(op('detail')) return 'detail';
+  if(op('claim')) return 'claim';
   if(op('track')) return 'track';
   if(op('pay')) return 'pay';
   if(op('fiok')) return 'fiok';
@@ -1398,6 +1438,42 @@ function openInfo(){
   const el=$('#info'); el.hidden=false; void el.offsetHeight; el.classList.add('open');
 }
 function closeInfo(){ const el=$('#info'); el.classList.remove('open'); setTimeout(()=>el.hidden=true,200); }
+
+/* ============ REKLAMÁCIÓ (fotóval, rendeléshez kötve) ============ */
+const CLAIM_REASONS=[{hu:'Hiány',en:'Shortage'},{hu:'Minőség',en:'Quality'},{hu:'Sérült',en:'Damaged'},{hu:'Nem azt kaptam',en:'Wrong item'},{hu:'Egyéb',en:'Other'}];
+let claim={photos:[],item:null,reason:0,orderNo:''};
+function openClaim(orderNo){
+  if(!order) order=makeOrder(SEED_ORDER,payMethod);
+  claim={photos:[],item:order.lines[0].id,reason:0,orderNo:orderNo||order.no};
+  buildClaim(); openSheet('claim');
+}
+function buildClaim(){
+  const items=order.lines.map(l=>{const p=BYID[l.id];return `<button class="claim-item" aria-pressed="${l.id===claim.item}" onclick="pickClaimItem('${l.id}',this)"><span class="gtile tile" style="--h:${p.h};width:32px;height:32px;font-size:17px">${p.e}</span><span class="ci-n">${p.n}</span></button>`;}).join('');
+  const reasons=CLAIM_REASONS.map((r,i)=>`<button aria-pressed="${i===claim.reason}" onclick="pickClaimReason(${i},this)">${r[lang]||r.hu}</button>`).join('');
+  $('#claim').innerHTML=`
+    <div class="s-top"><button class="back" aria-label="Vissza" onclick="closeSheet('claim')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button><div class="tt">${t('claim_title')}<small>${claim.orderNo}</small></div></div>
+    <div class="s-body">
+      <label class="claim-lab">${t('claim_which')}</label>
+      <div class="claim-items">${items}</div>
+      <label class="claim-lab">${t('claim_what')}</label>
+      <div class="claim-reasons">${reasons}</div>
+      <label class="claim-lab">${t('claim_photos')}</label>
+      <div class="claim-photos" id="claimPhotos"></div>
+      <input type="file" id="claimFile" accept="image/*" multiple hidden onchange="addClaimPhotos(this)">
+      <label class="claim-lab" style="margin-top:14px">${t('claim_note')}</label>
+      <textarea class="note-in" id="claimNote" placeholder="${t('claim_note_ph')}"></textarea>
+      <div class="est-note" style="margin-top:14px"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.2-2.8 7.8-7 9-4.2-1.2-7-4.8-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg><div>${t('claim_note2')}</div></div>
+    </div>
+    <div class="s-foot"><button class="btn primary" style="width:100%" onclick="submitClaim()">${t('claim_send')}</button></div>`;
+  injectUtils($('#claim')); renderClaimPhotos();
+}
+function pickClaimItem(id,btn){ claim.item=id; btn.parentElement.querySelectorAll('.claim-item').forEach(b=>b.setAttribute('aria-pressed',b===btn)); }
+function pickClaimReason(i,btn){ claim.reason=i; btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn)); }
+function addClaimPhotos(input){ [...input.files].slice(0,6).forEach(f=>{const r=new FileReader(); r.onload=e=>{ if(claim.photos.length<6){claim.photos.push(e.target.result); renderClaimPhotos();} }; r.readAsDataURL(f);}); input.value=''; }
+function renderClaimPhotos(){ const el=$('#claimPhotos'); if(!el)return;
+  el.innerHTML=claim.photos.map((src,i)=>`<div class="cphoto"><img src="${src}" alt=""><button aria-label="Törlés" onclick="claim.photos.splice(${i},1);renderClaimPhotos()">×</button></div>`).join('')
+   + (claim.photos.length<6?`<button class="cphoto-add" onclick="$('#claimFile').click()"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8h3l1.5-2h5L16 8h3v11H5z"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>${t('claim_addphoto')}</span></button>`:''); }
+function submitClaim(){ closeSheet('claim'); toast(lang=='en'?('Claim submitted · '+claim.orderNo+' · credit started'):('Reklamáció beküldve · '+claim.orderNo+' · jóváírást indítjuk')); }
 
 /* ============ SEGÉDEK ============ */
 const $ = s=>document.querySelector(s);
@@ -1480,9 +1556,12 @@ function renderChips(){
     `<button class="chip" aria-pressed="${id===activeCat}" onclick="setCat('${id}')">${t('cat_'+id)}</button>`).join('');
 }
 function setCat(id){activeCat=id;renderChips();renderCatalog();}
+function renderFreq(){ const sd=$('#segDays'); if(!sd)return; const u=lang=='en'?'days':'nap'; sd.innerHTML=[30,90,180].map(d=>`<button data-d="${d}" aria-pressed="${d===freqWin}" onclick="setFreqWin(${d})">${d}</button>`).join('')+`<span class="freqdays">${u}</span>`; }
+function setFreqWin(d){ freqWin=d; renderFreq(); renderCatalog(); }
 function renderCatalog(){
   let list = P.filter(p=>(activeCat==='mind'||p.cat===activeCat) &&
     (query==='' || (p.n+' '+p.og).toLowerCase().includes(query)));
+  list.sort((a,b)=>freqOf(b.id)-freqOf(a.id)); // a kiválasztott időablak rendelési gyakorisága szerint
   if(!list.length){$('#catalog').innerHTML=`<li style=”text-align:center;color:var(--ink-soft);padding:40px 10px;font-size:13.5px”>${t('no_result')}: „${query}”.</li>`;return;}
   $('#catalog').innerHTML = list.map(p=>{const u=p.u[0];const inCart=cart.some(c=>c.id===p.id);return `
     <li class="prod">
@@ -1691,7 +1770,7 @@ $('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerC
 /* ============ FOLYAMAT: fedőrétegek ============ */
 function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);void el.offsetHeight;el.classList.add('open');}
 function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
-function closeAllSheets(){ ['theme','info','onboard','hub','fiok','pay','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
+function closeAllSheets(){ ['theme','info','onboard','hub','fiok','pay','claim','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
 
 /* ---- onboarding / regisztráció ---- */
 function openOnboard(){showOb(0);openSheet('onboard');}
@@ -1854,7 +1933,7 @@ function settlementHTML(o, st){
   return `<div class="ctx" style="padding:0;overflow:hidden">
       <div style="padding:13px 15px 0"><div class="ch">${t('del_slip')}</div></div>
       <div class="grn">${rows}
-        <div class="claim"><span>${t('claim_q')}</span><button onclick="toast('Reklamáció a szállítólevélhez rögzítve · jóváírás indítva · demó')">${t('claim_btn')}</button></div>
+        <div class="claim"><span>${t('claim_q')}</span><button onclick="openClaim(o.no)">${t('claim_btn')}</button></div>
       </div></div>
     <div class="settle-tot"><div class="sl2">${t('settle_final')}<b>${ft(fin*(1+VAT))}</b></div>
       <div class="adj">${t('estimate')}: ${ft(est*(1+VAT))}<br>${diff>=0?'+':'−'}${ft(Math.abs(diff)*(1+VAT))} ${t('correction')}</div></div>
@@ -1921,7 +2000,7 @@ function buildDriver(){
 
 /* ============ INDÍTÁS ============ */
 initDelivery();
-renderAgain(); renderFeat(); renderNudge(); renderChips(); renderCatalog(); syncBadge();
+renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge();
 order = makeOrder(SEED_ORDER, 'Céges átutalás · 15 nap'); order.status = 2; renderOrders();
 applyStatic();
 setTheme((()=>{try{return localStorage.getItem('pp_theme')||'auto';}catch(e){return 'auto';}})());
