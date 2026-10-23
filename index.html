@@ -123,12 +123,12 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .su-info{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto}
 .su-info svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.9}
 /* ---- infó-panel ---- */
-.info-modal{position:absolute;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;
-  padding:16px;padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(8,14,10,.5);opacity:0;transition:opacity .2s}
+.info-modal{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
+  padding:16px;padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(8,14,10,.5)}
 .info-modal.open{opacity:1}
 .info-modal[hidden]{display:none!important}
-.info-card{width:100%;max-width:404px;background:var(--surface);border:1px solid var(--line);border-radius:20px;
-  padding:18px;box-shadow:0 22px 54px rgba(0,0,0,.34);transform:translateY(18px);transition:transform .24s ease}
+.info-card{width:100%;max-width:404px;max-height:calc(100% - 20px);overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-radius:20px;
+  padding:18px;box-shadow:0 22px 54px rgba(0,0,0,.34)}
 .info-modal.open .info-card{transform:none}
 .info-top{display:flex;align-items:center;gap:11px}
 .info-top .info-ic{width:30px;height:30px;border-radius:9px;background:var(--sprout);display:grid;place-items:center;flex:0 0 auto}
@@ -1395,7 +1395,7 @@ function openInfo(){
   $('#infoTitle').textContent = info.t[lang]||info.t.hu;
   $('#infoFlow').innerHTML = info.flow[lang]||info.flow.hu;
   $('#infoBody').textContent = info.b[lang]||info.b.hu;
-  const el=$('#info'); el.hidden=false; requestAnimationFrame(()=>el.classList.add('open'));
+  const el=$('#info'); el.hidden=false; void el.offsetHeight; el.classList.add('open');
 }
 function closeInfo(){ const el=$('#info'); el.classList.remove('open'); setTimeout(()=>el.hidden=true,200); }
 
@@ -1543,8 +1543,8 @@ function openDetail(id){
         <svg viewBox="0 0 24 24" style="stroke:var(--ink)"><path d="M12 4l2.4 5 5.6.6-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.6-.6L12 4Z"/></svg></button>
       <button class="btn primary" onclick="addFromDetail()"><span id="dAddLab">${t('to_cart')}</span> · <span class="pz" id="dAddPz"></span></button>
     </div>`;
-  d.hidden=false; injectUtils(d);
-  requestAnimationFrame(()=>d.classList.add('open'));
+  d.hidden=false; injectUtils(d); void d.offsetHeight;
+  d.classList.add('open');
   updateDetailPrice();
 }
 function closeDetail(){const d=$('#detail');d.classList.remove('open');setTimeout(()=>{d.hidden=true;},220);}
@@ -1681,7 +1681,7 @@ function tick(){
 let toastT=null;
 function toast(msg){
   const t=$('#toast'); $('#toastMsg').textContent=msg;
-  t.hidden=false; requestAnimationFrame(()=>t.classList.add('show'));
+  t.hidden=false; void t.offsetHeight; t.classList.add('show');
   clearTimeout(toastT); toastT=setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.hidden=true,220);},2200);
 }
 
@@ -1689,7 +1689,7 @@ function toast(msg){
 $('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();renderCatalog();});
 
 /* ============ FOLYAMAT: fedőrétegek ============ */
-function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);requestAnimationFrame(()=>el.classList.add('open'));}
+function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);void el.offsetHeight;el.classList.add('open');}
 function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
 function closeAllSheets(){ ['theme','info','onboard','hub','fiok','pay','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
 
