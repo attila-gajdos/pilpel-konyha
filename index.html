@@ -118,6 +118,28 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .th-opt b{font-size:13.5px;font-weight:600}
 .th-opt .th-aa{position:absolute;top:12px;right:14px;font-size:19px;color:var(--ink-faint);line-height:1}
 #theme{z-index:62}
+/* ---- nyelv+infó klaszter a lapfejlécekben ---- */
+.sheet-utils{margin-left:auto;display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.su-info{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto}
+.su-info svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:1.9}
+/* ---- infó-panel ---- */
+.info-modal{position:absolute;inset:0;z-index:80;display:flex;align-items:flex-end;justify-content:center;
+  padding:16px;padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(8,14,10,.5);opacity:0;transition:opacity .2s}
+.info-modal.open{opacity:1}
+.info-modal[hidden]{display:none!important}
+.info-card{width:100%;max-width:404px;background:var(--surface);border:1px solid var(--line);border-radius:20px;
+  padding:18px;box-shadow:0 22px 54px rgba(0,0,0,.34);transform:translateY(18px);transition:transform .24s ease}
+.info-modal.open .info-card{transform:none}
+.info-top{display:flex;align-items:center;gap:11px}
+.info-top .info-ic{width:30px;height:30px;border-radius:9px;background:var(--sprout);display:grid;place-items:center;flex:0 0 auto}
+.info-top .info-ic svg{width:17px;height:17px;stroke:var(--leaf-ink);fill:none;stroke-width:2}
+.info-top b{font-family:var(--serif);font-weight:600;font-size:17px;flex:1;min-width:0;letter-spacing:-.01em}
+.info-x{width:30px;height:30px;border-radius:8px;border:0;background:var(--surface-2);color:var(--ink-soft);font-size:15px;flex:0 0 auto}
+.info-flow{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:14px 0 0;font-size:11.5px;font-weight:600;color:var(--ink-faint)}
+.info-flow b{color:var(--leaf-ink);background:var(--sprout);padding:3px 9px;border-radius:999px}
+.info-flow i{color:var(--ink-faint);font-style:normal;padding:0 1px}
+.info-body{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin:13px 0 0}
+.info-ok{width:100%;border:0;border-radius:13px;padding:13px;font-size:14px;font-weight:700;background:var(--leaf);color:#fff;margin-top:16px}
 .icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
   background:var(--surface-2);display:grid;place-items:center;position:relative}
 .icon-btn svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:1.8}
@@ -661,11 +683,13 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           <div class="sub" data-t="sub">Séf-rendelő</div>
         </div>
       </div>
+      <button class="icon-btn" aria-label="Infó / Info" onclick="openInfo()">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+      </button>
       <div class="lang" role="group" aria-label="Nyelv / Language">
         <button data-l="hu" aria-pressed="true" onclick="setLang('hu')">HU</button>
         <button data-l="en" aria-pressed="false" onclick="setLang('en')">EN</button>
       </div>
-      <span class="demo-pill" data-t="demo">DEMÓ</span>
       <button class="icon-btn" aria-label="Fiók és számok" onclick="openSheet('fiok')">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20c0-3.3 3-5 6.5-5s6.5 1.7 6.5 5"/></svg>
       </button>
@@ -834,6 +858,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
           <div class="ob-logo"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c4 2 6 5 6 9a6 6 0 0 1-12 0c0-2 .7-3.6 2-5"/><path d="M12 21V9"/></svg></span><span>PilPel</span> Konyha</div>
           <div style="display:flex;align-items:center;gap:8px">
+            <button class="icon-btn" style="width:34px;height:34px;border-radius:9px" aria-label="Infó / Info" onclick="openInfo()"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
             <button class="icon-btn" style="width:34px;height:34px;border-radius:9px" aria-label="Téma / Theme" onclick="openSheet('theme')"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.3 0 2-.9 2-1.9 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4A8.9 8.9 0 0 0 12 3Z"/><circle cx="8" cy="9" r="1.1"/><circle cx="12" cy="7" r="1.1"/><circle cx="16" cy="9.5" r="1.1"/></svg></button>
             <div class="lang" role="group" aria-label="Nyelv / Language"><button data-l="hu" aria-pressed="true" onclick="setLang('hu')">HU</button><button data-l="en" aria-pressed="false" onclick="setLang('en')">EN</button></div>
           </div>
@@ -996,6 +1021,20 @@ button{font-family:inherit;cursor:pointer;color:inherit}
       </div>
     </div>
 
+    <!-- ===== INFÓ ===== -->
+    <div id="info" class="info-modal" hidden>
+      <div class="info-card">
+        <div class="info-top">
+          <span class="info-ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
+          <b id="infoTitle">Infó</b>
+          <button class="info-x" aria-label="Bezárás" onclick="closeInfo()"><svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;stroke:currentColor;stroke-width:2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <div class="info-flow" id="infoFlow"></div>
+        <p class="info-body" id="infoBody"></p>
+        <button class="info-ok" data-t="info_ok" onclick="closeInfo()">Értem</button>
+      </div>
+    </div>
+
     <div id="detail" class="detail" hidden></div>
     <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
   </div>
@@ -1128,7 +1167,7 @@ let detailId = null, detailUi = 0, detailQty = 1;
 /* ============ KÉTNYELVŰSÉG (HU / EN) ============ */
 let lang = 'hu';
 const TR = {
-  sub:{hu:'Séf-rendelő',en:'Chef ordering'},
+  sub:{hu:'Séf-rendelő · demó',en:'Chef ordering · demo'}, info_ok:{hu:'Értem',en:'Got it'},
   tab_ma:{hu:'Ma',en:'Today'}, tab_piac:{hu:'Piac',en:'Market'}, tab_kosar:{hu:'Kosár',en:'Cart'}, tab_rend:{hu:'Rendelések',en:'Orders'},
   greet:{hu:'Jó reggelt, Dániel séf',en:'Good morning, chef Dániel'},
   flow_title:{hu:'Teljes folyamat',en:'Full process'},
@@ -1260,8 +1299,8 @@ function setLang(l){
   applyStatic(); updateDeliveryLabels();
   renderAgain(); renderFeat(); renderNudge(); renderChips(); renderCatalog(); renderOrders();
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
-  if(!$('#track').hidden) buildTrack();
-  if(!$('#driver').hidden) buildDriver();
+  if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
+  if(!$('#driver').hidden){ buildDriver(); injectUtils($('#driver')); }
   if(!$('#detail').hidden && detailId) openDetail(detailId);
 }
 
@@ -1287,6 +1326,79 @@ function setTheme(name){
   try{ localStorage.setItem('pp_theme', name); }catch(e){}
 }
 
+/* ============ NYELV + INFÓ minden felületen ============ */
+function sheetUtilsHTML(){
+  return `<div class="sheet-utils">
+    <button class="su-info" aria-label="Infó / Info" onclick="openInfo()"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
+    <div class="lang" role="group" aria-label="Nyelv / Language"><button data-l="hu" aria-pressed="${lang=='hu'}" onclick="setLang('hu')">HU</button><button data-l="en" aria-pressed="${lang=='en'}" onclick="setLang('en')">EN</button></div>
+  </div>`;
+}
+function injectUtils(el){ if(!el) return; const h=el.querySelector('.s-top,.d-top'); if(h && !h.querySelector('.sheet-utils')) h.insertAdjacentHTML('beforeend', sheetUtilsHTML()); }
+
+const INFO={
+  ma:{t:{hu:'Főoldal',en:'Home'}, flow:{hu:'Belépés <i>→</i> <b>Ma</b> <i>→</i> Piac',en:'Sign‑in <i>→</i> <b>Today</b> <i>→</i> Market'},
+     b:{hu:'Innen indul minden: a következő szállítás és a rendelési határidő, az előző rendelés egy koppintással, a napi piac és a kedvencek. Böngéssz a Piacon, vagy nyisd a Kosarat.',en:'Everything starts here: your next delivery and order cut‑off, repeat your last order in one tap, today’s market and favourites. Browse the Market, or open the Cart.'}},
+  piac:{t:{hu:'Piac',en:'Market'}, flow:{hu:'Ma <i>→</i> <b>Piac</b> <i>→</i> Kosár',en:'Today <i>→</i> <b>Market</b> <i>→</i> Cart'},
+     b:{hu:'A 700+ termék böngészése kategóriák és kereső szerint. Koppints egy termékre a részletekért, vagy a + gombbal tedd a kosárba.',en:'Browse 700+ products by category and search. Tap a product for details, or use + to add it to the cart.'}},
+  kosar:{t:{hu:'Kosár',en:'Cart'}, flow:{hu:'Piac <i>→</i> <b>Kosár</b> <i>→</i> Fizetés',en:'Market <i>→</i> <b>Cart</b> <i>→</i> Payment'},
+     b:{hu:'A rendelésed áttekintése: mennyiségek, szállítási nap, üzenet a PilPelnek. A súlyra mért tételeknél az ár becsült (±10% tolerancia). Tovább a fizetéshez.',en:'Review your order: quantities, delivery day, a note to PilPel. For weighed items the price is estimated (±10% tolerance). Continue to payment.'}},
+  rendelesek:{t:{hu:'Rendeléseim',en:'My orders'}, flow:{hu:'Ma <i>→</i> <b>Rendelések</b> <i>→</i> Követés',en:'Today <i>→</i> <b>Orders</b> <i>→</i> Track'},
+     b:{hu:'Az aktív és korábbi rendeléseid státusszal. Nyisd meg a Követést az élő állapothoz, vagy rendeld újra egy koppintással.',en:'Your active and past orders with status. Open Track for the live status, or reorder in one tap.'}},
+  pay:{t:{hu:'Fizetés',en:'Payment'}, flow:{hu:'Kosár <i>→</i> <b>Fizetés</b> <i>→</i> Leadva',en:'Cart <i>→</i> <b>Payment</b> <i>→</i> Placed'},
+     b:{hu:'Válaszd a fizetési módot (céges átutalás / kártya / átvételkor). A végösszeg a kiszedett tömeg alapján véglegesül. Leadás után a rendelés a Követésbe kerül.',en:'Choose a payment method (company transfer / card / on delivery). The total is finalised by the picked weight. After placing it, the order moves to Track.'}},
+  confirm:{t:{hu:'Rendelés leadva',en:'Order placed'}, flow:{hu:'Fizetés <i>→</i> <b>Leadva</b> <i>→</i> Követés',en:'Payment <i>→</i> <b>Placed</b> <i>→</i> Track'},
+     b:{hu:'A rendelésed rögzítve; összeállítjuk és a futár hajnalban indul. Kövesd a Követésben.',en:'Your order is placed; we’ll pick it and the courier sets off at dawn. Follow it in Track.'}},
+  driver:{t:{hu:'Futár app',en:'Courier app'}, flow:{hu:'Séf‑app <i>↔</i> <b>Futár‑app</b>',en:'Chef app <i>↔</i> <b>Courier app</b>'},
+     b:{hu:'Ez a kiszállító oldala: mai útvonal, aktuális megálló. A futár műveletei (felvétel, megérkezés, QR, mérés) élőben léptetik a séf‑app státuszát.',en:'This is the courier’s side: today’s route, current stop. The courier’s actions (pickup, arrival, QR, weighing) advance the chef app’s status live.'}},
+  fiok:{t:{hu:'Konyha & számok',en:'Kitchen & numbers'}, flow:{hu:'<b>Fiók</b>',en:'<b>Account</b>'},
+     b:{hu:'A konyhád: a központi szám (számlázás, jóváhagyás) és az alárendelt számok szerepkörrel, kerettel. A „Jóváhagyással" számok rendelése a központi számra fut.',en:'Your kitchen: the central number (billing, approvals) and linked numbers with roles and limits. Orders from “Approval required” numbers go to the central number.'}},
+  hub:{t:{hu:'Folyamat‑térkép',en:'Process map'}, flow:{hu:'<b>Teljes folyamat</b>',en:'<b>Full process</b>'},
+     b:{hu:'A teljes lánc egy helyen: regisztrációtól az elszámolásig. Koppints bármelyik lépésre, és oda ugrik a demó.',en:'The whole chain in one place: from sign‑up to settlement. Tap any step to jump the demo there.'}},
+  detail:{t:{hu:'Termék',en:'Product'}, flow:{hu:'Piac <i>→</i> <b>Termék</b> <i>→</i> Kosár',en:'Market <i>→</i> <b>Product</b> <i>→</i> Cart'},
+     b:{hu:'A termék részletei: ár, mértékegység, mennyiség, minőség. A súlyra mért („kimérős") tételnél a végső ár a tényleges tömegre számol. Tedd a kosárba.',en:'Product details: price, unit, quantity, quality. For a weighed (“loose”) item the final price is by actual weight. Add it to the cart.'}},
+  theme:{t:{hu:'Téma',en:'Theme'}, flow:{hu:'<b>Megjelenés</b>',en:'<b>Appearance</b>'},
+     b:{hu:'Válassz megjelenést és betűtípust: Automatikus, Piac (világos), Éjfél (sötét), vagy Lovable.',en:'Choose a look and typeface: Auto, Market (light), Midnight (dark), or Lovable.'}},
+  onboard:{t:{hu:'Regisztráció',en:'Sign‑up'}, flow:{hu:'<b>Belépés</b> <i>→</i> Piac',en:'<b>Sign‑in</b> <i>→</i> Market'},
+     b:{hu:'Belépés telefonszámmal (OTP). Az első szám lesz a központi szám; később alárendelt számokat is meghívhatsz. Minden adat demó.',en:'Sign in with your phone (OTP). The first number becomes the central number; you can invite linked numbers later. All data is demo.'}}
+};
+function trackInfo(st){
+  const names={hu:['Leadva','Komissiózás','Becsomagolva','Úton','Átvétel','Elszámolás'],en:['Placed','Picking','Packed','On the way','Handover','Settled']};
+  const node=[0,0,1,2,3,4,4,5][st]; const flow={};
+  ['hu','en'].forEach(L=>{ flow[L]=names[L].map((n,i)=>i===node?('<b>'+n+'</b>'):n).join(' <i>→</i> '); });
+  const B={
+    0:{hu:'Leadva. A PilPel visszaigazolja, majd a raktárban összeszedik.',en:'Placed. PilPel confirms it, then it is picked in the warehouse.'},
+    1:{hu:'Visszaigazolva. Következik a komissiózás a raktárban.',en:'Confirmed. Picking in the warehouse is next.'},
+    2:{hu:'Komissiózás: a raktárban szedik össze, a súlyra mért tételeket lemérik és a szállítólevélre írják. Következik: becsomagolás.',en:'Picking: items are collected and weighed, recorded on the delivery note. Next: packing.'},
+    3:{hu:'Becsomagolva, indulásra kész. Következik: a futár felveszi.',en:'Packed, ready to go. Next: the courier picks it up.'},
+    4:{hu:'Úton: a futár hozzád tart. Megnézheted a futár oldaláról is. Következik: megérkezés.',en:'On the way: the courier is heading to you. You can see the courier side too. Next: arrival.'},
+    5:{hu:'A futár a helyszínen. Vedd át QR‑kóddal, és a szállítólevélen ellenőrizd a tömeget. Következik: elszámolás.',en:'The courier is on site. Accept with the QR code and check the weight on the delivery note. Next: settlement.'},
+    6:{hu:'Átvéve. A végösszeg a ténylegesen kiszedett tömeg szerint alakul (±10% tolerancia).',en:'Received. The total is by the actually picked weight (±10% tolerance).'},
+    7:{hu:'Elszámolva. A számla a tényleges mennyiséggel egyezik; innen újrarendelhetsz.',en:'Settled. The invoice matches the actual quantity; you can reorder from here.'}
+  };
+  return {t:{hu:'Rendeléskövetés',en:'Order tracking'}, flow, b:B[st]||B[0]};
+}
+function currentCtx(){
+  const op=id=>{const e=$('#'+id); return e && !e.hidden;};
+  if(op('theme')) return 'theme';
+  if(op('onboard')) return 'onboard';
+  if(op('driver')) return 'driver';
+  if(op('detail')) return 'detail';
+  if(op('track')) return 'track';
+  if(op('pay')) return 'pay';
+  if(op('fiok')) return 'fiok';
+  if(op('hub')) return 'hub';
+  const s=document.querySelector('.screen:not([hidden])'); return s?s.dataset.screen:'ma';
+}
+function openInfo(){
+  const k=currentCtx();
+  const info = k==='track' ? trackInfo(order?order.status:0) : (INFO[k]||INFO.ma);
+  $('#infoTitle').textContent = info.t[lang]||info.t.hu;
+  $('#infoFlow').innerHTML = info.flow[lang]||info.flow.hu;
+  $('#infoBody').textContent = info.b[lang]||info.b.hu;
+  const el=$('#info'); el.hidden=false; requestAnimationFrame(()=>el.classList.add('open'));
+}
+function closeInfo(){ const el=$('#info'); el.classList.remove('open'); setTimeout(()=>el.hidden=true,200); }
+
 /* ============ SEGÉDEK ============ */
 const $ = s=>document.querySelector(s);
 const ft = n=>Math.round(n).toLocaleString('hu-HU')+' Ft';
@@ -1306,7 +1418,7 @@ function go(name){
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', t.dataset.tab===name));
   $('#screens').scrollTop = 0;
   if(name==='kosar') renderCart();
-  closeDetail();
+  closeAllSheets();
 }
 
 /* ============ KOSÁR MŰVELETEK ============ */
@@ -1431,7 +1543,7 @@ function openDetail(id){
         <svg viewBox="0 0 24 24" style="stroke:var(--ink)"><path d="M12 4l2.4 5 5.6.6-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.6-.6L12 4Z"/></svg></button>
       <button class="btn primary" onclick="addFromDetail()"><span id="dAddLab">${t('to_cart')}</span> · <span class="pz" id="dAddPz"></span></button>
     </div>`;
-  d.hidden=false;
+  d.hidden=false; injectUtils(d);
   requestAnimationFrame(()=>d.classList.add('open'));
   updateDetailPrice();
 }
@@ -1577,8 +1689,9 @@ function toast(msg){
 $('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();renderCatalog();});
 
 /* ============ FOLYAMAT: fedőrétegek ============ */
-function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;requestAnimationFrame(()=>el.classList.add('open'));}
+function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);requestAnimationFrame(()=>el.classList.add('open'));}
 function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
+function closeAllSheets(){ ['theme','info','onboard','hub','fiok','pay','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
 
 /* ---- onboarding / regisztráció ---- */
 function openOnboard(){showOb(0);openSheet('onboard');}
@@ -1677,8 +1790,8 @@ function openTrack(stOverride){
 }
 function setStatus(n){
   if(!order)return; order.status=Math.max(0,Math.min(7,n));
-  if(!$('#track').hidden) buildTrack();
-  if(!$('#driver').hidden) buildDriver();
+  if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
+  if(!$('#driver').hidden){ buildDriver(); injectUtils($('#driver')); }
   renderOrders();
 }
 function trackTitle(st){return TITLE_L[lang][st];}
@@ -1762,7 +1875,7 @@ function openQR(){
       <button class="bigcta leaf" style="max-width:280px;margin:18px auto 0" onclick="setStatus(6)">${t('qr_scanned')}</button>
       <button class="ghostbtn" onclick="openDriver()">${t('driver_side')}</button>
     </div></div>`;
-  drawQR($('#qrc'), o.no);
+  drawQR($('#qrc'), o.no); injectUtils($('#track'));
 }
 function drawQR(cv, seed){
   if(!cv)return; const n=25, ctx=cv.getContext('2d'); let s=0;
