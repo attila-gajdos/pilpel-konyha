@@ -323,6 +323,21 @@ button{font-family:inherit;cursor:pointer;color:inherit}
   font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:999px}
 .mini .n{font-size:11px;color:var(--ink-soft);margin-top:5px;line-height:1.2;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* ---- mentett sablonok ---- */
+.tpl-row{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 6px;margin:0 -2px;scroll-snap-type:x proximity;scrollbar-width:none}
+.tpl-row::-webkit-scrollbar{display:none}
+.tpl-row>*{scroll-snap-align:start;flex:0 0 auto}
+.tpl-row:empty::after{content:"";}
+.tpl-card{width:182px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);padding:12px;text-align:left;display:flex;flex-direction:column;gap:10px}
+.tpl-card .tph{display:flex;align-items:center;gap:9px}
+.tpl-card .tpi{width:32px;height:32px;border-radius:9px;background:var(--sprout);display:grid;place-items:center;flex:0 0 auto}
+.tpl-card .tpi svg{width:17px;height:17px;stroke:var(--leaf-ink);fill:none;stroke-width:1.7}
+.tpl-card .tpt{min-width:0}
+.tpl-card .tpn{font-family:var(--serif);font-weight:600;font-size:14px;line-height:1.15;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpl-card .tpm{font-size:11px;color:var(--ink-faint);display:block;margin-top:2px;font-variant-numeric:tabular-nums}
+.tpl-card .tpe{font-size:17px;letter-spacing:2px;line-height:1}
+.tpl-card .tpl-add{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;color:#fff;background:var(--leaf);border-radius:10px;padding:8px}
+.tpl-card .tpl-add svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.4}
 
 /* ---- termékcsempe szín ---- */
 .tile{background:hsl(var(--h,120) 46% 90%);color:transparent}
@@ -873,6 +888,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="sec"><h2 data-t="again">Rendeld újra</h2><button class="more" data-t="myorders" onclick="go('rendelesek')">Rendeléseim</button></div>
         <div class="again" id="againRow"></div>
 
+        <div class="sec"><h2 data-t="templates">Mentett sablonok</h2><button class="more" data-t="save_tpl" onclick="saveTemplate()">+ Mentés sablonként</button></div>
+        <div class="tpl-row"></div>
+
         <div class="sec"><h2 data-t="market_today">Ma a piacon</h2><button class="more" data-t="all" onclick="go('piac')">Mind</button></div>
         <div class="feat-row" id="featRow"></div>
 
@@ -955,6 +973,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
             <div class="oacts"><button class="prim" data-t="reorder" onclick="reorderLast()">Újra</button></div>
           </div>
         </div>
+
+        <div class="sec"><h2 data-t="templates">Mentett sablonok</h2><button class="more" data-t="save_tpl" onclick="saveTemplate()">+ Mentés sablonként</button></div>
+        <div class="tpl-row"></div>
 
         <div class="sec"><h2 data-t="recurring_orders">Ismétlődő rendelések</h2></div>
         <div class="block" style="margin-top:0">
@@ -1353,6 +1374,12 @@ const LAST = [
   {id:'mosottrukkola',q:2,ui:0},{id:'citrom',q:3,ui:0},{id:'avokado',q:1,ui:1},
   {id:'bazsalikom',q:5,ui:0},{id:'barnacsiperke',q:3,ui:0}
 ];
+/* Mentett rendelés-sablonok (a séf elnevezett, visszatérő rendelései) */
+let TEMPLATES = [
+  {name:{hu:'Hétköznapi alap',en:'Weekday basics'}, lines:[{id:'tvpaprika',q:3,ui:1},{id:'koktelparadicsom',q:3,ui:0},{id:'kigyouborka',q:24,ui:0},{id:'citrom',q:5,ui:0},{id:'mosottrukkola',q:2,ui:0}]},
+  {name:{hu:'Saláta-bár utántöltés',en:'Salad bar refill'}, lines:[{id:'mosottrukkola',q:4,ui:0},{id:'babaspenot',q:3,ui:0},{id:'fejessalata',q:8,ui:0},{id:'koktelparadicsom',q:4,ui:0},{id:'avokado',q:12,ui:0}]},
+  {name:{hu:'Hétvégi menü',en:'Weekend menu'}, lines:[{id:'ratte',q:3,ui:0},{id:'romanesco',q:4,ui:0},{id:'barnacsiperke',q:4,ui:0},{id:'medjool',q:2,ui:0},{id:'bazsalikom',q:6,ui:0},{id:'citrom',q:5,ui:0}]}
+];
 const FEAT = [
   {id:'koktelparadicsom',r:'Ma szedve',hot:true},{id:'romanesco',r:'Új import'},
   {id:'feketefokhagyma',r:'Séfkedvenc'},{id:'sakura',r:'Frissen érkezett'},
@@ -1409,6 +1436,7 @@ const TR = {
   f2:{hu:'Agadir, saját farm',en:'Agadir, own farm'}, f2s:{hu:'Úton: Citrom, citrus',en:'On the way: Lemon, citrus'},
   f3:{hu:'Moshav Zeitan',en:'Moshav Zeitan'}, f3s:{hu:'Úton: Fűszernövények, ehető virágok',en:'On the way: Herbs, edible flowers'},
   repeat_last:{hu:'Előző rendelés megismétlése',en:'Repeat last order'},
+  templates:{hu:'Mentett sablonok',en:'Saved templates'}, save_tpl:{hu:'+ Mentés sablonként',en:'+ Save as template'},
   nudge:{hu:'A szokásos <b>Hass avokádódból</b> 1 karton maradt a mai járatra.',en:'Only 1 carton of your usual <b>Hass avocado</b> left for today’s run.'},
   add_cart:{hu:'+ Kosár',en:'+ Cart'},
   trust1:{hu:'prémium termék',en:'premium products'}, trust2:{hu:'étterem partner',en:'restaurant partners'}, trust3:{hu:'napi szállítás',en:'daily delivery'}, trust3d:{hu:'H–Szo',en:'Mon–Sat'},
@@ -1533,7 +1561,7 @@ function setLang(l){
   lang = l;
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
   applyStatic(); updateDeliveryLabels();
-  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap(); renderLiveOrders(); renderSosBadge();
+  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap(); renderLiveOrders(); renderSosBadge(); renderTemplates();
   if(!$('#urgent').hidden){ buildUrgent(); }
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
@@ -1804,6 +1832,35 @@ function renderAgain(){
       <span class="n">${p.n}</span>
     </button>`;}).join('');
   $('#againRow').innerHTML = html;
+}
+function tplNet(tp){ return tp.lines.reduce((s,l)=>s+BYID[l.id].u[l.ui].p*l.q,0); }
+function renderTemplates(){
+  document.querySelectorAll('.tpl-row').forEach(box=>{
+    box.innerHTML = TEMPLATES.map((tp,i)=>{
+      const emojis = tp.lines.slice(0,4).map(l=>BYID[l.id].e).join('');
+      return `<button class="tpl-card" onclick="reorderTemplate(${i})">
+        <div class="tph"><span class="tpi"><svg viewBox="0 0 24 24" fill="none"><path d="M9 4h6a1 1 0 0 1 1 1v1h2v14H6V6h2V5a1 1 0 0 1 1-1Z"/><path d="M9 6h6V5H9z"/><path d="M9 11h6M9 15h4"/></svg></span>
+          <span class="tpt"><span class="tpn">${tp.name[lang]||tp.name.hu}</span><span class="tpm">${tp.lines.length} ${t('items')} · ~${ft(tplNet(tp)*(1+VAT))}</span></span></div>
+        <span class="tpe">${emojis}</span>
+        <span class="tpl-add"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14"/></svg> ${t('to_cart')}</span>
+      </button>`;
+    }).join('');
+  });
+}
+function reorderTemplate(i){
+  const tp=TEMPLATES[i]; if(!tp) return;
+  cart = tp.lines.map(x=>({...x}));
+  syncBadge(); go('kosar');
+  toast((tp.name[lang]||tp.name.hu)+(lang=='en'?' loaded into cart':' betöltve a kosárba'));
+}
+function saveTemplate(){
+  const src = cart.length ? cart : LAST;
+  if(!src.length){ toast(lang=='en'?'Nothing to save':'Nincs mit menteni'); return; }
+  const base = BYID[src[0].id] ? BYID[src[0].id].n : (lang=='en'?'Order':'Rendelés');
+  const nm = (lang=='en'?base+' set':base+' csomag');
+  TEMPLATES.push({name:{hu:nm,en:nm}, lines:src.map(x=>({...x}))});
+  renderTemplates();
+  toast(lang=='en'?'Saved as template':'Mentve sablonként');
 }
 function renderFeat(){
   $('#featRow').innerHTML = FEAT.map(f=>{const p=BYID[f.id];const u=p.u[0];return `
@@ -2242,13 +2299,13 @@ function buildTrack(){
   $('#track').innerHTML = `
     <div class="s-top">
       <button class="back" aria-label="Vissza" onclick="closeSheet('track')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button>
-      <div class="tt">${o.no}<small>Kóstoló Bisztró · ${delWhenTextL()}</small></div>
+      <div class="tt">${o.no}<small>Kóstoló Bisztró · Budapest, V.</small></div>
     </div>
     <div class="s-body">
       <div class="track-hero">
         <span class="status-chip">${(st>=4&&st<=5)?'<span class="d"></span>':''}${STATUS_L[lang][st]}</span>
         <div class="big">${trackTitle(st)}</div>
-        <div class="sm">${items} ${t('items')} · ${methodL(o.method)}</div>
+        <div class="sm">${items} ${t('items')} · ${st>=6?(lang=='en'?'delivered':'leszállítva'):(t('arrives')+': '+delWhenTextL())}</div>
       </div>
       ${stepperHTML(st)}
       ${ctx}
@@ -2337,7 +2394,7 @@ function buildDriver(){
 
 /* ============ INDÍTÁS ============ */
 initDelivery();
-renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge(); renderFlowmap(); renderLiveOrders(); renderSosBadge();
+renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge(); renderFlowmap(); renderLiveOrders(); renderSosBadge(); renderTemplates();
 order = makeOrder(SEED_ORDER, 'Céges átutalás · 15 nap'); order.status = 2; renderOrders();
 applyStatic();
 setTheme((()=>{try{return localStorage.getItem('pp_theme')||'auto';}catch(e){return 'auto';}})());
