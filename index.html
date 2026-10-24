@@ -222,6 +222,44 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .scan-frame::after{bottom:12px;right:12px;border-left:0;border-top:0;border-radius:0 0 7px 0}
 .scan-line{position:absolute;left:14px;right:14px;height:2px;background:#45D197;box-shadow:0 0 10px #45D197;animation:scanmove 2.1s ease-in-out infinite}
 @keyframes scanmove{0%{top:18px}50%{top:160px}100%{top:18px}}
+/* ---- nyitáskori státuszok (főképernyő) ---- */
+.live-orders{display:flex;flex-direction:column;gap:9px}
+.lo{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:13px 14px}
+.lo-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.lo-no{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.lo-steps{display:flex;gap:4px;margin:11px 0 10px}
+.lo-steps i{flex:1;height:4px;border-radius:999px;background:var(--line)}
+.lo-steps i.on{background:var(--leaf)}
+.lo-steps i.on.now{background:var(--leaf-bright)}
+.lo-eta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft)}
+.lo-eta svg{width:15px;height:15px;stroke:var(--leaf);fill:none;stroke-width:1.9;flex:0 0 auto}
+.lo-eta b{color:var(--ink);font-weight:700}
+.lo-eta .lo-items{margin-left:auto;color:var(--ink-faint);font-size:11.5px}
+/* ---- sürgős (spec) rendelés ---- */
+.sos-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin-top:14px;padding:14px;border-radius:var(--r);background:linear-gradient(135deg,var(--amber-soft),var(--surface));border:1px solid var(--amber)}
+.sos-card .sos-ic{width:40px;height:40px;flex:0 0 auto;border-radius:12px;background:var(--amber);display:grid;place-items:center}
+.sos-card .sos-ic svg{width:21px;height:21px;fill:#fff;stroke:#fff;stroke-width:1}
+.sos-card .sos-tx{flex:1;min-width:0}
+.sos-card .sos-tx b{display:block;font-family:var(--serif);font-weight:600;font-size:15.5px}
+.sos-card .sos-tx span{display:block;font-size:11.5px;color:var(--ink-soft);margin-top:2px;line-height:1.35}
+.sos-badge{flex:0 0 auto;font-size:10.5px;font-weight:700;color:var(--leaf-ink);background:var(--sprout);border:1px solid var(--leaf);border-radius:999px;padding:5px 9px;white-space:nowrap;align-self:flex-start}
+.sos-badge.paid{color:var(--amber);background:var(--amber-soft);border-color:var(--amber)}
+.sos-gate{display:flex;align-items:flex-start;gap:10px;background:var(--amber-soft);border:1px solid var(--amber);border-radius:13px;padding:12px;font-size:12.5px;color:var(--ink-soft);line-height:1.4;margin-top:2px}
+.sos-gate .sg-ic{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:var(--amber);display:grid;place-items:center}
+.sos-gate .sg-ic svg{width:15px;height:15px;fill:#fff;stroke:#fff}
+.sos-free{display:flex;align-items:flex-start;gap:10px;margin-top:11px;background:var(--sprout);border:1px solid var(--leaf);border-radius:13px;padding:12px;font-size:13px;color:var(--ink);line-height:1.4}
+.sos-free.paid{background:var(--amber-soft);border-color:var(--amber)}
+.sos-free .sf-dot{width:11px;height:11px;flex:0 0 auto;border-radius:50%;background:var(--leaf);margin-top:3px}
+.sos-free.paid .sf-dot{background:var(--amber)}
+.sos-free .sf-sub{display:block;font-size:11px;color:var(--ink-faint);margin-top:3px}
+.sos-eta{display:flex;align-items:flex-start;gap:10px;margin-top:9px;background:var(--surface-2);border:1px solid var(--line);border-radius:13px;padding:12px;font-size:13px;color:var(--ink-soft);line-height:1.4}
+.sos-eta.ok{background:var(--sprout);border-color:var(--leaf);color:var(--ink)}
+.sos-eta .se-ic{width:26px;height:26px;flex:0 0 auto;border-radius:8px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center}
+.sos-eta .se-ic svg{width:15px;height:15px;stroke:var(--ink-soft);fill:none;stroke-width:1.9}
+.sos-eta.ok .se-ic{background:var(--leaf);border-color:var(--leaf)}
+.sos-eta.ok .se-ic svg{stroke:#fff}
+.sos-eta b{color:var(--ink)}
+.sos-eta .se-sub{display:block;font-size:11px;color:var(--ink-faint);margin-top:3px}
 .icon-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);
   background:var(--surface-2);display:grid;place-items:center;position:relative}
 .icon-btn svg{width:19px;height:19px;stroke:var(--ink);fill:none;stroke-width:1.8}
@@ -586,6 +624,11 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .ob-dots{display:flex;gap:6px;justify-content:center;margin-top:4px}
 .ob-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
 .ob-dots i.on{background:var(--leaf);width:20px;border-radius:999px}
+.ob-tier{display:flex;align-items:flex-start;gap:11px;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--sprout);border:1px solid var(--leaf)}
+.ob-tier .ob-tier-dot{width:13px;height:13px;border-radius:50%;background:linear-gradient(135deg,#F5C451,#D99A1C);margin-top:2px;flex:0 0 auto;box-shadow:0 0 0 3px rgba(217,154,28,.2)}
+.ob-tier>span:last-child{min-width:0}
+.ob-tier b{display:block;font-size:14px;font-weight:700;color:var(--ink)}
+.ob-tier>span:last-child>span{display:block;font-size:11.5px;color:var(--ink-soft);line-height:1.35;margin-top:2px}
 
 /* ---- folyamat-banner (Ma) ---- */
 .flow-banner{display:flex;align-items:center;gap:13px;margin-top:16px;border-radius:var(--r);padding:15px;
@@ -802,6 +845,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           </button>
         </div>
 
+        <div class="sec"><h2 data-t="orders_now">Rendeléseid most</h2><button class="more" data-t="all" onclick="go('rendelesek')">Mind</button></div>
+        <div class="live-orders" id="liveOrders"></div>
+
         <button class="flow-banner" onclick="openSheet('hub')">
           <span class="fb-ic"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 12h7M4 17h12"/><path d="M16 5l3 3-3 3"/></svg></span>
           <span class="fb-t"><b data-t="flow_title">Teljes folyamat</b><span data-t="flow_sub">Regisztráció → rendelés → fizetés → komissiózás → futár → QR‑átvétel → elszámolás</span></span>
@@ -817,6 +863,12 @@ button{font-family:inherit;cursor:pointer;color:inherit}
             <div class="clock" id="clock">–:–:–</div>
           </div>
         </div>
+
+        <button class="sos-card" onclick="openUrgent()">
+          <span class="sos-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></span>
+          <span class="sos-tx"><b data-t="sos_title">Sürgős rendelés</b><span data-t="sos_sub">Baj van, ma kell az áru? Soron kívüli kiszállítás, becsült időponttal.</span></span>
+          <span class="sos-badge" id="sosBadge"></span>
+        </button>
 
         <div class="sec"><h2 data-t="again">Rendeld újra</h2><button class="more" data-t="myorders" onclick="go('rendelesek')">Rendeléseim</button></div>
         <div class="again" id="againRow"></div>
@@ -1009,22 +1061,38 @@ button{font-family:inherit;cursor:pointer;color:inherit}
             <div class="phone"><input id="obName" type="text" value="Kóstoló Bisztró" style="padding:15px 14px"></div>
           </div>
           <div class="spacer"></div>
-          <button class="bigbtn" data-t="ob_create" onclick="obStep(4)">Konyha létrehozása</button>
+          <button class="bigbtn" data-t="ob_create" onclick="obCreate()">Konyha létrehozása</button>
         </div>
 
         <div data-ob="4" hidden>
+          <h1 data-t="ob_hk">Cégadatok és jóváhagyás</h1>
+          <p data-t="ob_pk">A rendelés indítása előtt a PilPel ellenőrzi az <b>adószámot</b> és a cégadatokat, kézzel jóváhagy, és <b>árkategóriába</b> sorolja a konyhát. Ez általában pár óra.</p>
+          <div class="field"><label data-t="ob_taxid">Adószám</label>
+            <div class="phone"><input id="obTax" type="text" inputmode="numeric" value="12345678-2-42" style="padding:15px 14px"></div>
+          </div>
+          <div class="field"><label data-t="ob_bizname">Számlázási név / cégforma</label>
+            <div class="phone"><input id="obBiz" type="text" value="Kóstoló Bisztró Kft." style="padding:15px 14px"></div>
+          </div>
+          <div class="est-note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="ob_kinfo">Meglévő vevőként ez a lépés kimarad – a jóváhagyás és az árkategória már megvan, egyből a rendelés jön.</div></div>
+          <div class="spacer"></div>
+          <button class="bigbtn leaf" data-t="ob_ksubmit" onclick="obStep(5)">Beküldés jóváhagyásra</button>
+          <button class="ghostbtn" data-t="ob_back" onclick="showOb(3)">Vissza</button>
+        </div>
+
+        <div data-ob="5" hidden>
           <div style="text-align:center;padding-top:16px"><div class="check" style="margin:0 auto"><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7"/></svg></div></div>
-          <h1 style="text-align:center" data-t="ob_h4">Készen állsz, Dániel séf</h1>
-          <p style="text-align:center" data-t="ob_p4">A <b>Kóstoló Bisztró</b> központi száma beállítva. Nézzük a piacot.</p>
+          <h1 style="text-align:center" data-t="ob_h4">Jóváhagyva – készen állsz, Dániel séf</h1>
+          <p style="text-align:center" data-t="ob_p4">A <b>Kóstoló Bisztró</b> jóváhagyva, a központi szám beállítva. Nézzük a piacot.</p>
           <div class="field" style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px">
             <label style="margin-bottom:4px" data-t="central_num">Központi szám</label>
             <div style="font-size:16px;font-weight:700">+36 30 123 4567 · admin</div>
           </div>
+          <div class="ob-tier"><span class="ob-tier-dot"></span><span><b data-t="ob_tier">Árkategória: GOLD</b><span data-t="ob_tiers">étterem · a PilPel sorolta be, a rendelések már ezen az áron futnak</span></span></div>
           <div class="spacer"></div>
           <button class="bigbtn leaf" data-t="go_market" onclick="finishOnboard()">Irány a piac</button>
         </div>
 
-        <div class="ob-dots" id="obDots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div class="ob-dots" id="obDots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
     </div>
 
@@ -1037,15 +1105,17 @@ button{font-family:inherit;cursor:pointer;color:inherit}
       <div class="s-body">
         <p class="hub-intro" data-t="hub_intro">A séf‑app és a <b>futár‑app</b> egy láncban dolgozik: a rendeléstől a QR‑es átvételig és a mennyiségi elszámolásig. Minden lépés élő demó.</p>
         <button class="hub-stage" onclick="closeSheet('hub');openOnboard()"><span class="hn">1</span><span class="hb"><span class="hbt"><b data-t="hs1">Regisztráció telefonszámmal</b><span data-t="hs1s">OTP‑kód, központi szám létrehozása</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');openSheet('fiok')"><span class="hn">2</span><span class="hb"><span class="hbt"><b data-t="hs2">Konyha &amp; alárendelt számok</b><span data-t="hs2s">Szerepkörök, keret, jóváhagyás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');go('piac')"><span class="hn">3</span><span class="hb"><span class="hbt"><b data-t="hs3">Rendelés összeállítása</b><span data-t="hs3s">Piac, kereső, kosár, catchweight</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');openPay(true)"><span class="hn">4</span><span class="hb"><span class="hbt"><b data-t="hs4">Fizetés &amp; elszámolási mód</b><span data-t="hs4s">Céges átutalás, kártya, átvételkor</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');openTrack(2)"><span class="hn">5</span><span class="hb"><span class="hbt"><b data-t="hs5">Komissiózás (raktár)</b><span data-t="hs5s">Tételek összeszedése, tömeg mérése</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');openDriver()"><span class="hn">6</span><span class="hb"><span class="hbt"><b data-t="hs6">Kiszállítás – futár app</b><span data-t="hs6s">Útvonal, státusz, élő kapcsolat</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');openTrack(5)"><span class="hn">7</span><span class="hb"><span class="hbt"><b data-t="hs7">Átvétel QR‑kóddal</b><span data-t="hs7s">Szállítólevél, helyszíni ellenőrzés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');openTrack(7)"><span class="hn">8</span><span class="hb"><span class="hbt"><b data-t="hs8">Mennyiségi elszámolás &amp; számla</b><span data-t="hs8s">Rendelt vs. kiszedett tömeg, jóváírás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openSheet('onboard');showOb(4)"><span class="hn">2</span><span class="hb"><span class="hbt"><b data-t="hsK">Cégadatok &amp; árkategória</b><span data-t="hsKs">Adószám, kézi jóváhagyás, besorolás – meglévő vevőnél kimarad</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openSheet('fiok')"><span class="hn">3</span><span class="hb"><span class="hbt"><b data-t="hs2">Konyha &amp; alárendelt számok</b><span data-t="hs2s">Szerepkörök, keret, jóváhagyás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');go('piac')"><span class="hn">4</span><span class="hb"><span class="hbt"><b data-t="hs3">Rendelés összeállítása</b><span data-t="hs3s">Piac, kereső, kosár, catchweight</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage branch" onclick="closeSheet('hub');openUrgent()"><span class="hn alt">⚡</span><span class="hb"><span class="hbt"><b data-t="hsU">Sürgős rendelés</b><span data-t="hsUs">Soron kívül, becsült idővel; havi ingyenes keret a tier szerint</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openPay(true)"><span class="hn">5</span><span class="hb"><span class="hbt"><b data-t="hs4">Fizetés &amp; elszámolási mód</b><span data-t="hs4s">Céges átutalás, kártya, átvételkor</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openTrack(2)"><span class="hn">6</span><span class="hb"><span class="hbt"><b data-t="hs5">Komissiózás (raktár)</b><span data-t="hs5s">Tételek összeszedése, tömeg mérése</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openDriver()"><span class="hn">7</span><span class="hb"><span class="hbt"><b data-t="hs6">Kiszállítás – futár app</b><span data-t="hs6s">Útvonal, státusz, élő kapcsolat</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openTrack(5)"><span class="hn">8</span><span class="hb"><span class="hbt"><b data-t="hs7">Átvétel QR‑kóddal</b><span data-t="hs7s">Szállítólevél, helyszíni ellenőrzés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');openTrack(7)"><span class="hn">9</span><span class="hb"><span class="hbt"><b data-t="hs8">Mennyiségi elszámolás &amp; számla</b><span data-t="hs8s">Rendelt vs. kiszedett tömeg, jóváírás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
         <button class="hub-stage branch" onclick="closeSheet('hub');openClaim('#PP-25884')"><span class="hn alt">!</span><span class="hb"><span class="hbt"><b data-t="hsR">Reklamáció – fotó / QR</b><span data-t="hsRs">Hiány/minőség jelzése, rendeléshez kötve</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
-        <button class="hub-stage" onclick="closeSheet('hub');reorderLast()"><span class="hn">9</span><span class="hb"><span class="hbt"><b data-t="hs9">Újrarendelés</b><span data-t="hs9s">Egy koppintás, vagy ismétlődő rendelés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage" onclick="closeSheet('hub');reorderLast()"><span class="hn">10</span><span class="hb"><span class="hbt"><b data-t="hs9">Újrarendelés</b><span data-t="hs9s">Egy koppintás, vagy ismétlődő rendelés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
       </div>
     </div>
 
@@ -1150,6 +1220,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
     </div>
 
     <div id="claim" class="sheet" hidden></div>
+    <div id="urgent" class="sheet" hidden></div>
     <div id="detail" class="detail" hidden></div>
     <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
   </div><!-- /#app -->
@@ -1306,6 +1377,17 @@ const TR = {
   claim_send:{hu:'Reklamáció beküldése',en:'Submit claim'},
   sub_title:{hu:'Automatikus csere, ha nem szállítható',en:'Auto-swap if unavailable'},
   sub_desc:{hu:'Azonos vagy jobb minőségre, felár nélkül. A cseréről értesítünk – nincs külön jóváhagyás.',en:'To equal or better quality, at no extra cost. We notify you of the swap – no separate approval.'},
+  orders_now:{hu:'Rendeléseid most',en:'Your orders now'}, arrives:{hu:'Érkezik',en:'Arrives'},
+  sos_title:{hu:'Sürgős rendelés',en:'Urgent order'}, sos_sub:{hu:'Baj van, ma kell az áru? Soron kívüli kiszállítás, becsült időponttal.',en:'Trouble, need it today? Priority delivery with an estimated time.'},
+  sos_small:{hu:'soron kívüli · diszpécserhez',en:'priority · to dispatcher'},
+  sos_gate:{hu:'A sürgős rendelés nem minden konyhának elérhető. A tiéd (<b>GOLD</b>) jogosult.',en:'Urgent ordering isn’t available to every kitchen. Yours (<b>GOLD</b>) is eligible.'},
+  sos_tier_note:{hu:'A keret a szerződéstől és az árkategóriától függ.',en:'The quota depends on your contract and price tier.'},
+  sos_need:{hu:'Mi kell és mennyi?',en:'What do you need, and how much?'},
+  sos_need_ph:{hu:'Pl. 10 kg koktélparadicsom, 5 láda citrom – ma a nyitásra.',en:'E.g. 10 kg cocktail tomato, 5 crates of lemon – for opening today.'},
+  sos_when:{hu:'Mikorra tudjuk hozni?',en:'When can we deliver?'},
+  sos_eta_wait:{hu:'A diszpécser becsül – küldd be a kérést.',en:'The dispatcher estimates it – submit the request.'},
+  sos_eta_sub:{hu:'Élő kapcsolat a back-office-szal, pár percen belül jön a válasz.',en:'Live link to the back office, a reply comes within minutes.'},
+  sos_send:{hu:'Kérés a diszpécsernek',en:'Request to dispatcher'},
   claim_order:{hu:'Melyik rendelés?',en:'Which order?'}, claim_scan:{hu:'QR / fotó',en:'QR / photo'},
   scan_title:{hu:'Rendelés azonosítása',en:'Identify order'}, scan_hint:{hu:'Tartsd a kamerát a futár szállítólevelének QR‑kódjára – vagy azonosítsd fotóval.',en:'Point the camera at the QR code on the courier’s delivery note – or identify it with a photo.'},
   scan_ok:{hu:'Beolvasva ✓ (demó)',en:'Scanned ✓ (demo)'}, scan_photo:{hu:'Inkább fotóval azonosítom',en:'Identify with a photo instead'},
@@ -1391,7 +1473,13 @@ const TR = {
   ob_opt1:{hu:'Új konyha regisztrálása',en:'Register a new kitchen'}, ob_opt1s:{hu:'Ez a szám lesz a központi szám (admin + számlázás).',en:'This number becomes the central number (admin + billing).'},
   ob_opt2:{hu:'Csatlakozás meglévő konyhához',en:'Join an existing kitchen'}, ob_opt2s:{hu:'Meghívóval, a központi szám jóváhagyásával.',en:'By invitation, approved by the central number.'},
   ob_kname:{hu:'Konyha / vállalkozás neve',en:'Kitchen / business name'}, ob_create:{hu:'Konyha létrehozása',en:'Create kitchen'},
-  ob_h4:{hu:'Készen állsz, Dániel séf',en:'You’re all set, chef Dániel'}, ob_p4:{hu:'A <b>Kóstoló Bisztró</b> központi száma beállítva. Nézzük a piacot.',en:'The central number for <b>Kóstoló Bisztró</b> is set. Let’s see the market.'},
+  ob_hk:{hu:'Cégadatok és jóváhagyás',en:'Company data & approval'},
+  ob_pk:{hu:'A rendelés indítása előtt a PilPel ellenőrzi az <b>adószámot</b> és a cégadatokat, kézzel jóváhagy, és <b>árkategóriába</b> sorolja a konyhát. Ez általában pár óra.',en:'Before ordering can start, PilPel checks the <b>tax number</b> and company data, approves manually, and assigns the kitchen to a <b>price tier</b>. Usually a few hours.'},
+  ob_taxid:{hu:'Adószám',en:'Tax number'}, ob_bizname:{hu:'Számlázási név / cégforma',en:'Billing name / legal entity'},
+  ob_kinfo:{hu:'Meglévő vevőként ez a lépés kimarad – a jóváhagyás és az árkategória már megvan, egyből a rendelés jön.',en:'For an existing customer this step is skipped – approval and price tier already exist, you go straight to ordering.'},
+  ob_ksubmit:{hu:'Beküldés jóváhagyásra',en:'Submit for approval'},
+  ob_tier:{hu:'Árkategória: GOLD',en:'Price tier: GOLD'}, ob_tiers:{hu:'étterem · a PilPel sorolta be, a rendelések már ezen az áron futnak',en:'restaurant · set by PilPel, orders already run at this price'},
+  ob_h4:{hu:'Jóváhagyva – készen állsz, Dániel séf',en:'Approved – you’re all set, chef Dániel'}, ob_p4:{hu:'A <b>Kóstoló Bisztró</b> jóváhagyva, a központi szám beállítva. Nézzük a piacot.',en:'<b>Kóstoló Bisztró</b> is approved, the central number is set. Let’s see the market.'},
   pick:{hu:'Összeszedve',en:'Picked'}, weighed:{hu:'Súlyra mért tételek',en:'Weighed items'}, scale_now:{hu:'mérleg alatt',en:'on the scale'},
   pick_note:{hu:'Minden láda mögött személyes minőségellenőrzés. A súlyra mért tételek tényleges tömegét most rögzítjük a szállítólevélre.',en:'Personal quality control behind every crate. The actual weight of weighed items is being recorded on the delivery note now.'},
   packed_note:{hu:'Készen áll a futárnak',en:'Ready for the courier'}, on_site:{hu:'A futár a helyszínen',en:'The courier is on site'},
@@ -1404,6 +1492,8 @@ const TR = {
   hub_title:{hu:'Teljes folyamat',en:'Full process'}, hub_sub:{hu:'Kattints bármelyik lépésre',en:'Tap any step'},
   hub_intro:{hu:'A séf‑app és a <b>futár‑app</b> egy láncban dolgozik: a rendeléstől a QR‑es átvételig és a mennyiségi elszámolásig. Minden lépés élő demó.',en:'The chef app and the <b>courier app</b> work in one chain: from order to QR handover and quantity settlement. Every step is a live demo.'},
   hs1:{hu:'Regisztráció telefonszámmal',en:'Sign-up with phone'}, hs1s:{hu:'OTP‑kód, központi szám létrehozása',en:'OTP code, create central number'},
+  hsK:{hu:'Cégadatok & árkategória',en:'Company data & price tier'}, hsKs:{hu:'Adószám, kézi jóváhagyás, besorolás – meglévő vevőnél kimarad',en:'Tax number, manual approval, tier – skipped for existing customers'},
+  hsU:{hu:'Sürgős rendelés',en:'Urgent order'}, hsUs:{hu:'Soron kívül, becsült idővel; havi ingyenes keret a tier szerint',en:'Priority with an ETA; monthly free quota by tier'},
   hs2:{hu:'Konyha &amp; alárendelt számok',en:'Kitchen &amp; linked numbers'}, hs2s:{hu:'Szerepkörök, keret, jóváhagyás',en:'Roles, limits, approval'},
   hs3:{hu:'Rendelés összeállítása',en:'Build the order'}, hs3s:{hu:'Piac, kereső, kosár, catchweight',en:'Market, search, cart, catchweight'},
   hs4:{hu:'Fizetés &amp; elszámolási mód',en:'Payment &amp; settlement method'}, hs4s:{hu:'Céges átutalás, kártya, átvételkor',en:'Transfer, card, on delivery'},
@@ -1443,7 +1533,8 @@ function setLang(l){
   lang = l;
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
   applyStatic(); updateDeliveryLabels();
-  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap();
+  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap(); renderLiveOrders(); renderSosBadge();
+  if(!$('#urgent').hidden){ buildUrgent(); }
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
   if(!$('#driver').hidden){ buildDriver(); injectUtils($('#driver')); }
@@ -1494,7 +1585,9 @@ const INFO={
   pay:{t:{hu:'Fizetés',en:'Payment'}, flow:{hu:'Kosár <i>→</i> <b>Fizetés</b> <i>→</i> Leadva',en:'Cart <i>→</i> <b>Payment</b> <i>→</i> Placed'},
      b:{hu:'Válaszd a fizetési módot (céges átutalás / kártya / átvételkor). A végösszeg a kiszedett tömeg alapján véglegesül. Leadás után a rendelés a Követésbe kerül.',en:'Choose a payment method (company transfer / card / on delivery). The total is finalised by the picked weight. After placing it, the order moves to Track.'}},
   claim:{t:{hu:'Reklamáció',en:'Claim'}, flow:{hu:'Rendelések <i>→</i> <b>Reklamáció</b>',en:'Orders <i>→</i> <b>Claim</b>'},
-     b:{hu:'Jelezd a hiányt vagy a minőségi gondot – tétel, ok, fotók –, a rendeléshez kötve. A bizonyíték a szállítólevélhez rögzül, és a jóváírás azonnal indul.',en:'Report a shortage or quality issue – item, reason, photos – linked to the order. The evidence is attached to the delivery note and the credit starts immediately.'}},
+     b:{hu:'Jelezd a hiányt vagy a minőségi gondot – tétel, érintett mennyiség, ok, fotók, megjegyzés –, a rendeléshez kötve. A bizonyíték a szállítólevélhez rögzül, és a jóváírás azonnal indul.',en:'Report a shortage or quality issue – item, affected quantity, reason, photos, note – linked to the order. The evidence is attached to the delivery note and the credit starts immediately.'}},
+  urgent:{t:{hu:'Sürgős rendelés',en:'Urgent order'}, flow:{hu:'Főképernyő <i>→</i> <b>Sürgős</b> <i>→</i> Diszpécser',en:'Home <i>→</i> <b>Urgent</b> <i>→</i> Dispatcher'},
+     b:{hu:'Soron kívüli kiszállítás, ha ma kell az áru. Nem minden konyhának elérhető; a kérés a diszpécserhez fut, aki becsült időpontot ad vissza. A havi ingyenes keret az árkategóriától és a szerződéstől függ, utána sürgősségi felár.',en:'Priority delivery when you need goods today. Not available to every kitchen; the request goes to the dispatcher, who returns an ETA. The monthly free quota depends on your price tier and contract, then an urgent surcharge applies.'}},
   confirm:{t:{hu:'Rendelés leadva',en:'Order placed'}, flow:{hu:'Fizetés <i>→</i> <b>Leadva</b> <i>→</i> Követés',en:'Payment <i>→</i> <b>Placed</b> <i>→</i> Track'},
      b:{hu:'A rendelésed rögzítve; összeállítjuk és a futár hajnalban indul. Kövesd a Követésben.',en:'Your order is placed; we’ll pick it and the courier sets off at dawn. Follow it in Track.'}},
   driver:{t:{hu:'Futár app',en:'Courier app'}, flow:{hu:'Séf‑app <i>↔</i> <b>Futár‑app</b>',en:'Chef app <i>↔</i> <b>Courier app</b>'},
@@ -1533,6 +1626,7 @@ function currentCtx(){
   if(op('driver')) return 'driver';
   if(op('detail')) return 'detail';
   if(op('claim')) return 'claim';
+  if(op('urgent')) return 'urgent';
   if(op('track')) return 'track';
   if(op('pay')) return 'pay';
   if(op('fiok')) return 'fiok';
@@ -1645,15 +1739,17 @@ function go(name){
 /* ============ KÜLSŐ FOLYAMATÁBRA (asztali) ============ */
 const FLOW=[
   {n:'1',k:'hs1',act:()=>openOnboard()},
-  {n:'2',k:'hs2',act:()=>openSheet('fiok')},
-  {n:'3',k:'hs3',act:()=>go('piac')},
-  {n:'4',k:'hs4',act:()=>openPay(true)},
-  {n:'5',k:'hs5',act:()=>openTrack(2)},
-  {n:'6',k:'hs6',act:()=>openDriver()},
-  {n:'7',k:'hs7',act:()=>openTrack(5)},
-  {n:'8',k:'hs8',act:()=>openTrack(7)},
+  {n:'2',k:'hsK',act:()=>{openSheet('onboard');showOb(4);}},
+  {n:'3',k:'hs2',act:()=>openSheet('fiok')},
+  {n:'4',k:'hs3',act:()=>go('piac')},
+  {n:'⚡',k:'hsU',act:()=>openUrgent(),branch:true},
+  {n:'5',k:'hs4',act:()=>openPay(true)},
+  {n:'6',k:'hs5',act:()=>openTrack(2)},
+  {n:'7',k:'hs6',act:()=>openDriver()},
+  {n:'8',k:'hs7',act:()=>openTrack(5)},
+  {n:'9',k:'hs8',act:()=>openTrack(7)},
   {n:'!',k:'hsR',act:()=>openClaim('#PP-25884'),branch:true},
-  {n:'9',k:'hs9',act:()=>reorderLast()}
+  {n:'10',k:'hs9',act:()=>reorderLast()}
 ];
 function renderFlowmap(){
   const host=$('#fmTrack'); if(!host) return;
@@ -1946,7 +2042,7 @@ $('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerC
 /* ============ FOLYAMAT: fedőrétegek ============ */
 function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);void el.offsetHeight;el.classList.add('open');}
 function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
-function closeAllSheets(){ ['scan','theme','info','onboard','hub','fiok','pay','claim','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
+function closeAllSheets(){ ['scan','theme','info','onboard','hub','fiok','pay','claim','urgent','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
 
 /* ---- onboarding / regisztráció ---- */
 function openOnboard(){showOb(0);openSheet('onboard');}
@@ -1956,7 +2052,12 @@ function showOb(n){
   document.querySelectorAll('#obDots i').forEach((d,i)=>d.classList.toggle('on',i===n));
   const w=document.querySelector('#onboard .ob-wrap'); if(w) w.scrollTop=0;
 }
-function obStep(n){ if(n>4){finishOnboard();return;} showOb(n); }
+function obStep(n){ if(n>5){finishOnboard();return;} showOb(n); }
+function obCreate(){ /* meglévő konyhához csatlakozás = már jóváhagyott vevő → KYC kimarad */
+  const opts=document.querySelectorAll('#onboard .opt');
+  const join = opts[1] && opts[1].getAttribute('aria-pressed')==='true';
+  showOb(join?5:4);
+}
 function obPick(btn){ document.querySelectorAll('#onboard .opt').forEach(o=>o.setAttribute('aria-pressed',o===btn)); }
 
 /* ---- fizetés ---- */
@@ -2040,6 +2141,61 @@ function renderOrders(){
     <div class="osum"><div class="ot">${st>=6?t('end_final'):t('end_est')}<b>${ft(tot*(1+VAT))}</b></div>
       <div class="oacts"><button class="prim" onclick="openTrack()">${t('track')}</button></div></div>
   </div>`;
+}
+
+/* ============ NYITÁSKORI STÁTUSZOK (főképernyő) ============ */
+function miniSteps(st){ const now=[0,0,1,2,3,4,4,5][st]; let h='<div class="lo-steps">'; for(let i=0;i<6;i++){ h+=`<i class="${i<now?'on':(i===now?'on now':'')}"></i>`; } return h+'</div>'; }
+function stChip(st){ const cls=st>=6?'done':st>=4?'way':'prep'; return `<span class="st ${cls}">${STATUS_L[lang][st]}</span>`; }
+function renderLiveOrders(){
+  const box=$('#liveOrders'); if(!box) return;
+  const list=[
+    {no:(order&&order.no)||'#PP-26058', st:4, items:(order?order.lines.length:11), eta:{hu:'ma 14:30–15:30',en:'today 14:30–15:30'}, ov:4},
+    {no:'#PP-25991', st:2, items:5, eta:{hu:'holnap 5:00–12:00',en:'tomorrow 5:00–12:00'}, ov:2}
+  ];
+  box.innerHTML = list.map(o=>`
+    <button class="lo" onclick="openTrack(${o.ov})">
+      <div class="lo-top"><span class="lo-no">${o.no}</span>${stChip(o.st)}</div>
+      ${miniSteps(o.st)}
+      <div class="lo-eta"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>${t('arrives')}: <b>${o.eta[lang]||o.eta.hu}</b></span><span class="lo-items">${o.items} ${t('items')}</span></div>
+    </button>`).join('');
+}
+
+/* ============ SÜRGŐS (SPEC) RENDELÉS ============ */
+const URGENT={tier:'GOLD', freeTotal:2, freeUsed:1};  /* GOLD: havi 2 ingyenes extrasürgős, 1 már elhasználva */
+function urgentFreeLeft(){ return Math.max(0, URGENT.freeTotal-URGENT.freeUsed); }
+function renderSosBadge(){ const b=$('#sosBadge'); if(!b) return; const n=urgentFreeLeft();
+  b.textContent = lang=='en' ? (n>0?`${n} free left`:'surcharge') : (n>0?`${n} ingyenes maradt`:'felár ellenében');
+  b.className = 'sos-badge'+(n>0?'':' paid'); }
+function openUrgent(){ buildUrgent(); openSheet('urgent'); }
+function buildUrgent(){
+  const n=urgentFreeLeft();
+  const freeLine = n>0
+    ? (lang=='en'?`<b>${n} / ${URGENT.freeTotal}</b> free extra-urgent deliveries left this month`:`<b>${n} / ${URGENT.freeTotal}</b> ingyenes extrasürgős kiszállítás maradt a hónapban`)
+    : (lang=='en'?`Monthly free quota used up — a surcharge applies`:`A havi ingyenes keret elfogyott — sürgősségi felár érvényes`);
+  $('#urgent').innerHTML=`
+    <div class="s-top"><button class="back" aria-label="${lang=='en'?'Back':'Vissza'}" onclick="closeSheet('urgent')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button><div class="tt">${t('sos_title')}<small>${t('sos_small')}</small></div></div>
+    <div class="s-body">
+      <div class="sos-gate"><span class="sg-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></span><div>${t('sos_gate')}</div></div>
+      <div class="sos-free ${n>0?'':'paid'}"><span class="sf-dot"></span><div>${freeLine}<span class="sf-sub">${t('sos_tier_note')}</span></div></div>
+      <label class="claim-lab">${t('sos_need')}</label>
+      <textarea class="note-in" id="urgNote" placeholder="${t('sos_need_ph')}"></textarea>
+      <label class="claim-lab">${t('sos_when')}</label>
+      <div class="sos-eta" id="urgEta"><span class="se-ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div>${t('sos_eta_wait')}<span class="se-sub">${t('sos_eta_sub')}</span></div></div>
+    </div>
+    <div class="s-foot"><button class="btn primary" style="width:100%" id="urgBtn" onclick="submitUrgent()">${t('sos_send')}</button></div>`;
+  injectUtils($('#urgent'));
+}
+function submitUrgent(){
+  const n=urgentFreeLeft();
+  const eta=$('#urgEta');
+  if(eta){ eta.classList.add('ok');
+    const fee = n>0 ? (lang=='en'?'free (from monthly quota)':'ingyenes (a havi keretből)') : (lang=='en'?'+4 900 Ft urgent surcharge':'+4 900 Ft sürgősségi felár');
+    eta.innerHTML = `<span class="se-ic ok"><svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7"/></svg></span><div>${lang=='en'?'Dispatcher confirmed':'Diszpécser visszaigazolta'}: <b>${lang=='en'?'today by 15:30':'ma 15:30-ig'}</b><span class="se-sub">${lang=='en'?'Delivery fee':'Kiszállítási díj'}: ${fee}</span></div>`;
+  }
+  const btn=$('#urgBtn');
+  if(btn){ btn.textContent = lang=='en'?'Confirm urgent order':'Sürgős rendelés megerősítése';
+    btn.onclick=()=>{ if(urgentFreeLeft()>0) URGENT.freeUsed++; closeSheet('urgent'); renderSosBadge();
+      toast(lang=='en'?'Urgent order placed · dispatcher notified':'Sürgős rendelés leadva · diszpécser értesítve'); }; }
 }
 
 /* ============ KÖVETÉS ============ */
@@ -2181,7 +2337,7 @@ function buildDriver(){
 
 /* ============ INDÍTÁS ============ */
 initDelivery();
-renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge(); renderFlowmap();
+renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge(); renderFlowmap(); renderLiveOrders(); renderSosBadge();
 order = makeOrder(SEED_ORDER, 'Céges átutalás · 15 nap'); order.status = 2; renderOrders();
 applyStatic();
 setTheme((()=>{try{return localStorage.getItem('pp_theme')||'auto';}catch(e){return 'auto';}})());
