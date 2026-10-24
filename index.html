@@ -93,6 +93,51 @@ button{font-family:inherit;cursor:pointer;color:inherit}
     box-shadow:var(--shadow);outline:1px solid rgba(255,255,255,.06)}
 }
 
+/* ---- külső folyamatábra (asztali) ---- */
+.stage-main{display:contents}
+#flowmap{display:none}
+@media (min-width:920px){
+  .stage-main{display:flex;flex-direction:row;align-items:stretch;justify-content:center;gap:22px}
+  #flowmap{display:flex;flex-direction:column;flex:0 0 auto;width:338px;
+    height:min(900px,calc(100dvh - 150px));
+    background:var(--surface);border:1px solid var(--line);border-radius:24px;
+    box-shadow:var(--shadow);outline:1px solid rgba(255,255,255,.05);
+    padding:20px 16px 14px;overflow:hidden}
+  .fm-head{flex:0 0 auto;display:flex;align-items:flex-start;gap:10px;margin:0 4px 2px}
+  .fm-head .fm-badge{width:34px;height:34px;flex:0 0 auto;border-radius:10px;background:var(--sprout);
+    display:grid;place-items:center}
+  .fm-head .fm-badge svg{width:19px;height:19px;stroke:var(--leaf-ink);fill:none;stroke-width:1.9}
+  .fm-head .fm-ht{min-width:0}
+  .fm-head b{font-family:var(--serif);font-weight:600;font-size:16.5px;letter-spacing:-.01em;display:block;line-height:1.15}
+  .fm-head .fm-hs{display:block;font-size:11.5px;color:var(--ink-faint);margin-top:4px;line-height:1.4}
+  .fm-track{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:0;
+    padding:10px 2px 2px;margin-top:8px;border-top:1px solid var(--line-soft)}
+  .fm-node{position:relative;display:flex;align-items:center;gap:12px;text-align:left;
+    border:0;background:none;padding:9px 8px;border-radius:12px;transition:background .13s}
+  .fm-node:hover{background:var(--surface-2)}
+  .fm-node[aria-current="step"]{background:var(--sprout)}
+  .fm-node::before{content:"";position:absolute;left:23px;top:0;bottom:0;width:2px;background:var(--line)}
+  .fm-node:first-child::before{top:calc(50% - 1px)}
+  .fm-node:last-child::before{bottom:calc(50% - 1px)}
+  .fm-n{width:30px;height:30px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;
+    position:relative;z-index:1;font-size:12.5px;font-weight:700;background:var(--sprout);
+    color:var(--leaf-ink);border:1.5px solid var(--leaf);font-variant-numeric:tabular-nums}
+  .fm-tx{flex:1;min-width:0}
+  .fm-tx b{display:block;font-size:13.5px;font-weight:600;line-height:1.2}
+  .fm-tx span{display:block;font-size:11px;color:var(--ink-faint);margin-top:2px;line-height:1.3}
+  .fm-go{flex:0 0 auto;color:var(--leaf);opacity:0;transform:translateX(-3px);transition:opacity .13s,transform .13s}
+  .fm-node:hover .fm-go,.fm-node:focus-visible .fm-go{opacity:1;transform:none}
+  .fm-go svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2}
+  .fm-node.branch .fm-n{background:var(--amber-soft);color:var(--amber);border-color:var(--amber)}
+  .fm-node.branch .fm-go{color:var(--amber)}
+  .fm-foot{flex:0 0 auto;display:flex;align-items:center;gap:7px;margin:6px 4px 0;padding-top:10px;
+    border-top:1px solid var(--line-soft);font-size:10.5px;color:var(--ink-faint);line-height:1.35}
+  .fm-foot svg{width:14px;height:14px;flex:0 0 auto;stroke:var(--amber);fill:none;stroke-width:2}
+}
+@media (min-width:920px) and (max-width:1040px){
+  #flowmap{width:300px}
+}
+
 /* ---- felső sáv ---- */
 .appbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;
   padding:14px max(16px,env(safe-area-inset-left,0px)) 12px max(16px,env(safe-area-inset-right,0px));
@@ -697,6 +742,8 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .hub-stage .hb .chev svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
 .hub-stage::before{content:"";position:absolute;left:16px;top:34px;bottom:3px;width:2px;background:var(--line);z-index:1}
 .hub-stage:last-child::before{display:none}
+.hub-stage .hn.alt{background:var(--amber-soft);color:var(--amber)}
+.hub-stage.branch .hb{border-style:dashed}
 /*CSS-MORE*/
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(69,209,151,.6)}70%{box-shadow:0 0 0 9px rgba(69,209,151,0)}100%{box-shadow:0 0 0 0 rgba(69,209,151,0)}}
 @media (prefers-reduced-motion:reduce){
@@ -711,6 +758,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
     <div class="plats"><span>Web</span><span>Android</span><span>Windows</span><span class="soon">iOS · 2027</span></div>
   </div>
 
+  <div class="stage-main">
   <div id="app">
     <header class="appbar">
       <div class="brand" role="button" tabindex="0" aria-label="Folyamat áttekintése" onclick="openSheet('hub')">
@@ -988,6 +1036,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <button class="hub-stage" onclick="closeSheet('hub');openDriver()"><span class="hn">6</span><span class="hb"><span class="hbt"><b data-t="hs6">Kiszállítás – futár app</b><span data-t="hs6s">Útvonal, státusz, élő kapcsolat</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
         <button class="hub-stage" onclick="closeSheet('hub');openTrack(5)"><span class="hn">7</span><span class="hb"><span class="hbt"><b data-t="hs7">Átvétel QR‑kóddal</b><span data-t="hs7s">Szállítólevél, helyszíni ellenőrzés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
         <button class="hub-stage" onclick="closeSheet('hub');openTrack(7)"><span class="hn">8</span><span class="hb"><span class="hbt"><b data-t="hs8">Mennyiségi elszámolás &amp; számla</b><span data-t="hs8s">Rendelt vs. kiszedett tömeg, jóváírás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage branch" onclick="closeSheet('hub');openClaim('#PP-25884')"><span class="hn alt">!</span><span class="hb"><span class="hbt"><b data-t="hsR">Reklamáció – fotó / QR</b><span data-t="hsRs">Hiány/minőség jelzése, rendeléshez kötve</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
         <button class="hub-stage" onclick="closeSheet('hub');reorderLast()"><span class="hn">9</span><span class="hb"><span class="hbt"><b data-t="hs9">Újrarendelés</b><span data-t="hs9s">Egy koppintás, vagy ismétlődő rendelés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
       </div>
     </div>
@@ -1095,7 +1144,17 @@ button{font-family:inherit;cursor:pointer;color:inherit}
     <div id="claim" class="sheet" hidden></div>
     <div id="detail" class="detail" hidden></div>
     <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
-  </div>
+  </div><!-- /#app -->
+
+  <aside id="flowmap" aria-label="Teljes folyamat – belépési pontok">
+    <div class="fm-head">
+      <span class="fm-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h10M4 12h7M4 17h12"/><path d="M16 5l3 3-3 3"/></svg></span>
+      <span class="fm-ht"><b data-t="fm_title">Teljes folyamat</b><span class="fm-hs" data-t="fm_sub">Kattints bármelyik lépésre – azon a ponton lépsz be a demóba.</span></span>
+    </div>
+    <div class="fm-track" id="fmTrack"></div>
+    <div class="fm-foot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg><span data-t="fm_foot">A reklamáció a lánc elágazása – bármely átvett rendeléshez.</span></div>
+  </aside>
+  </div><!-- /.stage-main -->
 </div>
 
 <script>
@@ -1242,7 +1301,10 @@ const TR = {
   tab_ma:{hu:'Ma',en:'Today'}, tab_piac:{hu:'Piac',en:'Market'}, tab_kosar:{hu:'Kosár',en:'Cart'}, tab_rend:{hu:'Rendelések',en:'Orders'},
   greet:{hu:'Jó reggelt, Dániel séf',en:'Good morning, chef Dániel'},
   flow_title:{hu:'Teljes folyamat',en:'Full process'},
-  flow_sub:{hu:'Regisztráció → rendelés → fizetés → komissiózás → futár → QR‑átvétel → elszámolás',en:'Sign‑up → order → payment → picking → courier → QR handover → settlement'},
+  flow_sub:{hu:'Regisztráció → rendelés → fizetés → komissiózás → futár → QR‑átvétel → elszámolás → reklamáció',en:'Sign‑up → order → payment → picking → courier → QR handover → settlement → complaint'},
+  fm_title:{hu:'Teljes folyamat',en:'Full process'},
+  fm_sub:{hu:'Kattints bármelyik lépésre – azon a ponton lépsz be a demóba.',en:'Click any step – you jump into the demo at that point.'},
+  fm_foot:{hu:'A reklamáció a lánc elágazása – bármely átvett rendeléshez.',en:'Complaints branch off the chain – for any received order.'},
   again:{hu:'Rendeld újra',en:'Order again'}, myorders:{hu:'Rendeléseim',en:'My orders'},
   market_today:{hu:'Ma a piacon',en:"Today's market"}, all:{hu:'Mind',en:'All'},
   live_fields:{hu:'Élő a földekről',en:'Live from the fields'}, contact:{hu:'A kapcsolattartód',en:'Your contact'},
@@ -1337,6 +1399,7 @@ const TR = {
   hs6:{hu:'Kiszállítás – futár app',en:'Delivery – courier app'}, hs6s:{hu:'Útvonal, státusz, élő kapcsolat',en:'Route, status, live link'},
   hs7:{hu:'Átvétel QR‑kóddal',en:'Handover with QR'}, hs7s:{hu:'Szállítólevél, helyszíni ellenőrzés',en:'Delivery note, on-site check'},
   hs8:{hu:'Mennyiségi elszámolás &amp; számla',en:'Quantity settlement &amp; invoice'}, hs8s:{hu:'Rendelt vs. kiszedett tömeg, jóváírás',en:'Ordered vs. picked weight, credit'},
+  hsR:{hu:'Reklamáció – fotó / QR',en:'Complaint – photo / QR'}, hsRs:{hu:'Hiány/minőség jelzése, rendeléshez kötve',en:'Report shortage/quality, linked to the order'},
   hs9:{hu:'Újrarendelés',en:'Reorder'}, hs9s:{hu:'Egy koppintás, vagy ismétlődő rendelés',en:'One tap, or a recurring order'},
   fiok_title:{hu:'Konyha &amp; számok',en:'Kitchen &amp; numbers'}, fiok_sub:{hu:'Központi és alárendelt számok',en:'Central and linked numbers'},
   meta_terms:{hu:'15 napos határidő',en:'15-day terms'}, meta_credit:{hu:'hitelkeret',en:'credit line'}, meta_sites:{hu:'2 telephely',en:'2 locations'}, acct_transfer:{hu:'Átutalás',en:'Transfer'},
@@ -1368,7 +1431,7 @@ function setLang(l){
   lang = l;
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
   applyStatic(); updateDeliveryLabels();
-  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders();
+  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap();
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
   if(!$('#driver').hidden){ buildDriver(); injectUtils($('#driver')); }
@@ -1539,6 +1602,37 @@ function go(name){
   $('#screens').scrollTop = 0;
   if(name==='kosar') renderCart();
   closeAllSheets();
+}
+
+/* ============ KÜLSŐ FOLYAMATÁBRA (asztali) ============ */
+const FLOW=[
+  {n:'1',k:'hs1',act:()=>openOnboard()},
+  {n:'2',k:'hs2',act:()=>openSheet('fiok')},
+  {n:'3',k:'hs3',act:()=>go('piac')},
+  {n:'4',k:'hs4',act:()=>openPay(true)},
+  {n:'5',k:'hs5',act:()=>openTrack(2)},
+  {n:'6',k:'hs6',act:()=>openDriver()},
+  {n:'7',k:'hs7',act:()=>openTrack(5)},
+  {n:'8',k:'hs8',act:()=>openTrack(7)},
+  {n:'!',k:'hsR',act:()=>openClaim('#PP-25884'),branch:true},
+  {n:'9',k:'hs9',act:()=>reorderLast()}
+];
+function renderFlowmap(){
+  const host=$('#fmTrack'); if(!host) return;
+  host.innerHTML = FLOW.map((s,i)=>
+    `<button class="fm-node${s.branch?' branch':''}" onclick="fmJump(${i})" aria-current="false" aria-label="${t(s.k)}">`
+    +`<span class="fm-n">${s.n}</span>`
+    +`<span class="fm-tx"><b>${t(s.k)}</b><span>${t(s.k+'s')}</span></span>`
+    +`<span class="fm-go"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span>`
+    +`</button>`).join('');
+}
+function fmActive(i){
+  document.querySelectorAll('#fmTrack .fm-node').forEach((el,j)=>el.setAttribute('aria-current', j===i?'step':'false'));
+}
+function fmJump(i){
+  closeAllSheets();
+  try{ FLOW[i].act(); }catch(e){}
+  fmActive(i);
 }
 
 /* ============ KOSÁR MŰVELETEK ============ */
@@ -2044,7 +2138,7 @@ function buildDriver(){
 
 /* ============ INDÍTÁS ============ */
 initDelivery();
-renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge();
+renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge(); renderFlowmap();
 order = makeOrder(SEED_ORDER, 'Céges átutalás · 15 nap'); order.status = 2; renderOrders();
 applyStatic();
 setTheme((()=>{try{return localStorage.getItem('pp_theme')||'auto';}catch(e){return 'auto';}})());
