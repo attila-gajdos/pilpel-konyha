@@ -201,6 +201,12 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .cphoto-add{width:72px;height:72px;border-radius:12px;border:1.5px dashed var(--line);background:var(--surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink-soft)}
 .cphoto-add svg{width:20px;height:20px;stroke:var(--leaf);fill:none;stroke-width:1.8}
 .cphoto-add span{font-size:10.5px;font-weight:600}
+.claim-qty{display:flex;align-items:stretch;border:1.5px solid var(--line);background:var(--surface);border-radius:13px;overflow:hidden;max-width:230px}
+.claim-qty input{flex:1;min-width:0;width:100%;border:0;background:none;color:var(--ink);font:700 16px/1 var(--sans);padding:12px 13px;font-variant-numeric:tabular-nums}
+.claim-qty input::placeholder{color:var(--ink-faint);font-weight:600}
+.claim-qty input:focus{outline:none}
+.claim-qty .cq-unit{flex:0 0 auto;display:grid;place-items:center;padding:0 14px;font-size:13px;font-weight:700;color:var(--ink-soft);background:var(--surface-2);border-left:1px solid var(--line)}
+.cq-hint{font-size:11.5px;color:var(--ink-faint);margin:7px 2px 0;line-height:1.4}
 /* ---- rendelés azonosítása (QR/fotó) ---- */
 .claim-order{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:10px 12px}
 .co-id{flex:1;min-width:0}
@@ -405,8 +411,10 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .seg button b{font-size:13.5px;color:var(--ink);font-variant-numeric:tabular-nums}
 .seg button[aria-pressed="true"]{border-color:var(--leaf);background:var(--sprout);color:var(--leaf-ink)}
 .seg button[aria-pressed="true"] b{color:var(--leaf-ink)}
-.d-sub{display:flex;align-items:flex-start;gap:9px;margin-top:14px;font-size:12px;color:var(--ink-soft);line-height:1.4}
-.d-sub input{margin-top:2px;accent-color:var(--leaf);width:16px;height:16px;flex:0 0 auto}
+.d-sub{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:11px 13px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.d-sub input{margin-top:1px;accent-color:var(--leaf);width:17px;height:17px;flex:0 0 auto}
+.d-sub .d-sub-tx{flex:1;min-width:0;font-size:12px;color:var(--ink-soft);line-height:1.4}
+.d-sub .d-sub-tx b{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
 .qty{display:inline-flex;align-items:center;gap:0;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
 .qty button{width:40px;height:40px;background:var(--surface);border:0;font-size:20px;color:var(--ink);display:grid;place-items:center}
 .qty button:active{background:var(--line-soft)}
@@ -788,7 +796,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
       <section class="screen" data-screen="ma">
         <div class="greet">
           <p class="hi" data-t="greet">Jó reggelt, Dániel séf</p>
-          <button class="loc" onclick="toast('Konyha-váltás: Kóstoló Bisztró / Lánchíd Kávéház','loc')">
+          <button class="loc" onclick="toast((lang=='en'?'Kitchen switch: ':'Konyha-váltás: ')+'Kóstoló Bisztró / Lánchíd Kávéház','loc')">
             <svg viewBox="0 0 24 24"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10Z"/><circle cx="12" cy="11" r="2"/></svg>
             <b>Kóstoló Bisztró</b> · Budapest, V.
           </button>
@@ -831,15 +839,15 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           <span class="rav">TA</span>
           <div class="ri"><b>Tóth Anna · PilPel</b><span data-t="rep_sub">Hívd bármikor, ha valami nem stimmel</span></div>
           <div class="rb">
-            <button aria-label="Hívás" onclick="toast('Hívás: +36 30 789 0967 · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button>
-            <button aria-label="Üzenet" onclick="toast('Üzenet a kapcsolattartónak · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></button>
+            <button aria-label="Hívás" onclick="toast(lang=='en'?'Call: +36 30 789 0967 · demo':'Hívás: +36 30 789 0967 · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button>
+            <button aria-label="Üzenet" onclick="toast(lang=='en'?'Message to your contact · demo':'Üzenet a kapcsolattartónak · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></button>
           </div>
         </div>
 
         <div class="trust">
           <div><b>700+</b><span data-t="trust1">prémium termék</span></div>
           <div><b>950+</b><span data-t="trust2">étterem partner</span></div>
-          <div><b>H–Szo</b><span data-t="trust3">napi szállítás</span></div>
+          <div><b data-t="trust3d">H–Szo</b><span data-t="trust3">napi szállítás</span></div>
         </div>
       </section>
 
@@ -1051,7 +1059,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="acct-hero">
           <div class="lbl" data-t="central_num">Központi szám</div>
           <div class="nm">Kóstoló Bisztró</div>
-          <div class="num">+36 30 123 4567 · Dániel séf (admin)</div>
+          <div class="num">+36 30 123 4567 · Dániel <span data-t="k_chefadmin">séf (admin)</span></div>
           <div class="meta">
             <div><b data-t="acct_transfer">Átutalás</b><span data-t="meta_terms">15 napos határidő</span></div>
             <div><b>800 000 Ft</b><span data-t="meta_credit">hitelkeret</span></div>
@@ -1060,9 +1068,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         </div>
         <div class="sec"><h2 data-t="sub_numbers">Alárendelt számok</h2></div>
         <div class="sub-row"><span class="av">GB</span><div class="si"><b>Gábor · sous‑chef</b><span>+36 30 ••• 2211</span></div><span class="role can" data-t="role_can">Rendelhet · 150e</span></div>
-        <div class="sub-row"><span class="av">L2</span><div class="si"><b>Lánchíd Kávéház · konyha 2</b><span>+36 70 ••• 4480</span></div><span class="role appr" data-t="role_appr">Jóváhagyással</span></div>
-        <div class="sub-row"><span class="av">BE</span><div class="si"><b>Beszerzés</b><span>+36 20 ••• 9075</span></div><span class="role view" data-t="role_view">Megtekintés</span></div>
-        <button class="add-sub" data-t="invite_num" onclick="toast('Új szám meghívása SMS‑ben · demó')">+ Szám meghívása</button>
+        <div class="sub-row"><span class="av">L2</span><div class="si"><b>Lánchíd Kávéház · <span data-t="k_kitchen2">konyha 2</span></b><span>+36 70 ••• 4480</span></div><span class="role appr" data-t="role_appr">Jóváhagyással</span></div>
+        <div class="sub-row"><span class="av">BE</span><div class="si"><b data-t="k_procure">Beszerzés</b><span>+36 20 ••• 9075</span></div><span class="role view" data-t="role_view">Megtekintés</span></div>
+        <button class="add-sub" data-t="invite_num" onclick="toast(lang=='en'?'Invite a new number by SMS · demo':'Új szám meghívása SMS‑ben · demó')">+ Szám meghívása</button>
         <div class="est-note" style="margin-top:16px"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="wf_note">A „Jóváhagyással" számok rendelése és a keret feletti tételek a <b>központi számra</b> futnak be jóváhagyásra.</div></div>
       </div>
     </div>
@@ -1291,10 +1299,13 @@ let lang = 'hu';
 const TR = {
   sub:{hu:'Séf-rendelő · demó',en:'Chef ordering · demo'}, info_ok:{hu:'Értem',en:'Got it'}, freq_lab:{hu:'Gyakoriság · utolsó',en:'Frequency · last'},
   claim_title:{hu:'Reklamáció',en:'Claim'}, claim_which:{hu:'Melyik tétel?',en:'Which item?'}, claim_what:{hu:'Mi a gond?',en:'What’s wrong?'},
-  claim_photos:{hu:'Fotók (max 6)',en:'Photos (max 6)'}, claim_addphoto:{hu:'Fotó',en:'Photo'}, claim_note:{hu:'Megjegyzés',en:'Note'},
+  claim_qty:{hu:'Érintett mennyiség (opcionális)',en:'Affected quantity (optional)'},
+  claim_photos:{hu:'Fotók (opcionális, max 6)',en:'Photos (optional, max 6)'}, claim_addphoto:{hu:'Fotó',en:'Photo'}, claim_note:{hu:'Megjegyzés (opcionális)',en:'Note (optional)'},
   claim_note_ph:{hu:'Pl. a felét penészesen kaptuk, a láda alja nyomott.',en:'E.g. half of it arrived mouldy, the bottom of the crate was crushed.'},
   claim_note2:{hu:'A fotó és a szállítólevél a jóváírás bizonyítéka. A PilPel kapcsolattartó még ma visszajelez.',en:'The photo and the delivery note are the evidence for the credit. Your PilPel contact replies the same day.'},
   claim_send:{hu:'Reklamáció beküldése',en:'Submit claim'},
+  sub_title:{hu:'Automatikus csere, ha nem szállítható',en:'Auto-swap if unavailable'},
+  sub_desc:{hu:'Azonos vagy jobb minőségre, felár nélkül. A cseréről értesítünk – nincs külön jóváhagyás.',en:'To equal or better quality, at no extra cost. We notify you of the swap – no separate approval.'},
   claim_order:{hu:'Melyik rendelés?',en:'Which order?'}, claim_scan:{hu:'QR / fotó',en:'QR / photo'},
   scan_title:{hu:'Rendelés azonosítása',en:'Identify order'}, scan_hint:{hu:'Tartsd a kamerát a futár szállítólevelének QR‑kódjára – vagy azonosítsd fotóval.',en:'Point the camera at the QR code on the courier’s delivery note – or identify it with a photo.'},
   scan_ok:{hu:'Beolvasva ✓ (demó)',en:'Scanned ✓ (demo)'}, scan_photo:{hu:'Inkább fotóval azonosítom',en:'Identify with a photo instead'},
@@ -1318,7 +1329,8 @@ const TR = {
   repeat_last:{hu:'Előző rendelés megismétlése',en:'Repeat last order'},
   nudge:{hu:'A szokásos <b>Hass avokádódból</b> 1 karton maradt a mai járatra.',en:'Only 1 carton of your usual <b>Hass avocado</b> left for today’s run.'},
   add_cart:{hu:'+ Kosár',en:'+ Cart'},
-  trust1:{hu:'prémium termék',en:'premium products'}, trust2:{hu:'étterem partner',en:'restaurant partners'}, trust3:{hu:'napi szállítás',en:'daily delivery'},
+  trust1:{hu:'prémium termék',en:'premium products'}, trust2:{hu:'étterem partner',en:'restaurant partners'}, trust3:{hu:'napi szállítás',en:'daily delivery'}, trust3d:{hu:'H–Szo',en:'Mon–Sat'},
+  k_chefadmin:{hu:'séf (admin)',en:'chef (admin)'}, k_kitchen2:{hu:'konyha 2',en:'kitchen 2'}, k_procure:{hu:'Beszerzés',en:'Procurement'},
   rep_sub:{hu:'Hívd bármikor, ha valami nem stimmel',en:'Call anytime if something is off'},
   market:{hu:'Piac',en:'Market'}, search_ph:{hu:'Keress 700+ termék között…',en:'Search 700+ products…'},
   cat_mind:{hu:'Mind',en:'All'}, cat_zoldseg:{hu:'Zöldség',en:'Vegetables'}, cat_gyumolcs:{hu:'Gyümölcs',en:'Fruit'}, cat_salata:{hu:'Saláták',en:'Salads'}, cat_gomba:{hu:'Gombák',en:'Mushrooms'}, cat_fuszer:{hu:'Fűszernövény',en:'Herbs'}, cat_kulon:{hu:'Különlegesség',en:'Specialty'},
@@ -1435,6 +1447,7 @@ function setLang(l){
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
   if(!$('#driver').hidden){ buildDriver(); injectUtils($('#driver')); }
+  if(!$('#claim').hidden){ buildClaim(); }
   if(!$('#detail').hidden && detailId) openDetail(detailId);
 }
 
@@ -1538,12 +1551,19 @@ function closeInfo(){ const el=$('#info'); el.classList.remove('open'); setTimeo
 
 /* ============ REKLAMÁCIÓ (fotóval, rendeléshez kötve) ============ */
 const CLAIM_REASONS=[{hu:'Hiány',en:'Shortage'},{hu:'Minőség',en:'Quality'},{hu:'Sérült',en:'Damaged'},{hu:'Nem azt kaptam',en:'Wrong item'},{hu:'Egyéb',en:'Other'}];
-let claim={photos:[],item:null,reason:0,orderNo:''};
+let claim={photos:[],item:null,reason:0,orderNo:'',qty:'',note:''};
 function openClaim(orderNo){
   if(!order) order=makeOrder(SEED_ORDER,payMethod);
-  claim={photos:[],item:order.lines[0].id,reason:0,orderNo:orderNo||order.no};
+  claim={photos:[],item:order.lines[0].id,reason:0,orderNo:orderNo||order.no,qty:'',note:''};
   buildClaim(); openSheet('claim');
 }
+function claimLine(){ return order && (order.lines.find(l=>l.id===claim.item) || order.lines[0]); }
+function claimUnit(){ const l=claimLine(); return l ? unitL(unitShort(BYID[l.id].u[l.ui].u)) : ''; }
+function claimUnitLabel(){ return claimUnit(); }
+function claimQtyHint(){ const l=claimLine(); if(!l) return '';
+  const uu=claimUnit();
+  return lang==='en' ? ('Ordered: '+l.q+' '+uu+' — give the affected amount, or leave empty.')
+                     : ('Rendelt: '+l.q+' '+uu+' — add meg az érintett mennyiséget, vagy hagyd üresen.'); }
 function buildClaim(){
   const items=order.lines.map(l=>{const p=BYID[l.id];return `<button class="claim-item" aria-pressed="${l.id===claim.item}" onclick="pickClaimItem('${l.id}',this)"><span class="gtile tile" style="--h:${p.h};width:32px;height:32px;font-size:17px">${p.e}</span><span class="ci-n">${p.n}</span></button>`;}).join('');
   const reasons=CLAIM_REASONS.map((r,i)=>`<button aria-pressed="${i===claim.reason}" onclick="pickClaimReason(${i},this)">${r[lang]||r.hu}</button>`).join('');
@@ -1558,23 +1578,36 @@ function buildClaim(){
       <div class="claim-items">${items}</div>
       <label class="claim-lab">${t('claim_what')}</label>
       <div class="claim-reasons">${reasons}</div>
+      <label class="claim-lab">${t('claim_qty')}</label>
+      <div class="claim-qty"><input type="number" inputmode="decimal" min="0" step="0.1" id="claimQty" placeholder="0" value="${claim.qty||''}" oninput="claim.qty=this.value"><span class="cq-unit" id="claimQtyUnit">${claimUnitLabel()}</span></div>
+      <div class="cq-hint" id="claimQtyHint">${claimQtyHint()}</div>
       <label class="claim-lab">${t('claim_photos')}</label>
       <div class="claim-photos" id="claimPhotos"></div>
       <input type="file" id="claimFile" accept="image/*" multiple hidden onchange="addClaimPhotos(this)">
       <label class="claim-lab" style="margin-top:14px">${t('claim_note')}</label>
-      <textarea class="note-in" id="claimNote" placeholder="${t('claim_note_ph')}"></textarea>
+      <textarea class="note-in" id="claimNote" placeholder="${t('claim_note_ph')}" oninput="claim.note=this.value">${claim.note||''}</textarea>
       <div class="est-note" style="margin-top:14px"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.2-2.8 7.8-7 9-4.2-1.2-7-4.8-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg><div>${t('claim_note2')}</div></div>
     </div>
     <div class="s-foot"><button class="btn primary" style="width:100%" onclick="submitClaim()">${t('claim_send')}</button></div>`;
   injectUtils($('#claim')); renderClaimPhotos();
 }
-function pickClaimItem(id,btn){ claim.item=id; btn.parentElement.querySelectorAll('.claim-item').forEach(b=>b.setAttribute('aria-pressed',b===btn)); }
+function pickClaimItem(id,btn){ claim.item=id; claim.qty='';
+  btn.parentElement.querySelectorAll('.claim-item').forEach(b=>b.setAttribute('aria-pressed',b===btn));
+  const u=$('#claimQtyUnit'); if(u) u.textContent=claimUnitLabel();
+  const h=$('#claimQtyHint'); if(h) h.textContent=claimQtyHint();
+  const qi=$('#claimQty'); if(qi) qi.value=''; }
 function pickClaimReason(i,btn){ claim.reason=i; btn.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===btn)); }
 function addClaimPhotos(input){ [...input.files].slice(0,6).forEach(f=>{const r=new FileReader(); r.onload=e=>{ if(claim.photos.length<6){claim.photos.push(e.target.result); renderClaimPhotos();} }; r.readAsDataURL(f);}); input.value=''; }
 function renderClaimPhotos(){ const el=$('#claimPhotos'); if(!el)return;
   el.innerHTML=claim.photos.map((src,i)=>`<div class="cphoto"><img src="${src}" alt=""><button aria-label="Törlés" onclick="claim.photos.splice(${i},1);renderClaimPhotos()">×</button></div>`).join('')
    + (claim.photos.length<6?`<button class="cphoto-add" onclick="$('#claimFile').click()"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8h3l1.5-2h5L16 8h3v11H5z"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>${t('claim_addphoto')}</span></button>`:''); }
-function submitClaim(){ closeSheet('claim'); toast(lang=='en'?('Claim submitted · '+claim.orderNo+' · credit started'):('Reklamáció beküldve · '+claim.orderNo+' · jóváírást indítjuk')); }
+function submitClaim(){
+  const qtyTxt = (claim.qty && parseFloat(claim.qty)>0) ? (' · '+claim.qty+' '+claimUnit()) : '';
+  const photoTxt = claim.photos.length ? (' · '+claim.photos.length+(lang=='en'?' photo':' fotó')) : '';
+  closeSheet('claim');
+  toast(lang=='en'?('Claim submitted · '+claim.orderNo+qtyTxt+photoTxt+' · credit started')
+                  :('Reklamáció beküldve · '+claim.orderNo+qtyTxt+photoTxt+' · jóváírást indítjuk'));
+}
 /* Rendelés azonosítása QR-rel vagy fotóval */
 function openScan(){ const el=$('#scan'); el.hidden=false; const cv=$('#scanqr'); if(cv) drawQR(cv, (claim.orderNo||order&&order.no||'PP-DEMO')); void el.offsetHeight; el.classList.add('open'); applyStatic(); }
 function closeScan(){ const el=$('#scan'); el.classList.remove('open'); setTimeout(()=>el.hidden=true,180); }
@@ -1593,7 +1626,12 @@ const lineTotal = c=>BYID[c.id].u[c.ui].p*c.q;
 const cartCount = ()=>cart.reduce((s,c)=>s+c.q,0);
 const cartNet = ()=>cart.reduce((s,c)=>s+lineTotal(c),0);
 function badges(ids,max){let a=ids.filter(k=>B[k]).slice(0,max||99).map(k=>`<span class="bdg ${B[k].c}">${(lang=='en'&&B[k].en)?B[k].en:B[k].t}</span>`);return a.join('');}
-function gradeL(g){const M={'I. osztály':'Class I','Konyhakész':'Ready to use','kimérős, súlyra':'loose, by weight'};return (lang=='en'&&M[g])?M[g]:g;}
+function gradeL(g){ if(lang!=='en'||!g) return g;
+  const M={'I. osztály':'Class I','Konyhakész':'Ready to use','kimérős, súlyra':'loose, by weight','saját termesztés':'own-grown'};
+  let s=g; for(const k in M){ s=s.split(k).join(M[k]); } return s; }
+function ogL(og){ if(lang!=='en'||!og) return og;
+  const M={'Franciaország':'France','Olaszország':'Italy','Hollandia':'Netherlands','Izrael':'Israel','Spanyolország':'Spain','Magyarország':'Hungary','Indonézia':'Indonesia','Kolumbia':'Colombia','Thaiföld':'Thailand','Dél-Afrika':'South Africa','Irán':'Iran','Németország':'Germany','Görögország':'Greece','Marokkó':'Morocco','saját farm':'own farm','saját gazdaság':'own farm','saját termesztés':'own-grown'};
+  let s=og; for(const k in M){ s=s.split(k).join(M[k]); } return s; }
 
 /* ============ NAVIGÁCIÓ ============ */
 function go(name){
@@ -1677,7 +1715,7 @@ function renderFeat(){
       <span class="ph tile" style="--h:${p.h}">${p.e}<span class="reason ${f.hot?'hot':''}">${reasonL(f.r)}</span></span>
       <span class="body">
         <span class="nm">${p.n}</span>
-        <span class="og"><span style="font-size:13px">${p.fl}</span> ${p.og}</span>
+        <span class="og"><span style="font-size:13px">${p.fl}</span> ${ogL(p.og)}</span>
         <span class="pr"><b>${u.p.toLocaleString('hu-HU')} Ft</b><small>/${unitL(unitShort(u.u))}</small></span>
       </span>
     </button>`;}).join('');
@@ -1707,7 +1745,7 @@ function renderCatalog(){
         <span class="tile" style="--h:${p.h}">${p.e}</span>
         <span class="prod-main">
           <span class="prod-name">${p.n}</span>
-          <span class="prod-meta"><span class="fl">${p.fl}</span> ${p.og} · ${gradeL(p.gr.split(' · ')[0])}</span>
+          <span class="prod-meta"><span class="fl">${p.fl}</span> ${ogL(p.og)} · ${gradeL(p.gr.split(' · ')[0])}</span>
           <span class="prod-badges">${badges(p.b,2)}${stockTag(p.id)}</span>
         </span>
       </button>
@@ -1733,7 +1771,7 @@ function openDetail(id){
     </div>
     <div class="d-body">
       <div class="d-hero tile" style="--h:${p.h}">${p.e}
-        <span class="d-flag"><span class="fl">${p.fl}</span> ${p.og}</span>
+        <span class="d-flag"><span class="fl">${p.fl}</span> ${ogL(p.og)}</span>
       </div>
       <div class="d-wrap">
         <h1 class="d-name">${p.n}</h1>
@@ -1743,12 +1781,12 @@ function openDetail(id){
         <p class="d-desc">${p.d}</p>
         <div class="d-qc">
           <svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.2-2.8 7.8-7 9-4.2-1.2-7-4.8-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
-          <div class="tx"><b>Személyes minőségellenőrzés</b>Minden láda mögött kézi ellenőrzés áll. &lt;72 óra a földtől a konyhádig.</div>
+          <div class="tx"><b>${lang=='en'?'Personal quality check':'Személyes minőségellenőrzés'}</b>${lang=='en'?'Every crate is hand-checked. &lt;72 hours from field to your kitchen.':'Minden láda mögött kézi ellenőrzés áll. &lt;72 óra a földtől a konyhádig.'}</div>
         </div>
         <div class="seg" id="segUnits">${p.u.map((x,i)=>`
           <button aria-pressed="${i===0}" onclick="setUnit(${i})">${unitL(unitShort(x.u))}<b>${x.p.toLocaleString('hu-HU')} Ft</b>${x.u.includes(' · ')?`<small style="color:var(--ink-faint)">${x.u.split(' · ')[1]}</small>`:''}</button>`).join('')}
         </div>
-        <label class="d-sub"><input type="checkbox" checked> Ha elfogy, a séf jóváhagyásával <b>hasonló minőségre cserélhető</b> (pl. másik termőhely).</label>
+        <label class="d-sub"><input type="checkbox" checked><span class="d-sub-tx"><b>${t('sub_title')}</b>${t('sub_desc')}</span></label>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px">
           <span style="font-size:13px;color:var(--ink-soft)">${t('qty')}</span>
           <span class="qty"><button aria-label="Kevesebb" onclick="dq(-1)">−</button><span class="v" id="dQ">1</span><button aria-label="Több" onclick="dq(1)">+</button></span>
@@ -1756,7 +1794,7 @@ function openDetail(id){
       </div>
     </div>
     <div class="d-foot">
-      <button class="btn ghost" aria-label="Kedvenc" onclick="toast('Hozzáadva a kedvencekhez','star')">
+      <button class="btn ghost" aria-label="Kedvenc" onclick="toast(lang=='en'?'Added to favourites':'Hozzáadva a kedvencekhez','star')">
         <svg viewBox="0 0 24 24" style="stroke:var(--ink)"><path d="M12 4l2.4 5 5.6.6-4 3.9 1 5.5-5-2.8-5 2.8 1-5.5-4-3.9 5.6-.6L12 4Z"/></svg></button>
       <button class="btn primary" onclick="addFromDetail()"><span id="dAddLab">${t('to_cart')}</span> · <span class="pz" id="dAddPz"></span></button>
     </div>`;
@@ -1851,7 +1889,7 @@ function tgl(b){const on=b.getAttribute('aria-pressed')==='true';b.setAttribute(
 
 /* ============ RENDELÉS LEADÁSA ============ */
 function placeOrder(){
-  if(!cart.length){toast('A kosár üres');return;}
+  if(!cart.length){toast(lang=='en'?'Your cart is empty':'A kosár üres');return;}
   order = makeOrder(cart, payMethod); order.status=0;
   const items=order.lines.length;
   $('#confItems').textContent=items+' tétel';
@@ -1924,7 +1962,7 @@ function obPick(btn){ document.querySelectorAll('#onboard .opt').forEach(o=>o.se
 /* ---- fizetés ---- */
 let payMethod='Céges átutalás · 15 nap';
 function openPay(loadSample){
-  if(!cart.length){ if(loadSample){cart=LAST.map(x=>({...x}));syncBadge();} else {toast('A kosár üres');go('piac');return;} }
+  if(!cart.length){ if(loadSample){cart=LAST.map(x=>({...x}));syncBadge();} else {toast(lang=='en'?'Your cart is empty':'A kosár üres');go('piac');return;} }
   const net=cartNet(), gross=net*(1+VAT);
   $('#payTotals').innerHTML =
     `<div class="t"><span>${t('est_net')}</span><b>${ft(net)}</b></div>
@@ -1976,7 +2014,12 @@ function stockTag(id){const s=stockOf(id);
   return `<span class="stock hi"><span class="sd"></span>${lang=='en'?'In stock':'Raktáron'}</span>`;}
 function availLine(id){const s=stockOf(id);if(s!=='out')return '';
   const sub=SUBST[id],sp=sub?BYID[sub]:null;
-  return `<div class="est-note" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div><b>Most elfogyott.</b> Kérj értesítést, amint újra lesz.${sp?` Ajánlott helyettesítő: <b onclick="openDetail('${sub}')" style="color:var(--leaf);cursor:pointer;text-decoration:underline">${sp.n}</b>.`:''}</div></div>`;}
+  const link=sp?`<b onclick="openDetail('${sub}')" style="color:var(--leaf);cursor:pointer;text-decoration:underline">${sp.n}</b>`:'';
+  const head=lang=='en'?'<b>Out right now.</b>':'<b>Most elfogyott.</b>';
+  const body=lang=='en'
+    ? ` If you order it, we auto-swap to equal or better quality${sp?` — e.g. ${link}`:''} at no extra cost, and notify you. Or ask to be told when it’s back.`
+    : ` Ha megrendeled, automatikusan azonos vagy jobb minőségre cseréljük${sp?` — pl. ${link}`:''}, felár nélkül, és szólunk. Vagy kérj értesítést, amint újra lesz.`;
+  return `<div class="est-note" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div>${head}${body}</div></div>`;}
 
 /* ============ RENDELÉSEIM: aktív kártya ============ */
 function stepperHTML(st){
@@ -2030,7 +2073,7 @@ function buildTrack(){
   } else if(st===4){
     ctx=`<div class="driver-card"><span class="dav">${o.driver.init}</span>
         <div class="di"><b>${o.driver.name}</b><span>${t('courier')} · ${o.driver.plate}</span></div>
-        <button class="call" aria-label="Futár hívása" onclick="toast('Futár hívása: ${o.driver.phone} · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button></div>
+        <button class="call" aria-label="Futár hívása" onclick="toast(lang=='en'?('Call courier: ${o.driver.phone} · demo'):('Futár hívása: ${o.driver.phone} · demó'))"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button></div>
       <div class="eta"><div class="el">${t('eta')}<b>${lang=='en'?'~18 min':'~ 18 perc'}</b></div>
         <div class="route"><span class="stop on"></span><span class="ln on"></span><span class="stop cur"></span><span class="ln"></span><span class="stop"></span></div></div>
       <button class="bigcta leaf" onclick="openDriver()"><svg viewBox="0 0 24 24" fill="none"><path d="M3 13l2-5h9l3 4h4v4h-2M5 17h1m11 0h2"/><circle cx="7.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/></svg> ${t('look_driver')}</button>`;
@@ -2077,7 +2120,7 @@ function settlementHTML(o, st){
       <div class="adj">${t('estimate')}: ${ft(est*(1+VAT))}<br>${diff>=0?'+':'−'}${ft(Math.abs(diff)*(1+VAT))} ${t('correction')}</div></div>
     ${st===7
       ?`<div class="ctx"><div class="ch">${lang=='en'?'Payment &amp; invoice':'Fizetés &amp; számla'}</div><div class="pk"><span>${methodL(o.method)}</span><b>${t('pay_settled')}</b></div><div class="pk"><span>${t('invoice_no')}</span><b>#SZ‑${o.no.slice(4)}</b></div></div>
-        <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost" style="width:auto;flex:1" onclick="toast('Számla (PDF) · demó')">${t('invoice')}</button><button class="btn leaf" onclick="closeSheet('track');reorderLast()">${lang=='en'?'Reorder':'Újrarendelés'}</button></div>`
+        <div style="display:flex;gap:10px;margin-top:12px"><button class="btn ghost" style="width:auto;flex:1" onclick="toast(lang=='en'?'Invoice (PDF) · demo':'Számla (PDF) · demó')">${t('invoice')}</button><button class="btn leaf" onclick="closeSheet('track');reorderLast()">${lang=='en'?'Reorder':'Újrarendelés'}</button></div>`
       :`<button class="bigcta leaf" onclick="setStatus(7)">${t('finalize')}</button>`}`;
 }
 function openQR(){
