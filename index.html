@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PilPel Konyha</title>
+<title>Pilpel Order</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
@@ -815,13 +815,74 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
+
+/* ===== merged from Doodi's prototype: spec mode, insights, requirements, finance ===== */
+:root{--spec:#3D4FB8;--spec-soft:#E2E6FA}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--spec:#9AA8FF;--spec-soft:#23284A}}
+:root[data-theme="dark"]{--spec:#9AA8FF;--spec-soft:#23284A}
+.spec{display:none;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;line-height:1.45;color:var(--spec);background:var(--spec-soft);border-radius:9px;padding:6px 9px;margin-top:9px;text-align:left}
+body.show-spec .spec{display:block}
+.specbar{display:flex;align-items:center;gap:10px;background:var(--spec-soft);color:var(--spec);border-radius:12px;padding:11px 12px;font-size:13px;font-weight:600;margin-top:14px;cursor:pointer}
+.specbar input{accent-color:var(--spec);width:16px;height:16px}
+.stage-req{border:1px solid #2b3a2d;background:rgba(255,255,255,.05);color:#EAF0E8;border-radius:999px;padding:8px 14px;font-weight:600;font-size:13px}
+.home-card{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.ins-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ins-kpi div{background:var(--surface-2);border:1px solid var(--line-soft);border-radius:12px;padding:10px;min-width:0}
+.ins-kpi span{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+.ins-kpi b{display:block;font-family:var(--serif);font-size:15px;font-variant-numeric:tabular-nums;margin-top:3px;overflow-wrap:anywhere}
+.ins-row{margin-top:10px}
+.ins-row .h{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.ins-sub{font-size:11.5px;color:var(--ink-faint);font-variant-numeric:tabular-nums;line-height:1.45}
+.meter{height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden;margin:5px 0 3px}
+.meter i{display:block;height:100%;background:var(--leaf);border-radius:3px}
+.stack{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px;margin-top:14px}
+.stack i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.chart{width:100%;height:auto;display:block}
+.chart .b-hi{fill:var(--leaf)} .chart .b-lo{fill:var(--line)} .chart .gl{stroke:var(--line-soft);stroke-width:1}
+.chart .ax{fill:var(--ink-faint);font-size:9px;font-family:var(--sans)}
+.big2{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--leaf);font-variant-numeric:tabular-nums}
+.rl{display:grid;grid-template-columns:1fr auto;gap:5px 10px;font-size:13px;font-variant-numeric:tabular-nums}
+.pill{font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--sprout);color:var(--leaf-ink)} .p-warn{background:var(--amber-soft);color:var(--amber)} .p-bad{background:var(--tomato-soft);color:var(--tomato-ink)}
+.ph{font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 6px;white-space:nowrap}
+.ph1{background:var(--sprout);color:var(--leaf-ink)} .ph2{background:var(--amber-soft);color:var(--amber)} .ph3{background:var(--line-soft);color:var(--ink-soft)}
+.req table{width:100%;border-collapse:collapse;font-size:12.5px}
+.req th,.req td{text-align:left;padding:8px 5px;border-top:1px solid var(--line-soft);vertical-align:top}
+.req th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint)}
+.req td.bc{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:var(--spec)}
+.req .src{display:block;font-size:10px;color:var(--ink-faint);margin-top:2px}
+.dec{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:var(--r-sm);padding:12px 13px;margin-top:10px;font-size:13px;line-height:1.45}
+.dec .q{display:block;font-size:14px;margin-bottom:6px}
+.dec .dopt{display:grid;grid-template-columns:auto 1fr;gap:6px 8px;align-items:start;font-size:12.5px}
+.dec .rec{color:var(--leaf-ink);background:var(--sprout);border-radius:8px;padding:7px 9px;margin-top:8px;font-size:12.5px}
+.fin-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line-soft);font-size:13px}
+.fin-row:first-child{border-top:0}
+.fin-row .mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;font-weight:600}
+.fin-row small{display:block;color:var(--ink-faint);font-size:11.5px;margin-top:1px}
+.fin-row .r{text-align:right;font-variant-numeric:tabular-nums}
+.tier{font-family:var(--serif);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:linear-gradient(135deg,#E9C766,#B88A1E);color:#3A2A00}
+.promo-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--line-soft)}
+.promo-row:first-child{border-top:0;padding-top:0}
+.promo-row .tile{width:46px;height:46px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;font-size:24px}
+.promo-row .pi{flex:1;min-width:0}
+.promo-row .pi b{display:block;font-size:14px}
+.promo-row .pi span{font-size:12px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.promo-row s,.price s.lp{color:var(--ink-faint);font-size:11px;font-weight:500;margin-left:4px}
+.price s.lp{display:block;margin-left:0;text-align:right}
+.add-mini{border:1.5px solid var(--leaf);color:var(--leaf);background:none;border-radius:10px;padding:7px 12px;font-weight:700;font-size:13px;flex:0 0 auto}
+.inp{width:100%;border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:12px;padding:11px 13px;font:inherit;font-size:14px}
 </style>
 
 <div id="stage">
   <div class="stage-head">
-    <div class="mk"><b>PilPel</b> Konyha</div>
+    <div class="mk"><b>Pilpel</b> Order</div>
     <p data-t="stage_head_p">A legjobb zöldség-gyümölcs rendelő, séf-szemmel. Kattintható prototípus – minden adat demó.</p>
     <div class="plats"><span>Web</span><span>Android</span><span>Windows</span><span class="soon">iOS · 2027</span></div>
+    <label class="specbar"><input type="checkbox" class="specToggle" onchange="setSpec(this.checked)"> <span data-t="spec_toggle">Spec mode: BC data sources</span></label>
+    <button class="stage-req" onclick="openReqs()" data-t="hsQ">Requirements &amp; open decisions</button>
   </div>
 
   <div class="stage-main">
@@ -830,7 +891,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
       <div class="brand" role="button" tabindex="0" aria-label="Folyamat áttekintése" onclick="openSheet('hub')">
         <span class="dot"><svg viewBox="0 0 24 24"><path d="M12 3c4 2 6 5 6 9a6 6 0 0 1-12 0c0-2 .7-3.6 2-5"/><path d="M12 21V9"/></svg></span>
         <div>
-          <div class="wm"><span>PilPel</span> Konyha</div>
+          <div class="wm"><span>Pilpel</span> Order</div>
           <div class="sub" data-t="sub">Séf-rendelő</div>
         </div>
       </div>
@@ -878,6 +939,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
             <div class="clock" id="clock">–:–:–</div>
           </div>
         </div>
+        <div class="spec">BC ▸ Customer › Shipping Agent / route · cut-off and delivery window per route (custom table)</div>
 
         <button class="sos-card" onclick="openUrgent()">
           <span class="sos-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></span>
@@ -887,6 +949,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 
         <div class="sec"><h2 data-t="again">Rendeld újra</h2><button class="more" data-t="myorders" onclick="go('rendelesek')">Rendeléseim</button></div>
         <div class="again" id="againRow"></div>
+        <div class="spec">BC ▸ Sales Invoice Line history (last 4 weeks) → suggested qty per item</div>
 
         <div class="sec"><h2 data-t="templates">Mentett sablonok</h2><button class="more" data-t="save_tpl" onclick="saveTemplate()">+ Mentés sablonként</button></div>
         <div class="tpl-row"></div>
@@ -894,7 +957,14 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="sec"><h2 data-t="market_today">Ma a piacon</h2><button class="more" data-t="all" onclick="go('piac')">Mind</button></div>
         <div class="feat-row" id="featRow"></div>
 
+        <div class="sec"><h2 data-t="offers">This week's offers</h2></div>
+        <div class="block" style="margin-top:0" id="promoBox"></div>
+
         <div class="nudge" id="lowNudge"></div>
+
+        <div class="sec"><h2 data-t="money">Money</h2></div>
+        <button class="block home-card" style="margin-top:0" onclick="go('insights')" id="monthCard"></button>
+        <button class="block home-card" onclick="openSheet('fiok')" id="balCard"></button>
 
         <div class="sec"><h2 data-t="live_fields">Élő a földekről</h2></div>
         <div class="fields">
@@ -911,6 +981,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           <div class="rb">
             <button aria-label="Hívás" onclick="toast(lang=='en'?'Call: +36 30 789 0967 · demo':'Hívás: +36 30 789 0967 · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h3l2 5-2 1a9 9 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg></button>
             <button aria-label="Üzenet" onclick="toast(lang=='en'?'Message to your contact · demo':'Üzenet a kapcsolattartónak · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v10H9l-4 4V5Z"/></svg></button>
+            <button aria-label="Call-back" onclick="toast(lang=='en'?'Call-back requested · demo':'Visszahívás kérve · demó')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
           </div>
         </div>
 
@@ -929,6 +1000,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
           <input id="searchIn" type="search" data-tph="search_ph" placeholder="Keress 700+ termék között…" autocomplete="off">
         </label>
         <div class="chips" id="chips"></div>
+        <div class="spec">BC ▸ Item + Item Category · Item Unit of Measure (kg / pcs / crate, pack multiple) · availability = inventory − reserved · customer price from Customer Price Group (tier), list price struck through</div>
         <div class="freqbar">
           <span class="freqlab" data-t="freq_lab">Gyakoriság · utolsó</span>
           <div class="seg-days" id="segDays"></div>
@@ -987,8 +1059,16 @@ button{font-family:inherit;cursor:pointer;color:inherit}
             <div class="tx"><b data-t="standing2">Szerda – saláták</b><span data-t="standing2s">5 tétel · minden szerdára</span></div>
             <button class="sw" aria-pressed="false" onclick="tgl(this)"></button>
           </div>
+          <div class="ins-sub" style="margin-top:10px" data-t="standing_note">Standing orders are created automatically at 18:00. You can edit or skip a day until the cut-off.</div>
+          <div class="spec">BC ▸ Recurring Sales Lines / Standard Customer Sales Codes → Sales Order via job queue</div>
         </div>
+
+        <div class="sec"><h2 data-t="claims">Claims</h2></div>
+        <div class="block" style="margin-top:0" id="claimList"></div>
       </section>
+
+      <!-- ===== INSIGHTS (Doodi) ===== -->
+      <section class="screen" data-screen="insights" hidden><div id="insBody"></div></section>
 
       <!-- ===== MEGERŐSÍTÉS ===== -->
       <section class="screen" data-screen="confirm" hidden>
@@ -1020,13 +1100,15 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <span class="cbadge" id="tabBadge" hidden>0</span></button>
       <button class="tab" role="tab" aria-selected="false" data-tab="rendelesek" onclick="go('rendelesek')">
         <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9.5 8h5M9.5 12h5"/></svg><span data-t="tab_rend">Rendelések</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="insights" onclick="go('insights')">
+        <svg viewBox="0 0 24 24"><path d="M4 20V11M10 20V5M16 20v-7M21 20H3"/></svg><span data-t="tab_ins">Insights</span></button>
     </nav>
 
     <!-- ===== ONBOARDING ===== -->
     <div id="onboard" class="sheet ob" hidden>
       <div class="ob-wrap">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <div class="ob-logo"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c4 2 6 5 6 9a6 6 0 0 1-12 0c0-2 .7-3.6 2-5"/><path d="M12 21V9"/></svg></span><span>PilPel</span> Konyha</div>
+          <div class="ob-logo"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3c4 2 6 5 6 9a6 6 0 0 1-12 0c0-2 .7-3.6 2-5"/><path d="M12 21V9"/></svg></span><span>Pilpel</span> Order</div>
           <div style="display:flex;align-items:center;gap:8px">
             <button class="icon-btn" style="width:34px;height:34px;border-radius:9px" aria-label="Infó / Info" onclick="openInfo()"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
             <button class="icon-btn" style="width:34px;height:34px;border-radius:9px" aria-label="Téma / Theme" onclick="openSheet('theme')"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.3 0 2-.9 2-1.9 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H17a4 4 0 0 0 4-4A8.9 8.9 0 0 0 12 3Z"/><circle cx="8" cy="9" r="1.1"/><circle cx="12" cy="7" r="1.1"/><circle cx="16" cy="9.5" r="1.1"/></svg></button>
@@ -1095,6 +1177,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
             <div class="phone"><input id="obBiz" type="text" value="Kóstoló Bisztró Kft." style="padding:15px 14px"></div>
           </div>
           <div class="est-note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="ob_kinfo">Meglévő vevőként ez a lépés kimarad – a jóváhagyás és az árkategória már megvan, egyből a rendelés jön.</div></div>
+          <div class="spec">BC ▸ new Customer (Blocked = All until approved) · VAT Registration No. → NAV taxpayer check · Customer Price Group = tier</div>
           <div class="spacer"></div>
           <button class="bigbtn leaf" data-t="ob_ksubmit" onclick="obStep(5)">Beküldés jóváhagyásra</button>
           <button class="ghostbtn" data-t="ob_back" onclick="showOb(3)">Vissza</button>
@@ -1137,6 +1220,8 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <button class="hub-stage" onclick="closeSheet('hub');openTrack(7)"><span class="hn">9</span><span class="hb"><span class="hbt"><b data-t="hs8">Mennyiségi elszámolás &amp; számla</b><span data-t="hs8s">Rendelt vs. kiszedett tömeg, jóváírás</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
         <button class="hub-stage branch" onclick="closeSheet('hub');openClaim('#PP-25884')"><span class="hn alt">!</span><span class="hb"><span class="hbt"><b data-t="hsR">Reklamáció – fotó / QR</b><span data-t="hsRs">Hiány/minőség jelzése, rendeléshez kötve</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
         <button class="hub-stage" onclick="closeSheet('hub');reorderLast()"><span class="hn">10</span><span class="hb"><span class="hbt"><b data-t="hs9">Újrarendelés</b><span data-t="hs9s">Egy koppintás, vagy ismétlődő rendelés</span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage branch" onclick="closeSheet('hub');go('insights')"><span class="hn alt">📊</span><span class="hb"><span class="hbt"><b data-t="hsI">Insights</b><span data-t="hsIs"></span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
+        <button class="hub-stage branch" onclick="closeSheet('hub');openReqs()"><span class="hn alt">☰</span><span class="hb"><span class="hbt"><b data-t="hsQ">Requirements</b><span data-t="hsQs"></span></span><span class="chev"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6"/></svg></span></span></button>
       </div>
     </div>
 
@@ -1161,8 +1246,11 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         <div class="sub-row"><span class="av">GB</span><div class="si"><b>Gábor · sous‑chef</b><span>+36 30 ••• 2211</span></div><span class="role can" data-t="role_can">Rendelhet · 150e</span></div>
         <div class="sub-row"><span class="av">L2</span><div class="si"><b>Lánchíd Kávéház · <span data-t="k_kitchen2">konyha 2</span></b><span>+36 70 ••• 4480</span></div><span class="role appr" data-t="role_appr">Jóváhagyással</span></div>
         <div class="sub-row"><span class="av">BE</span><div class="si"><b data-t="k_procure">Beszerzés</b><span>+36 20 ••• 9075</span></div><span class="role view" data-t="role_view">Megtekintés</span></div>
+        <div class="sub-row"><span class="av">KN</span><div class="si"><b data-t="k_book">Könyvelő</b><span>+36 70 ••• 1302</span></div><span class="role view" data-t="role_inv">Csak számlák</span></div>
         <button class="add-sub" data-t="invite_num" onclick="toast(lang=='en'?'Invite a new number by SMS · demo':'Új szám meghívása SMS‑ben · demó')">+ Szám meghívása</button>
         <div class="est-note" style="margin-top:16px"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="wf_note">A „Jóváhagyással" számok rendelése és a keret feletti tételek a <b>központi számra</b> futnak be jóváhagyásra.</div></div>
+        <div class="spec">BC ▸ Contact (person) linked to Customer · roles, limits and approval in the app layer</div>
+        <div id="finBox"></div>
       </div>
     </div>
 
@@ -1183,6 +1271,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
         </div>
         <div class="est-note"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div data-t="est_note"><b>Becsült összeg.</b> A súlyra mért tételeknél a végleges ár a <b>kiszedett tömeg</b> alapján alakul (±10% tolerancia). A számla a tényleges mennyiséggel egyezik.</div></div>
         <div class="totals" id="payTotals"></div>
+        <div class="spec">BC ▸ Payment Terms / Payment Method on Customer · credit-limit check before release · POST salesOrders (API v2.0)</div>
       </div>
       <div class="s-foot">
         <button class="btn primary" style="width:100%" id="payBtn" data-t="place_order" onclick="placeOrder()">Rendelés leadása</button>
@@ -1241,6 +1330,7 @@ button{font-family:inherit;cursor:pointer;color:inherit}
     </div>
 
     <div id="claim" class="sheet" hidden></div>
+    <div id="reqs" class="sheet" hidden></div>
     <div id="urgent" class="sheet" hidden></div>
     <div id="detail" class="detail" hidden></div>
     <div id="toast" class="toast" hidden><svg viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg><span id="toastMsg"></span></div>
@@ -1393,7 +1483,7 @@ let activeCat = 'mind', query = '', freqWin = 90;
 let detailId = null, detailUi = 0, detailQty = 1;
 
 /* ============ KÉTNYELVŰSÉG (HU / EN) ============ */
-let lang = 'hu';
+let lang = 'en';
 const TR = {
   sub:{hu:'Séf-rendelő · demó',en:'Chef ordering · demo'}, info_ok:{hu:'Értem',en:'Got it'}, freq_lab:{hu:'Gyakoriság · utolsó',en:'Frequency · last'},
   claim_title:{hu:'Reklamáció',en:'Claim'}, claim_which:{hu:'Melyik tétel?',en:'Which item?'}, claim_what:{hu:'Mi a gond?',en:'What’s wrong?'},
@@ -1561,7 +1651,7 @@ function setLang(l){
   lang = l;
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===l));
   applyStatic(); updateDeliveryLabels();
-  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap(); renderLiveOrders(); renderSosBadge(); renderTemplates();
+  renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); renderOrders(); renderFlowmap(); renderLiveOrders(); renderSosBadge(); renderTemplates(); renderMerged();
   if(!$('#urgent').hidden){ buildUrgent(); }
   const ks=document.querySelector('[data-screen="kosar"]'); if(ks && !ks.hidden) renderCart();
   if(!$('#track').hidden){ buildTrack(); injectUtils($('#track')); }
@@ -1649,6 +1739,7 @@ function trackInfo(st){
 }
 function currentCtx(){
   const op=id=>{const e=$('#'+id); return e && !e.hidden;};
+  if(op('reqs')) return 'reqs';
   if(op('theme')) return 'theme';
   if(op('onboard')) return 'onboard';
   if(op('driver')) return 'driver';
@@ -1687,7 +1778,7 @@ function claimQtyHint(){ const l=claimLine(); if(!l) return '';
   return lang==='en' ? ('Ordered: '+l.q+' '+uu+' — give the affected amount, or leave empty.')
                      : ('Rendelt: '+l.q+' '+uu+' — add meg az érintett mennyiséget, vagy hagyd üresen.'); }
 function buildClaim(){
-  const items=order.lines.map(l=>{const p=BYID[l.id];return `<button class="claim-item" aria-pressed="${l.id===claim.item}" onclick="pickClaimItem('${l.id}',this)"><span class="gtile tile" style="--h:${p.h};width:32px;height:32px;font-size:17px">${p.e}</span><span class="ci-n">${p.n}</span></button>`;}).join('');
+  const items=order.lines.map(l=>{const p=BYID[l.id];return `<button class="claim-item" aria-pressed="${l.id===claim.item}" onclick="pickClaimItem('${l.id}',this)"><span class="gtile tile" style="--h:${p.h};width:32px;height:32px;font-size:17px">${p.e}</span><span class="ci-n">${pn(p)}</span></button>`;}).join('');
   const reasons=CLAIM_REASONS.map((r,i)=>`<button aria-pressed="${i===claim.reason}" onclick="pickClaimReason(${i},this)">${r[lang]||r.hu}</button>`).join('');
   $('#claim').innerHTML=`
     <div class="s-top"><button class="back" aria-label="Vissza" onclick="closeSheet('claim')"><svg viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6"/></svg></button><div class="tt">${t('claim_title')}<small>${claim.orderNo}</small></div></div>
@@ -1724,6 +1815,9 @@ function renderClaimPhotos(){ const el=$('#claimPhotos'); if(!el)return;
   el.innerHTML=claim.photos.map((src,i)=>`<div class="cphoto"><img src="${src}" alt=""><button aria-label="Törlés" onclick="claim.photos.splice(${i},1);renderClaimPhotos()">×</button></div>`).join('')
    + (claim.photos.length<6?`<button class="cphoto-add" onclick="$('#claimFile').click()"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8h3l1.5-2h5L16 8h3v11H5z"/><circle cx="12" cy="13.5" r="3.2"/></svg><span>${t('claim_addphoto')}</span></button>`:''); }
 function submitClaim(){
+  if((claim.reason===1||claim.reason===2) && !claim.photos.length){ toast(t('photo_req')); return; }
+  const cl=claimLine();
+  CLAIMS.unshift({no:'RK-'+String(912+CLAIMS.length).padStart(4,'0'),ord:claim.orderNo,id:claim.item,q:claim.qty,u:cl?unitShort(BYID[cl.id].u[cl.ui].u):'',r:claim.reason,st:'pending'}); renderClaimList();
   const qtyTxt = (claim.qty && parseFloat(claim.qty)>0) ? (' · '+claim.qty+' '+claimUnit()) : '';
   const photoTxt = claim.photos.length ? (' · '+claim.photos.length+(lang=='en'?' photo':' fotó')) : '';
   closeSheet('claim');
@@ -1761,6 +1855,7 @@ function go(name){
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected', t.dataset.tab===name));
   $('#screens').scrollTop = 0;
   if(name==='kosar') renderCart();
+  if(name==='insights') renderInsights();
   closeAllSheets();
 }
 
@@ -1816,20 +1911,20 @@ function syncBadge(){
 function reorderLast(){
   cart = LAST.map(x=>({...x}));
   syncBadge(); go('kosar');
-  toast(lang=='en'?'Last order added to cart':'Előző rendelés a kosárban');
+  toast(lang=='en'?'Your usual order is in the cart':'A szokásos rendelés a kosárban');
 }
 
 /* ============ RENDERELÉS: MA ============ */
 function renderAgain(){
   let html = `<button class="again-cta" onclick="reorderLast()">
       <div class="t">${t('repeat_last')}</div>
-      <div style="font-size:11.5px;color:var(--leaf-ink);opacity:.8">${LAST.length} ${t('items')} · ~63 400 Ft</div>
+      <div style="font-size:11.5px;color:var(--leaf-ink);opacity:.8">${t('usual_sub')} · ${LAST.length} ${t('items')}</div>
       <span class="arr"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </button>`;
   html += LAST.map(x=>{const p=BYID[x.id];return `
     <button class="mini" onclick="openDetail('${p.id}')">
       <span class="tile" style="--h:${p.h}">${p.e}<span class="q">${x.q}×</span></span>
-      <span class="n">${p.n}</span>
+      <span class="n">${pn(p)}</span>
     </button>`;}).join('');
   $('#againRow').innerHTML = html;
 }
@@ -1856,7 +1951,7 @@ function reorderTemplate(i){
 function saveTemplate(){
   const src = cart.length ? cart : LAST;
   if(!src.length){ toast(lang=='en'?'Nothing to save':'Nincs mit menteni'); return; }
-  const base = BYID[src[0].id] ? BYID[src[0].id].n : (lang=='en'?'Order':'Rendelés');
+  const base = BYID[src[0].id] ? pn(BYID[src[0].id]) : (lang=='en'?'Order':'Rendelés');
   const nm = (lang=='en'?base+' set':base+' csomag');
   TEMPLATES.push({name:{hu:nm,en:nm}, lines:src.map(x=>({...x}))});
   renderTemplates();
@@ -1867,7 +1962,7 @@ function renderFeat(){
     <button class="feat" onclick="openDetail('${p.id}')">
       <span class="ph tile" style="--h:${p.h}">${p.e}<span class="reason ${f.hot?'hot':''}">${reasonL(f.r)}</span></span>
       <span class="body">
-        <span class="nm">${p.n}</span>
+        <span class="nm">${pn(p)}</span>
         <span class="og"><span style="font-size:13px">${p.fl}</span> ${ogL(p.og)}</span>
         <span class="pr"><b>${u.p.toLocaleString('hu-HU')} Ft</b><small>/${unitL(unitShort(u.u))}</small></span>
       </span>
@@ -1889,7 +1984,7 @@ function renderFreq(){ const sd=$('#segDays'); if(!sd)return; const u=lang=='en'
 function setFreqWin(d){ freqWin=d; renderFreq(); renderCatalog(); }
 function renderCatalog(){
   let list = P.filter(p=>(activeCat==='mind'||p.cat===activeCat) &&
-    (query==='' || (p.n+' '+p.og).toLowerCase().includes(query)));
+    (query==='' || (p.n+' '+(PEN[p.id]||[''])[0]+' '+p.og).toLowerCase().includes(query)));
   list.sort((a,b)=>freqOf(b.id)-freqOf(a.id)); // a kiválasztott időablak rendelési gyakorisága szerint
   if(!list.length){$('#catalog').innerHTML=`<li style=”text-align:center;color:var(--ink-soft);padding:40px 10px;font-size:13.5px”>${t('no_result')}: „${query}”.</li>`;return;}
   $('#catalog').innerHTML = list.map(p=>{const u=p.u[0];const inCart=cart.some(c=>c.id===p.id);return `
@@ -1897,20 +1992,20 @@ function renderCatalog(){
       <button class="prod-open" onclick="openDetail('${p.id}')">
         <span class="tile" style="--h:${p.h}">${p.e}</span>
         <span class="prod-main">
-          <span class="prod-name">${p.n}</span>
+          <span class="prod-name">${pn(p)}</span>
           <span class="prod-meta"><span class="fl">${p.fl}</span> ${ogL(p.og)} · ${gradeL(p.gr.split(' · ')[0])}</span>
           <span class="prod-badges">${badges(p.b,2)}${stockTag(p.id)}</span>
         </span>
       </button>
       <span class="prod-right">
-        <span class="price">${u.p.toLocaleString('hu-HU')} Ft<small>/${unitL(unitShort(u.u))}</small></span>
-        <button class="add ${inCart?'in':''}" aria-label="Kosárba: ${p.n}" onclick="quickAdd('${p.id}')">
+        <span class="price">${u.p.toLocaleString('hu-HU')} Ft<small>/${unitL(unitShort(u.u))}</small><s class="lp">${listP(u.p).toLocaleString('hu-HU')} Ft</s></span>
+        <button class="add ${inCart?'in':''}" aria-label="Kosárba: ${pn(p)}" onclick="quickAdd('${p.id}')">
           <svg viewBox="0 0 24 24">${inCart?'<path d="m5 13 4 4L19 7"/>':'<path d="M12 5v14M5 12h14"/>'}</svg>
         </button>
       </span>
     </li>`;}).join('');
 }
-function quickAdd(id){addToCart(id,1,0);const p=BYID[id];toast(p.n+(lang=='en'?' added to cart':' a kosárban'));renderCatalog();}
+function quickAdd(id){addToCart(id,1,0);const p=BYID[id];toast(pn(p)+(lang=='en'?' added to cart':' a kosárban'));renderCatalog();}
 
 /* ============ TERMÉK RÉSZLETEK ============ */
 function openDetail(id){
@@ -1927,11 +2022,11 @@ function openDetail(id){
         <span class="d-flag"><span class="fl">${p.fl}</span> ${ogL(p.og)}</span>
       </div>
       <div class="d-wrap">
-        <h1 class="d-name">${p.n}</h1>
+        <h1 class="d-name">${pn(p)}</h1>
         <div class="d-grade">${gradeL(p.gr)}</div>
         <div class="d-badges">${badges(p.b)} ${stockTag(p.id)}</div>
         ${availLine(p.id)}
-        <p class="d-desc">${p.d}</p>
+        <p class="d-desc">${pd(p)}</p>
         <div class="d-qc">
           <svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.2-2.8 7.8-7 9-4.2-1.2-7-4.8-7-9V6l7-3Z"/><path d="m9 12 2 2 4-4"/></svg>
           <div class="tx"><b>${lang=='en'?'Personal quality check':'Személyes minőségellenőrzés'}</b>${lang=='en'?'Every crate is hand-checked. &lt;72 hours from field to your kitchen.':'Minden láda mögött kézi ellenőrzés áll. &lt;72 óra a földtől a konyhádig.'}</div>
@@ -1962,7 +2057,7 @@ function updateDetailPrice(){const p=BYID[detailId];$('#dAddPz').textContent=ft(
 function addFromDetail(){
   addToCart(detailId,detailQty,detailUi);
   const p=BYID[detailId];
-  closeDetail(); toast(p.n+(lang=='en'?' added to cart':' a kosárban'));
+  closeDetail(); toast(pn(p)+(lang=='en'?' added to cart':' a kosárban'));
 }
 
 /* ============ RENDERELÉS: KOSÁR ============ */
@@ -1984,7 +2079,7 @@ function renderCart(){
     <div class="cart-line">
       <span class="tile" style="--h:${p.h}">${p.e}</span>
       <div class="ci">
-        <b>${p.n}</b>
+        <b>${pn(p)}</b>
         <span>${unitL(unitShort(u.u))} · ${u.p.toLocaleString('hu-HU')} Ft${u.u.includes(' · ')?' · '+unitL(u.u.split(' · ')[1]):''}</span>
         <div class="lp">${ft(lineTotal(c))}</div>
       </div>
@@ -2003,6 +2098,11 @@ function renderCart(){
   html += `<div class="block"><h3>${t('del_block')}</h3>
     <div class="dates" id="dates"></div>
     <div class="win"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> ${t('del_window')} <b style="margin:0 3px">5:00–12:00</b> · ${t('courier')}</div>
+    <label class="claim-lab">${t('ship_to')}</label>
+    <select class="inp">${SHIPTO.map(x=>`<option>${x[lang]||x.hu}</option>`).join('')}</select>
+    <label class="claim-lab">${t('drv_note_l')}</label>
+    <input class="inp" placeholder="${t('drv_note_ph')}">
+    ${spec('Sales Header: Shipment Date, Ship-to Code, Work Description')}
   </div>`;
 
   html += `<div class="block"><h3>${t('msg_pilpel')}</h3>
@@ -2018,7 +2118,8 @@ function renderCart(){
   </div>
   <button class="btn primary" style="margin-top:14px;width:100%" onclick="openPay()">
     ${t('to_pay')} · ${ft(gross)}</button>
-  <p style="text-align:center;font-size:11.5px;color:var(--ink-faint);margin:12px 0 0">${t('cutnote')}</p>`;
+  <p style="text-align:center;font-size:11.5px;color:var(--ink-faint);margin:12px 0 0">${t('cutnote')}</p>
+  ${spec('POST salesOrders (BC API v2.0) · VAT from VAT Posting Setup · minimum order and credit-limit check before release')}`;
 
   box.innerHTML = html;
   renderDates();
@@ -2099,7 +2200,7 @@ $('#searchIn').addEventListener('input',e=>{query=e.target.value.trim().toLowerC
 /* ============ FOLYAMAT: fedőrétegek ============ */
 function openSheet(id){const el=$('#'+id);if(!el)return;el.hidden=false;injectUtils(el);void el.offsetHeight;el.classList.add('open');}
 function closeSheet(id){const el=$('#'+id);if(!el)return;el.classList.remove('open');setTimeout(()=>{el.hidden=true;},240);}
-function closeAllSheets(){ ['scan','theme','info','onboard','hub','fiok','pay','claim','urgent','track','driver','detail'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
+function closeAllSheets(){ ['scan','theme','info','onboard','hub','fiok','pay','claim','urgent','track','driver','detail','reqs'].forEach(id=>{const e=$('#'+id); if(e){e.classList.remove('open'); e.hidden=true;}}); }
 
 /* ---- onboarding / regisztráció ---- */
 function openOnboard(){showOb(0);openSheet('onboard');}
@@ -2172,7 +2273,7 @@ function stockTag(id){const s=stockOf(id);
   return `<span class="stock hi"><span class="sd"></span>${lang=='en'?'In stock':'Raktáron'}</span>`;}
 function availLine(id){const s=stockOf(id);if(s!=='out')return '';
   const sub=SUBST[id],sp=sub?BYID[sub]:null;
-  const link=sp?`<b onclick="openDetail('${sub}')" style="color:var(--leaf);cursor:pointer;text-decoration:underline">${sp.n}</b>`:'';
+  const link=sp?`<b onclick="openDetail('${sub}')" style="color:var(--leaf);cursor:pointer;text-decoration:underline">${pn(sp)}</b>`:'';
   const head=lang=='en'?'<b>Out right now.</b>':'<b>Most elfogyott.</b>';
   const body=lang=='en'
     ? ` If you order it, we auto-swap to equal or better quality${sp?` — e.g. ${link}`:''} at no extra cost, and notify you. Or ask to be told when it’s back.`
@@ -2317,11 +2418,11 @@ function settlementHTML(o, st){
   const rows=o.lines.map(l=>{const p=BYID[l.id];
     if(l.catch){const ok=Math.abs(l.f-1)<=0.10;
       return `<div class="gl"><span class="gtile tile" style="--h:${p.h}">${p.e}</span>
-        <span class="gn"><b>${p.n}</b><span>${t('ordered')} ${nf(l.ordKg)} kg → ${t('picked_w')} ${nf(l.actKg)} kg</span></span>
+        <span class="gn"><b>${pn(p)}</b><span>${t('ordered')} ${nf(l.ordKg)} kg → ${t('picked_w')} ${nf(l.actKg)} kg</span></span>
         <span class="gok ${ok?'in':'out'}">${ok?'±10% ✓':(lang=='en'?'deviation':'eltérés')}</span>
         <span class="gp">${ft(l.ppk*l.actKg)}</span></div>`;}
     return `<div class="gl"><span class="gtile tile" style="--h:${p.h}">${p.e}</span>
-      <span class="gn"><b>${p.n}</b><span>${l.q} ${unitL(unitShort(p.u[l.ui].u))} · ${t('exact')}</span></span>
+      <span class="gn"><b>${pn(p)}</b><span>${l.q} ${unitL(unitShort(p.u[l.ui].u))} · ${t('exact')}</span></span>
       <span class="gok in">${t('ok_in')}</span><span class="gp">${ft(p.u[l.ui].p*l.q)}</span></div>`;}).join('');
   const est=estTotal(o), fin=finalTotal(o), diff=fin-est;
   return `<div class="ctx" style="padding:0;overflow:hidden">
@@ -2371,7 +2472,7 @@ function buildDriver(){
   else if(st===4){ action=`<button class="bigcta leaf" onclick="setStatus(5)">${t('arrived_btn')}</button>`; }
   else if(st===5){ action=`<button class="bigcta" onclick="setStatus(6)"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/></svg> ${t('scan_btn')}</button>`; }
   else if(st===6){
-    const meas=o.lines.filter(l=>l.catch).map(l=>{const p=BYID[l.id];return `<div class="drv-meas"><span class="gtile tile" style="--h:${p.h};width:34px;height:34px;font-size:18px">${p.e}</span><div class="dm1"><b>${p.n}</b><span>${t('ordered').toLowerCase()} ${nf(l.ordKg)} kg</span></div><span class="scale">${nf(l.actKg)} kg</span></div>`;}).join('');
+    const meas=o.lines.filter(l=>l.catch).map(l=>{const p=BYID[l.id];return `<div class="drv-meas"><span class="gtile tile" style="--h:${p.h};width:34px;height:34px;font-size:18px">${p.e}</span><div class="dm1"><b>${pn(p)}</b><span>${t('ordered').toLowerCase()} ${nf(l.ordKg)} kg</span></div><span class="scale">${nf(l.actKg)} kg</span></div>`;}).join('');
     action=`<div class="ctx"><div class="ch">${t('drv_scale')}</div>${meas}</div><button class="bigcta leaf" onclick="setStatus(7)">${t('finalize_handover')}</button>`;
   } else { action=`<div class="status-chip" style="margin-top:8px"><span class="d" style="animation:none"></span>${lang=='en'?'Handed over · settled':'Átadva · elszámolva'}</div>`; }
   $('#driver').innerHTML = `
@@ -2392,11 +2493,325 @@ function buildDriver(){
     </div>`;
 }
 
+/* ============ ÖSSZEFÉSÜLÉS: Doodi prototípusából (spec mód, insights, követelmények, pénzügy) ============ */
+/* English product names and descriptions (BC: Item Translation) */
+const PEN={
+  tvpaprika:['TV pepper (sweet stuffing pepper)','Sweet, thin-skinned stuffing pepper from our own farm in Szentes. Picked in the morning, in your kitchen by noon.'],
+  kaliforniai:['Bell pepper, red','Thick-fleshed, crunchy, deep-red bell pepper. For grilling, roasting or raw.'],
+  koktelparadicsom:['Cherry tomatoes','Cherry tomatoes on the vine, intensely sweet and tart. From our partner grower, fresh every day.'],
+  kigyouborka:['Cucumber (long)','Long, seedless cucumber with a crisp skin. For salads and pickling.'],
+  romanesco:['Romanesco','Nature’s mathematical masterpiece: Fibonacci spirals and a nutty, sweet flavour. A showpiece on the plate.'],
+  mangold:['Rainbow chard','Red, yellow, orange and pink stems: a visual show on the plate.'],
+  ratte:['Ratte potatoes','The iconic potato of French cuisine: chestnut and butter notes, small size.'],
+  lilaburgonya:['Purple potatoes','Anthocyanin-rich purple flesh: a natural colouring, great for purée and crisps.'],
+  mosottrukkola:['Washed rocket','Washed, ready-to-use rocket, straight onto the plate. Peppery, nutty character.'],
+  babaspenot:['Baby spinach, washed','Young, washed baby spinach: raw in salads or warm as a side. Ready to use.'],
+  fejessalata:['Butterhead lettuce','Classic soft butterhead lettuce with fresh, crisp leaves.'],
+  barnacsiperke:['Brown mushrooms','Fuller-flavoured brown button mushrooms, always in stock. For stews, ragouts and the grill.'],
+  laska:['Oyster mushrooms','Silky oyster mushrooms from a Hungarian grower. Pan-fried or in tempura.'],
+  shiitake:['Shiitake','Umami-rich shiitake with meaty caps. For Asian dishes and broths.'],
+  citrom:['Lemons','From our own farm in Morocco, direct import with no middlemen. Juicy and thin-skinned.'],
+  avokado:['Hass avocado, ripe','Ready-to-eat Hass avocado: creamy and buttery. Direct import, ripe for tasting.'],
+  medjool:['Medjool dates','The king of dates: caramel, honey, toffee. A natural sweetener, perfect stuffed.'],
+  sarkany:['Dragon fruit, red','Deep magenta pitaya with natural antioxidants. A striking dessert element.'],
+  mangosteen:['Mangosteen','The queen of fruits: snow-white and creamy, with lychee and peach notes.'],
+  physalis:['Physalis (Inca berry)','Golden lantern berry: a fine-dining garnish classic, sweet and tart.'],
+  kumquat:['Kumquat','The only citrus you eat whole: sweet peel, sour flesh.'],
+  babyananasz:['Baby pineapple','Palm-sized, extra sweet baby pineapple with an edible core.'],
+  bazsalikom:['Basil','Aromatic Israeli basil, flown in directly from our partner farms.'],
+  kaffir:['Kaffir lime leaves','The signature aroma of Thai cuisine: both the leaf and the zest can be used.'],
+  galanga:['Galangal root','A base of Thai cooking: a citrusy, peppery, ginger-like root for curries and soups.'],
+  kurkuma:['Fresh turmeric','Vivid orange fresh root, rich in curcumin, with an intense colour.'],
+  viragok:['Edible flowers','Viola, begonia, violet: an essential of fine-dining plating. Mixed tray.'],
+  sakura:['Sakura micro-green mix','Premium micro-green mix for plating, salads and sandwiches. Ready to use, on a living tray.'],
+  feketefokhagyma:['Black garlic','Fermented garlic: caramel-like and umami-rich, without the sharp smell. For sauces and purées.'],
+  safrany:['Saffron','The world’s most expensive spice: 150,000 flowers for 1 kg. For risotto and fish; a few threads are enough.']
+};
+function pn(p){ return (lang==='en' && PEN[p.id]) ? PEN[p.id][0] : p.n; }
+function pd(p){ return (lang==='en' && PEN[p.id]) ? PEN[p.id][1] : p.d; }
+function listP(p){ return Math.round(p/0.88/10)*10; }   // demo: GOLD tier = list price − 12%
+const spec = s=>`<div class="spec">BC ▸ ${s}</div>`;
+function setSpec(on){ document.body.classList.toggle('show-spec',on); document.querySelectorAll('.specToggle').forEach(c=>c.checked=on); }
+
+Object.assign(TR,{
+  tab_ins:{hu:'Elemzés',en:'Insights'},
+  spec_toggle:{hu:'Spec mód: BC adatforrások',en:'Spec mode: BC data sources'},
+  repeat_last:{hu:'A szokásos rendelés',en:'Your usual order'},
+  usual_sub:{hu:'az elmúlt 4 hét alapján',en:'based on the last 4 weeks'},
+  offers:{hu:'Heti ajánlat',en:'This week’s offers'}, money:{hu:'Pénzügyek',en:'Money'},
+  contact:{hu:'A területi képviselőd',en:'Your area manager'},
+  claims:{hu:'Reklamációk',en:'Claims'},
+  standing1:{hu:'H · Sze · P – szokásos',en:'Mon · Wed · Fri – usual'}, standing1s:{hu:'12 tétel · ~63 400 Ft',en:'12 items · ~63,400 Ft'},
+  standing2:{hu:'Szombat – hétvégi menü',en:'Saturday – weekend menu'}, standing2s:{hu:'6 tétel · ~41 200 Ft · szünetel',en:'6 items · ~41,200 Ft · paused'},
+  standing_note:{hu:'Az állandó rendelések 18:00-kor automatikusan létrejönnek. Határidőig módosíthatók vagy kihagyhatók.',en:'Standing orders are created automatically at 18:00. You can edit or skip a day until the cut-off.'},
+  claim_photos:{hu:'Fotók (minőségi hibánál és sérülésnél kötelező, max 6)',en:'Photos (required for quality or damage, max 6)'},
+  claim_note2:{hu:'Reklamáció a szállítás napján 12:00-ig. A fotó és a szállítólevél a jóváírás bizonyítéka; a PilPel még aznap visszajelez.',en:'Claims are accepted until 12:00 on the delivery day. The photo and the delivery note are the evidence for the credit; PilPel replies the same day.'},
+  photo_req:{hu:'Minőségi hibánál és sérülésnél fotó kötelező',en:'A photo is required for quality issues and damage'},
+  ship_to:{hu:'Szállítási cím',en:'Delivery address'}, drv_note_l:{hu:'Megjegyzés a sofőrnek',en:'Note for the driver'},
+  drv_note_ph:{hu:'pl. hátsó csengő, a séf 7:00-kor érkezik',en:'e.g. ring the back bell, chef arrives at 7:00'},
+  k_book:{hu:'Könyvelő',en:'Bookkeeper'}, role_inv:{hu:'Csak számlák',en:'Invoices only'},
+  hsI:{hu:'Elemzések',en:'Insights'}, hsIs:{hu:'Költés, megtakarítás, árfigyelő, ételköltség',en:'Spend, savings, price watch, dish cost'},
+  hsQ:{hu:'Követelmények és nyitott döntések',en:'Requirements & open decisions'}, hsQs:{hu:'P1/P2/P3 BC-forrással, Azure DevOpsban',en:'P1/P2/P3 with BC sources, in Azure DevOps'}
+});
+Object.assign(INFO,{
+  insights:{t:{hu:'Elemzések',en:'Insights'}, flow:{hu:'Rendelések <i>→</i> <b>Elemzés</b>',en:'Orders <i>→</i> <b>Insights</b>'},
+    b:{hu:'Mire költ a konyha: havi költés, termék és kategória szerint, a tier-megtakarítás, árfigyelő, reklamációs arány és ételköltség-kalkulátor az aktuális árakkal.',en:'Where the kitchen’s money goes: monthly spend by product and category, tier savings, price watch, claim rate and a dish cost calculator on current prices.'}},
+  reqs:{t:{hu:'Követelmények',en:'Requirements'}, flow:{hu:'<b>Követelmények</b> <i>→</i> Azure DevOps',en:'<b>Requirements</b> <i>→</i> Azure DevOps'},
+    b:{hu:'A két kattintható demóból levezetett követelmények fázisokkal és BC-forrással, plusz a nyitott döntések.',en:'Requirements derived from both click-dummies, with phases and BC sources, plus the open decisions.'}}
+});
+FLOW.push({n:'📊',k:'hsI',act:()=>go('insights'),branch:true},{n:'☰',k:'hsQ',act:()=>openReqs(),branch:true});
+TK.push('--spec','--spec-soft');
+Object.assign(THEMES.piac,{'--spec':'#3D4FB8','--spec-soft':'#E2E6FA'});
+Object.assign(THEMES.lovable,{'--spec':'#3D4FB8','--spec-soft':'#E2E6FA'});
+Object.assign(THEMES.ejfel,{'--spec':'#9AA8FF','--spec-soft':'#23284A'});
+
+/* ---- home: offers + money ---- */
+const PROMO=[{id:'avokado',ui:1,off:15},{id:'physalis',ui:0,off:15}];
+const SHIPTO=[{hu:'Kóstoló Bisztró · 1052 Budapest (konyhai bejárat)',en:'Kóstoló Bisztró · 1052 Budapest (kitchen entrance)'},{hu:'Lánchíd Kávéház · 1011 Budapest',en:'Lánchíd Kávéház · 1011 Budapest'}];
+const BAL=205630, OVERDUE=52900, CREDIT=800000;
+const INV=[{no:'PH-2026-08812',d:'2026-10-22',due:'2026-11-06',amt:88420,st:'open'},{no:'PH-2026-08701',d:'2026-10-15',due:'2026-10-30',amt:64310,st:'open'},
+  {no:'PH-2026-08455',d:'2026-10-01',due:'2026-10-16',amt:52900,st:'over'},{no:'PH-2026-08120',d:'2026-09-24',due:'2026-10-09',amt:71250,st:'paid'}];
+function renderPromo(){ const box=$('#promoBox'); if(!box) return;
+  box.innerHTML = PROMO.map(x=>{const p=BYID[x.id],u=p.u[x.ui];return `<div class="promo-row">
+    <span class="tile" style="--h:${p.h}">${p.e}</span>
+    <div class="pi"><b>${pn(p)} <span class="pill p-warn">−${x.off}%</span></b><span>${ft(u.p)} / ${unitL(unitShort(u.u))}<s>${ft(u.p/(1-x.off/100))}</s></span></div>
+    <button class="add-mini" onclick="addToCart('${x.id}',1,${x.ui});toast(pn(BYID['${x.id}'])+(lang=='en'?' added to cart':' a kosárban'))">${t('add_cart')}</button></div>`;}).join('')
+    + spec('Price List (type Sales, campaign) · valid from / to dates');
+}
+function renderMoney(){ const L=lang=='en';
+  const m=$('#monthCard'); if(m) m.innerHTML=`<h3 style="display:flex;justify-content:space-between"><span>${L?'This month':'Ez a hónap'}</span><span style="color:var(--leaf)">${L?'Insights':'Elemzés'} →</span></h3>
+    <div style="font-size:13.5px">${L?'Saved vs list price':'Megtakarítás a listaárhoz képest'}: <b style="color:var(--leaf)">${ft(savedFor(PF[0]))}</b> · ${L?'avocado':'avokádó'} <span class="pill p-bad">+12%</span></div>`;
+  const b=$('#balCard'); if(b) b.innerHTML=`<h3 style="display:flex;justify-content:space-between;align-items:center"><span>${L?'Open balance':'Nyitott egyenleg'}</span><span class="pill p-bad">${ft(OVERDUE)} ${L?'overdue':'lejárt'}</span></h3>
+    <div style="font-family:var(--serif);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums">${ft(BAL)}</div>
+    ${spec('Cust. Ledger Entry (open, due date) · Credit Limit check')}`;
+}
+
+/* ---- account: finance (Doodi) ---- */
+function renderFin(){ const box=$('#finBox'); if(!box) return; const L=lang=='en';
+  const stL=st=>st==='paid'?['p-ok',L?'Paid':'Fizetve']:st==='over'?['p-bad',L?'Overdue':'Lejárt']:['p-warn',L?'Open':'Nyitott'];
+  box.innerHTML = `
+  <div class="sec"><h2>${L?'Account & money':'Számlák és egyenleg'}</h2><span class="tier">Gold</span></div>
+  <div class="block" style="margin-top:0">
+    <div class="ins-kpi"><div><span>${L?'Balance':'Egyenleg'}</span><b>${ft(BAL)}</b></div><div><span>${L?'Overdue':'Lejárt'}</span><b style="color:var(--tomato)">${ft(OVERDUE)}</b></div><div><span>${L?'Credit limit':'Hitelkeret'}</span><b>${ft(CREDIT)}</b></div></div>
+    <div class="ins-sub" style="margin-top:9px">${L?'Payment terms: 15 days, transfer. The tier is reviewed monthly from purchase volume.':'Fizetési feltétel: 15 nap, átutalás. A kategória havonta frissül a vásárlási forgalom alapján.'}</div>
+    ${spec('Customer: Balance (LCY), Balance Due, Credit Limit, Payment Terms · Customer Price Group = Bronze / Silver / Gold / Platinum / Diamond')}
+  </div>
+  <div class="block"><h3>${L?'Invoices':'Számlák'}</h3>
+    ${INV.map(i=>{const [c,l]=stL(i.st);return `<div class="fin-row"><div><span class="mono">${i.no}</span><small>${i.d} · ${L?'due':'esedékes'} ${i.due}</small></div><div class="r"><b>${ft(i.amt)}</b><div><span class="pill ${c}">${l}</span></div></div></div>`;}).join('')}
+    <div class="ins-sub" style="margin-top:8px">${L?'Invoice and delivery note PDFs can be downloaded in the live app.':'Számla és szállítólevél PDF letölthető az éles alkalmazásban.'}</div>
+    ${spec('Posted Sales Invoice + report PDF via API · NAV Online Számla status')}
+  </div>
+  <div class="block"><h3>${L?'Delivery addresses':'Szállítási címek'}</h3>
+    ${SHIPTO.map(x=>`<div class="fin-row"><span>${x[lang]||x.hu}</span></div>`).join('')}
+    ${spec('Ship-to Address')}
+  </div>
+  <label class="specbar"><input type="checkbox" class="specToggle" ${document.body.classList.contains('show-spec')?'checked':''} onchange="setSpec(this.checked)"> ${t('spec_toggle')}</label>
+  <button class="btn leaf" style="width:100%;margin-top:12px" onclick="openReqs()">${t('hsQ')} →</button>`;
+}
+
+/* ---- orders: claim list ---- */
+let CLAIMS=[{no:'RK-0912',ord:'#PP-25717',id:'bazsalikom',q:3,u:'csomag',r:1,st:'credited',amt:1020}];
+function renderClaimList(){ const box=$('#claimList'); if(!box) return; const L=lang=='en';
+  box.innerHTML = CLAIMS.map(c=>`<div class="fin-row"><div><span class="mono">${c.no}</span> · ${pn(BYID[c.id])}<small>${CLAIM_REASONS[c.r][lang]||CLAIM_REASONS[c.r].hu}${c.q?' · '+c.q+' '+unitL(c.u):''} · ${c.ord}</small></div>
+    <span class="pill ${c.st==='credited'?'p-ok':'p-warn'}">${c.st==='credited'?(L?'Credited ':'Jóváírva ')+ft(c.amt):(L?'Pending':'Folyamatban')}</span></div>`).join('')
+    + spec('Sales Return Order / Sales Cr. Memo status ↔ claim · open claims older than 48 h flagged to customer service');
+}
+
+/* ---- insights (Doodi) ---- */
+let insPer=1, insRec=0; const menuPrice=[3290,1890];
+const SHAPE=[82,104,72,75,81,89,99,111,118,116,97,92];
+const MON={hu:['nov','dec','jan','febr','márc','ápr','máj','jún','júl','aug','szept','okt'],en:['Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct']};
+const HIST={tvpaprika:{q:62,ui:0,ch:4},kaliforniai:{q:38,ui:0,ch:-6},koktelparadicsom:{q:40,ui:1,ch:3},kigyouborka:{q:240,ui:0,ch:0},
+  bazsalikom:{q:130,ui:0,ch:2},avokado:{q:300,ui:0,ch:12},citrom:{q:36,ui:0,ch:-3},mosottrukkola:{q:22,ui:0,ch:-2},
+  barnacsiperke:{q:30,ui:0,ch:0},medjool:{q:6,ui:0,ch:5},sakura:{q:20,ui:0,ch:-8}};
+const PF=[1/3,1,4], PORD=[13,39,156], PCHG=[6,9,14], PCRED=[1020,4380,15600];
+const hp=id=>BYID[id].u[HIST[id].ui].p;
+const uName=(id,ui)=>unitL(unitShort(BYID[id].u[ui].u));
+const savedFor=f=>Object.keys(HIST).reduce((s,id)=>s+HIST[id].q*f*(listP(hp(id))-hp(id)),0);
+const RECIPES=[
+  {hu:'Guacamole (1 adag, 200 g)',en:'Guacamole (1 portion, 200 g)',l:[['avokado',1.5,0],['citrom',0.04,0],['koktelparadicsom',0.05,1],['bazsalikom',0.1,0]]},
+  {hu:'Paradicsomos rukkolasaláta (1 adag)',en:'Tomato and rocket salad (1 portion)',l:[['koktelparadicsom',0.15,1],['mosottrukkola',0.04,0],['bazsalikom',0.15,0],['citrom',0.02,0]]}
+];
+const rcost=r=>r.l.reduce((s,[id,q,ui])=>s+BYID[id].u[ui].p*q,0);
+function setInsPer(i){ insPer=i; renderInsights(); }
+function setInsRec(i){ insRec=+i; renderInsights(); }
+function setMenuP(v){ menuPrice[insRec]=+v||0; const el=$('#fcp'); if(el) el.textContent = menuPrice[insRec] ? (rcost(RECIPES[insRec])/menuPrice[insRec]*100).toFixed(0)+'%' : '–'; }
+function renderInsights(){ const box=$('#insBody'); if(!box) return; const L=lang=='en'; const f=PF[insPer];
+  const rows=Object.keys(HIST).map(id=>{const h=HIST[id],q=h.q*f;return {id,p:BYID[id],q,ui:h.ui,sp:q*hp(id),ch:h.ch};}).sort((a,b)=>b.sp-a.sp);
+  const total=rows.reduce((s,r)=>s+r.sp,0), saved=savedFor(f), aov=total/PORD[insPer];
+  const t3=total/f, s3=SHAPE.slice(9).reduce((a,b)=>a+b,0), mon=SHAPE.map(x=>x/s3*t3);
+  const nHi=[1,3,12][insPer], top=Math.ceil(Math.max(...mon)/100000)*100000;
+  const kf=v=>Math.round(v/1000)+(L?'k':'e');
+  const grid=[0,top/2,top].map(v=>{const y=110-v/top*100;return `<line x1="30" x2="358" y1="${y}" y2="${y}" class="gl"/><text x="26" y="${y+3}" text-anchor="end" class="ax">${kf(v)}</text>`;}).join('');
+  const bars=mon.map((v,i)=>{const h=v/top*100,x=36+i*27;return `<rect x="${x}" y="${(110-h).toFixed(1)}" width="18" height="${h.toFixed(1)}" rx="3" class="${i>=12-nHi?'b-hi':'b-lo'}"><title>${MON[lang][i]}: ${ft(v)}</title></rect><text x="${x+9}" y="126" text-anchor="middle" class="ax">${MON[lang][i]}</text>`;}).join('');
+  const COLS={zoldseg:'var(--leaf)',gyumolcs:'var(--tomato)',salata:'var(--leaf-bright)',gomba:'var(--plum)',fuszer:'var(--amber)',kulon:'var(--spec)'};
+  const cats=CATS.filter(c=>c[0]!=='mind').map(c=>({id:c[0],v:rows.filter(r=>r.p.cat===c[0]).reduce((s,r)=>s+r.sp,0),col:COLS[c[0]]})).filter(x=>x.v>0);
+  const pct=v=>(v*100/total).toFixed(0)+'%';
+  const herb=(cats.find(c=>c.id==='fuszer')||{v:0}).v/total*100;
+  const watch=rows.filter(r=>Math.abs(r.ch)>=5);
+  const crate=PCRED[insPer]/total*100;
+  const r=RECIPES[insRec], rc=rcost(r);
+  box.innerHTML = `
+  <div class="greet"><p class="hi" style="font-size:22px">${L?'Your insights':'Elemzéseid'}</p></div>
+  <div class="chips">${(L?['30 days','3 months','12 months']:['30 nap','3 hónap','12 hónap']).map((x,i)=>`<button class="chip" aria-pressed="${insPer===i}" onclick="setInsPer(${i})">${x}</button>`).join('')}</div>
+  <div class="block">
+    <div class="ins-kpi"><div><span>${L?'Spend':'Költés'}</span><b>${ft(total)}</b></div><div><span>${L?'Orders':'Rendelés'}</span><b>${PORD[insPer]}</b></div><div><span>${L?'Avg. order':'Átl. rendelés'}</span><b>${ft(aov)}</b></div></div>
+    <div class="ins-sub" style="margin-top:9px"><span class="pill p-warn">+${PCHG[insPer]}%</span> ${L?'vs the previous period':'az előző időszakhoz képest'}</div>
+    ${spec('Sales Invoice Line + Sales Cr. Memo Line, aggregated per item / month (nightly sync to an analytics store)')}
+  </div>
+  <div class="block"><h3>${L?'Monthly spend':'Havi költés'}</h3><svg class="chart" viewBox="0 0 362 132" role="img" aria-label="${L?'Monthly spend, last 12 months':'Havi költés, utolsó 12 hónap'}">${grid}${bars}</svg></div>
+  <div class="block"><h3>${L?'Where your money goes':'Mire költ'}</h3>
+    ${rows.slice(0,6).map(x=>`<div class="ins-row"><div class="h"><b>${pn(x.p)}</b><span>${ft(x.sp)}</span></div><div class="meter"><i style="width:${(x.sp/rows[0].sp*100).toFixed(0)}%"></i></div><div class="ins-sub">${Math.round(x.q)} ${uName(x.id,x.ui)} · ${L?'avg':'átl.'} ${ft(hp(x.id))}/${uName(x.id,x.ui)} · ${pct(x.sp)} ${L?'of spend':'a költésből'}</div></div>`).join('')}
+    <div class="stack" aria-hidden="true">${cats.map(c=>`<i style="width:${c.v/total*100}%;background:${c.col}"></i>`).join('')}</div>
+    <div class="legend">${cats.map(c=>`<span><i style="background:${c.col}"></i>${t('cat_'+c.id)} ${pct(c.v)}</span>`).join('')}</div>
+  </div>
+  <div class="block"><h3>${L?'Price watch':'Árfigyelő'}</h3>
+    ${watch.map(x=>`<div class="fin-row"><span>${pn(x.p)}</span><span class="pill ${x.ch>0?'p-bad':'p-ok'}">${x.ch>0?'+':''}${x.ch}%</span></div>`).join('')}
+    <div class="ins-sub" style="margin-top:6px">${L?'Change in your average price vs the previous period. Avocado is up: ask your area manager about a fixed weekly volume at a fixed price.':'Átlagár-változás az előző időszakhoz képest. Az avokádó drágult: kérdezd a területi képviselődet fix heti mennyiségről fix áron.'}</div>
+    ${spec('Price List Line history (Starting Date) per Customer Price Group')}
+  </div>
+  <div class="block"><h3>${L?'Your Gold savings':'Gold megtakarítás'}</h3><div class="big2">${ft(saved)}</div>
+    <div class="ins-sub">${L?'Saved against list price in this period through your tier price and offers.':'Ennyit takarítottál meg a listaárhoz képest a kategóriaárnak és az ajánlatoknak köszönhetően.'}</div></div>
+  <div class="block"><h3>${L?'Quality and credits':'Minőség és jóváírások'}</h3>
+    <div class="ins-kpi"><div><span>${L?'Credits':'Jóváírás'}</span><b>${ft(PCRED[insPer])}</b></div><div><span>${L?'Claim rate':'Reklamáció'}</span><b>${crate.toFixed(1)}%</b></div><div><span>${L?'Resolved in':'Megoldás'}</span><b>26 ${L?'h':'óra'}</b></div></div>
+    ${spec('Sales Cr. Memo (reason code) vs invoiced value · claim timestamps from the app')}</div>
+  <div class="block"><h3>${L?'Dish cost calculator':'Ételköltség-kalkulátor'}</h3>
+    <select class="inp" onchange="setInsRec(this.value)">${RECIPES.map((x,i)=>`<option value="${i}" ${i===insRec?'selected':''}>${L?x.en:x.hu}</option>`).join('')}</select>
+    <div class="rl" style="margin-top:10px">${r.l.map(([id,q,ui])=>`<span>${pn(BYID[id])} <span style="color:var(--ink-faint)">${q} ${uName(id,ui)}</span></span><span>${ft(BYID[id].u[ui].p*q)}</span>`).join('')}<b>${L?'Ingredient cost':'Alapanyagköltség'}</b><b>${ft(rc)}</b></div>
+    <div style="display:flex;align-items:flex-end;gap:12px;margin-top:12px">
+      <label style="flex:1"><span class="ins-sub">${L?'Menu price (net, Ft)':'Menüár (nettó, Ft)'}</span><input class="inp" type="number" inputmode="numeric" value="${menuPrice[insRec]}" oninput="setMenuP(this.value)"></label>
+      <div style="text-align:right"><div class="ins-sub">Food cost</div><div class="big2" id="fcp" style="color:var(--ink)">${(rc/menuPrice[insRec]*100).toFixed(0)}%</div></div>
+    </div>
+    <div class="ins-sub" style="margin-top:6px">${L?'Calculated on your current prices; it updates when they change.':'Az aktuális áraiddal számol, és árváltozáskor frissül.'}</div>
+    ${spec('Recipes saved by the customer in the app · ingredient prices live from the BC price list')}</div>
+  <div class="block"><h3 style="display:flex;justify-content:space-between"><span>${L?'Compared with similar venues':'Hasonló helyekhez képest'}</span><span class="ph ph3">P3</span></h3>
+    <div class="rl"><span>${L?'Herbs share of spend':'Fűszernövények aránya'}</span><span>${herb.toFixed(0)}% · ${L?'peers':'átlag'} 14%</span><span>${L?'Claim rate':'Reklamációs arány'}</span><span>${crate.toFixed(1)}% · ${L?'peers':'átlag'} 1.4%</span></div>
+    <div class="ins-sub" style="margin-top:6px">${L?'Bistros in Budapest V–VII, anonymised, at least 10 venues per comparison.':'Bisztrók Budapest V–VII. kerületben, anonimizálva, összehasonlításonként legalább 10 hely.'}</div></div>
+  <p class="ins-sub" style="text-align:center;margin:14px 0 0">${L?'Monthly statement as PDF and Excel export in the live app.':'Havi kimutatás PDF és Excel formátumban az éles alkalmazásban.'}</p>`;
+}
+
+/* ---- requirements + open decisions (both prototypes) ---- */
+const DECISIONS=[
+  {q:'Bottom navigation',
+   d:'Six tabs: Home, Products, Cart, Orders, Insights, Account.',
+   a:'Four tabs (Today, Market, Cart, Orders); account and kitchen settings behind the header icon.',
+   r:'Five tabs with Insights, account in the header (as in this merge). Six labels get cramped on small Android phones, and the account is opened rarely.'},
+  {q:'Order cut-off and delivery window',
+   d:'Cut-off 22:00, delivery 06:00–10:00.',
+   a:'Cut-off 20:00, delivery 05:00–12:00.',
+   r:'Keep it per route in BC, not in the app. Please confirm the real values per route; the demo still shows 20:00.'},
+  {q:'Minimum order value',
+   d:'25,000 Ft, the order button is disabled below it.',
+   a:'15,000 Ft as the threshold for free early-morning delivery; you can still order below it.',
+   r:'A commercial call for Pilpel. We build it as a per-tier setting that supports both modes (block, or delivery surcharge).'},
+  {q:'Claims',
+   d:'Deadline 12:00 on the delivery day; photo required for damage and quality; four reasons.',
+   a:'Photos optional; order identified by QR or photo; affected quantity; reason "Other".',
+   r:'Merged: Doodi’s deadline and photo rule, Attila’s QR identification and quantity. The photo stays optional for a shortage (a missing item can’t be photographed). Implemented here.'},
+  {q:'Reorder',
+   d:'"Your usual order" from the last 4 weeks, add all in one tap.',
+   a:'"Repeat last order" plus named saved templates.',
+   r:'Doodi’s usual order as the main button (the last order may be untypical), saved templates next to it. Implemented here.'},
+  {q:'Users and roles',
+   d:'Chef (orders), Owner (orders, invoices, approvals), Bookkeeper (invoices only).',
+   a:'Phone sign-in: one central number plus linked numbers with an order limit or approval.',
+   r:'Attila’s phone-number model with Doodi’s role names: the Owner is the central number, the Bookkeeper sees invoices only. Implemented here.'},
+  {q:'Product names',
+   d:'Hungarian and English names.',
+   a:'Hungarian names in both languages.',
+   r:'English names from BC Item Translation, as Doodi did. Implemented here.'},
+  {q:'Payment terms in the demo',
+   d:'8 days, credit limit 600,000 Ft.',
+   a:'15 days, credit limit 800,000 Ft; payment by transfer, card or on delivery.',
+   r:'Nothing to decide: the app reads payment terms and credit limit from the BC customer card. Card and pay on delivery are P2; B2B transfer comes first.'},
+  {q:'Name and look',
+   d:'"Pilpel", green header, Figtree font.',
+   a:'"PilPel Konyha", four switchable themes.',
+   r:'Name "Pilpel Order". The final look comes from Doodi’s frontend prototype; the theme switch is only for trying things out.'},
+  {q:'Courier side and QR handover',
+   d:'Not in the prototype.',
+   a:'Courier app, route, QR handover and weighed settlement on site.',
+   r:'Keep it in the prototype to show the whole chain, but the driver app is a separate project. In this offer only the chef-side status and the delivery note with picked weights are included.'}
+];
+const REQ=[
+  [{hu:'Rendelés',en:'Ordering'},[
+    ['Customer-specific prices and tier (Bronze → Diamond), list price struck through','Price List / Customer Price Group',1,'B'],
+    ['Usual order from the last 4 weeks, add all in one tap','Sales Invoice Line history',1,'D'],
+    ['Saved, named order templates','App layer (or Standard Sales Codes)',1,'A'],
+    ['Catalogue sorted by the customer’s order frequency (30 / 90 / 180 days)','Sales Shipment / Invoice Lines',2,'A'],
+    ['Pack multiples and units (kg, pcs, crate, bunch)','Item Unit of Measure',1,'B'],
+    ['Weighed items: estimated price, final by picked weight (±10%)','Item UoM + actual qty on shipment',1,'A'],
+    ['Cut-off per route and delivery date choice','Shipping Agent / custom route table',1,'B'],
+    ['Live availability, out-of-stock substitutes (auto-swap)','Inventory, Item Substitution',1,'B'],
+    ['Minimum order value and credit-limit check before release','Customer Credit Limit',1,'B'],
+    ['Standing orders by weekday, skip or edit until cut-off','Recurring Sales Lines + job queue',2,'B'],
+    ['Weekly offers and campaign prices','Price List (campaign)',2,'D'],
+    ['Urgent order with dispatcher ETA, monthly free quota by tier','Custom dispatch queue',2,'A']]],
+  [{hu:'Regisztráció és fiók',en:'Sign-up & account'},[
+    ['Phone sign-in (OTP), central number + linked numbers with roles and limits','Contact + app roles',1,'B'],
+    ['New customer: tax number, manual approval, tier assignment','Customer (Blocked until approved), VAT Reg. No., NAV check',1,'A'],
+    ['Multiple delivery addresses / locations','Ship-to Address',1,'B'],
+    ['Call-back request to the area manager','Salesperson, Interaction Log',2,'D']]],
+  [{hu:'Követés',en:'Tracking'},[
+    ['Order status: placed → picking → packed → on the way → handover → settled','Sales Order / Warehouse Shipment',1,'B'],
+    ['On opening: where each order is and when it arrives','Sales Order + route ETA',1,'A'],
+    ['One-tap reorder from history','Sales Order copy',1,'B'],
+    ['Delivery note with ordered vs picked weight','Posted Sales Shipment',2,'A'],
+    ['Push notification at status change and before cut-off','App layer',2,'D'],
+    ['Courier app, QR handover on site','Separate project (driver app)',3,'A']]],
+  [{hu:'Reklamáció',en:'Claims'},[
+    ['Claim per line: reason, quantity, photo; deadline 12:00','Sales Return Order + attachment',1,'B'],
+    ['Claim status and credit amount visible to the customer','Sales Cr. Memo',1,'D'],
+    ['Identify the order by QR code or photo','Shipment No. in the QR',2,'A'],
+    ['Link the customer claim to the supplier claim','Purch. Return Order',3,'D']]],
+  [{hu:'Pénzügy',en:'Finance'},[
+    ['Open balance, overdue amount, credit limit','Cust. Ledger Entry',1,'D'],
+    ['Invoice and delivery note PDFs','Posted Sales Invoice / Shipment',1,'D'],
+    ['Payment by transfer; card and pay on delivery later','Payment Terms / Payment Method',2,'A'],
+    ['Block ordering above credit limit or overdue threshold (configurable)','Customer Blocked / Credit Limit',2,'D']]],
+  [{hu:'Elemzés',en:'Insights'},[
+    ['Spend by month, product and category (30 d / 3 m / 12 m)','Sales Invoice + Cr. Memo Lines',1,'D'],
+    ['Savings vs list price from tier price and offers','Price List vs Customer Price Group',1,'D'],
+    ['Claim rate and credits received','Sales Cr. Memo',1,'D'],
+    ['Average price per product and price-change watch','Price List Line history',2,'D'],
+    ['Dish cost calculator on live prices','App layer + Price List',2,'D'],
+    ['Monthly statement PDF / Excel','Report / API',2,'D'],
+    ['Anonymised benchmark vs similar venues (min. 10)','Aggregated analytics store',3,'D']]],
+  [{hu:'Platform',en:'Platform'},[
+    ['One codebase: web (PWA), Android, Windows; Hungarian and English','—',1,'B'],
+    ['iOS','—',3,'B'],
+    ['Source code in Pilpel-owned Git from day one; IP assigned to Pilpel','Contract',1,'D']]]
+];
+function openReqs(){ buildReqs(); openSheet('reqs'); }
+function buildReqs(){ const L=lang=='en'; const SRC={D:'Doodi',A:'Attila',B:L?'both':'mindkettő'};
+  $('#reqs').innerHTML = `
+  <div class="s-top"><button class="x" aria-label="Close" onclick="closeSheet('reqs')"><svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="tt">${t('hsQ')}<small>Feature 160583 · Online ordering app</small></div></div>
+  <div class="s-body">
+    <p class="ins-sub" style="margin:0">Merged from both click-dummies. P1 = first release, P2 = next, P3 = later. Under each line: whose prototype it came from.</p>
+    <div class="sec"><h2>Open decisions</h2></div>
+    ${DECISIONS.map((d,i)=>`<div class="dec"><b class="q">${i+1}. ${d.q}</b>
+      <div class="dopt"><span class="pill p-warn">Doodi</span><span>${d.d}</span><span class="pill p-ok">Attila</span><span>${d.a}</span></div>
+      <div class="rec"><b>Proposal:</b> ${d.r}</div></div>`).join('')}
+    <div class="sec"><h2>Requirements</h2></div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px"><span class="ph ph1">P1</span>MVP <span class="ph ph2">P2</span>Next <span class="ph ph3">P3</span>Later</div>
+    ${REQ.map(([g,rows])=>`<div class="block req"><h3>${g.en}</h3><table><thead><tr><th>Requirement</th><th>BC</th><th></th></tr></thead><tbody>
+      ${rows.map(r=>`<tr><td>${r[0]}<span class="src">${SRC[r[3]]}</span></td><td class="bc">${r[1]}</td><td><span class="ph ph${r[2]}">P${r[2]}</span></td></tr>`).join('')}</tbody></table></div>`).join('')}
+    <div class="block" style="border-color:var(--leaf);background:var(--sprout)">
+      <h3 style="color:var(--leaf-ink)">Let’s run this in Azure DevOps</h3>
+      <p style="font-size:13.5px;line-height:1.5;margin:0">Every line above becomes a work item under <b>Feature 160583 · Online ordering app</b>, and the open decisions are the first ones. You comment, move things between P1, P2 and P3, and see what is being built and tested, next to the code, without waiting for a status call.</p>
+      <button class="btn leaf" style="width:100%;margin-top:12px" onclick="toast('We’ll send you the invite · demo')">Count me in</button>
+    </div>
+  </div>`;
+  injectUtils($('#reqs'));
+}
+function renderMerged(){ renderPromo(); renderMoney(); renderFin(); renderClaimList(); renderInsights(); if(!$('#reqs').hidden) buildReqs(); }
+
 /* ============ INDÍTÁS ============ */
 initDelivery();
 renderAgain(); renderFeat(); renderNudge(); renderChips(); renderFreq(); renderCatalog(); syncBadge(); renderFlowmap(); renderLiveOrders(); renderSosBadge(); renderTemplates();
 order = makeOrder(SEED_ORDER, 'Céges átutalás · 15 nap'); order.status = 2; renderOrders();
-applyStatic();
+setLang(lang);
 setTheme((()=>{try{return localStorage.getItem('pp_theme')||'auto';}catch(e){return 'auto';}})());
 tick(); setInterval(tick,1000);
 openOnboard();
